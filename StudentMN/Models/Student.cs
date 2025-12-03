@@ -2,6 +2,7 @@
 {
     public class Student : BaseEntity
     {
+        public string Avt { get; set; }
         public string StudentCode { get; set; }
         public string FullName { get; set; }
         public DateTime DateOfBirth { get; set; }

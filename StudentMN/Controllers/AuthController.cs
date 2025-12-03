@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs;
+using StudentMN.DTOs.Response;
 using StudentMN.Models;
 using StudentMN.Services;
 using System.Security.Claims;
@@ -18,11 +19,7 @@ namespace StudentMN.Controllers
             _authService = authService;
         }
 
-        /// <summary>
-        /// Đăng nhập sinh viên
-        /// </summary>
-        /// <param name="request">Thông tin đăng nhập</param>
-        /// <returns>Token và thông tin user</returns>
+        
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
@@ -45,10 +42,7 @@ namespace StudentMN.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        /// Lấy thông tin user hiện tại
-        /// </summary>
-        /// <returns>Thông tin user đang đăng nhập</returns>
+       
         [Authorize]
         [HttpGet("me")]
         public async Task<IActionResult> GetCurrentUser()
@@ -90,10 +84,6 @@ namespace StudentMN.Controllers
             });
         }
 
-        /// <summary>
-        /// Test endpoint để kiểm tra authentication
-        /// </summary>
-        /// <returns>Thông tin từ token</returns>
         [Authorize]
         [HttpGet("test")]
         public IActionResult TestAuth()
@@ -115,11 +105,6 @@ namespace StudentMN.Controllers
             });
         }
 
-        /// <summary>
-        /// Kiểm tra token có hợp lệ không
-        /// </summary>
-        /// <param name="token">JWT Token</param>
-        /// <returns>True/False</returns>
         [HttpPost("validate-token")]
         public async Task<IActionResult> ValidateToken([FromBody] string token)
         {
@@ -141,16 +126,11 @@ namespace StudentMN.Controllers
             });
         }
 
-        /// <summary>
-        /// Đăng xuất (client side - chỉ xóa token)
-        /// </summary>
-        /// <returns>Thông báo</returns>
         [Authorize]
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            // JWT là stateless, không cần xử lý server-side
-            // Client chỉ cần xóa token ở localStorage/sessionStorage
+           
             return Ok(new
             {
                 success = true,

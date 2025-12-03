@@ -1,5 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using StudentMN.DTOs;
+using StudentMN.DTOs.Response;
 using StudentMN.Models;
 using StudentMN.Repositories;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,6 +12,17 @@ namespace StudentMN.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
+        
+
+        public string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        public bool VerifyPassword(string password, string hash)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, hash);
+        }
 
         public AuthService(IUserRepository userRepository, IConfiguration configuration)
         {

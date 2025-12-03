@@ -1,4 +1,4 @@
-﻿namespace StudentMN.DTOs
+﻿namespace StudentMN.DTOs.Response
 {
     public class LoginResponse
     {

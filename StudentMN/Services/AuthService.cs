@@ -4,6 +4,7 @@ using StudentMN.Models;
 using StudentMN.Repositories;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace StudentMN.Services
@@ -125,6 +126,8 @@ namespace StudentMN.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        
+
 
         public async Task<bool> ValidateTokenAsync(string token)
         {

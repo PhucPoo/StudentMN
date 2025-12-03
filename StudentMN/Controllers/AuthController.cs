@@ -84,26 +84,7 @@ namespace StudentMN.Controllers
             });
         }
 
-        [Authorize]
-        [HttpGet("test")]
-        public IActionResult TestAuth()
-        {
-            var username = User.FindFirst(ClaimTypes.Name)?.Value;
-            var role = User.FindFirst(ClaimTypes.Role)?.Value;
-            var fullName = User.FindFirst("FullName")?.Value;
-
-            return Ok(new
-            {
-                success = true,
-                message = "Bạn đã xác thực thành công!",
-                data = new
-                {
-                    username = username,
-                    fullName = fullName,
-                    role = role
-                }
-            });
-        }
+        
 
         [HttpPost("validate-token")]
         public async Task<IActionResult> ValidateToken([FromBody] string token)

@@ -10,37 +10,37 @@ namespace StudentManagement.StudentManagement.API.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    public class StudentsController : ControllerBase
     {
-        private readonly UserService _service;
+        private readonly StudentService _service;
 
-        public UsersController(UserService service)
+        public StudentsController(StudentService service)
         {
             _service = service;
         }
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<UserResponseDTO>>> GetAll()
+        public async Task<ActionResult<List<StudentResponseDTO>>> GetAll()
         {
             return Ok(await _service.GetAllAsync());
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<UserResponseDTO>> Create(UserRequestDTO dto)
+        public async Task<ActionResult<StudentResponseDTO>> Create(StudentRequestDTO dto)
         {
-            var user = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetAll), new { id = user.Id }, user);
+            var student = await _service.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetAll), new { id = student.Id }, student);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<UserResponseDTO>> Update(int id, UserRequestDTO dto)
+        public async Task<ActionResult<StudentResponseDTO>> Update(int id, StudentRequestDTO dto)
         {
-            var user = await _service.UpdateAsync(id, dto);
-            if (user == null) return NotFound();
-            return Ok(user);
+            var student = await _service.UpdateAsync(id, dto);
+            if (student == null) return NotFound();
+            return Ok(student);
         }
 
         [Authorize(Roles = "Admin")]

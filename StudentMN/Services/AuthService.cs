@@ -119,7 +119,7 @@ namespace StudentMN.Services
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddHours(8),
+                expires: DateTime.Now.AddMinutes(1),
                 signingCredentials: credentials
             );
 

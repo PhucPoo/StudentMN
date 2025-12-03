@@ -11,6 +11,8 @@ namespace StudentMN.Mapping
         {
             CreateMap<User, UserResponseDTO>().ReverseMap();
             CreateMap<UserRequestDTO, User>();
+            CreateMap<Student, StudentResponseDTO>().ReverseMap();
+            CreateMap<StudentRequestDTO, Student>();
         }
     }
 

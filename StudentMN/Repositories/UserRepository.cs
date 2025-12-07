@@ -13,6 +13,12 @@ namespace StudentMN.Repositories
             _context = context;
         }
 
+        public async Task UpdateAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<User> GetUserByUsernameAsync(string username)
         {
             try
@@ -176,5 +182,11 @@ namespace StudentMN.Repositories
                 throw;
             }
         }
+        public async Task<User> GetUserByRefreshTokenAsync(string refreshToken)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+        }
+
     }
 }

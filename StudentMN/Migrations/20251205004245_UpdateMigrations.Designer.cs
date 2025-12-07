@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentMN.Data;
 
@@ -11,9 +12,11 @@ using StudentMN.Data;
 namespace StudentMN.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251205004245_UpdateMigrations")]
+    partial class UpdateMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +59,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2558),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5619),
                             Description = "Xem danh sách người dùng",
                             PermissionName = "ViewUsers",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -64,7 +67,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2560),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5621),
                             Description = "Tạo người dùng mới",
                             PermissionName = "CreateUser",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -72,7 +75,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2561),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5623),
                             Description = "Cập nhật người dùng",
                             PermissionName = "UpdateUser",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -80,7 +83,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2562),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5625),
                             Description = "Xóa người dùng",
                             PermissionName = "DeleteUser",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -88,7 +91,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2563),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5626),
                             Description = "Xem danh sách sinh viên",
                             PermissionName = "ViewStudents",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -96,7 +99,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2564),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5628),
                             Description = "Quản lý sinh viên",
                             PermissionName = "ManageStudents",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -137,7 +140,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 395, DateTimeKind.Local).AddTicks(8530),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 67, DateTimeKind.Local).AddTicks(9331),
                             Description = "Quản trị viên",
                             RoleName = "Admin",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -145,7 +148,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 395, DateTimeKind.Local).AddTicks(8543),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 67, DateTimeKind.Local).AddTicks(9354),
                             Description = "Sinh viên",
                             RoleName = "Student",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -153,7 +156,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 395, DateTimeKind.Local).AddTicks(8544),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 67, DateTimeKind.Local).AddTicks(9357),
                             Description = "Giảng viên",
                             RoleName = "Teacher",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -195,7 +198,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2615),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5689),
                             PermissionId = 1,
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -203,7 +206,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2617),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5691),
                             PermissionId = 2,
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -211,7 +214,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2618),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5693),
                             PermissionId = 3,
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -219,7 +222,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2619),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5694),
                             PermissionId = 4,
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -227,7 +230,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2620),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5696),
                             PermissionId = 5,
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -235,7 +238,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2622),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5697),
                             PermissionId = 6,
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -243,7 +246,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2623),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5699),
                             PermissionId = 5,
                             RoleId = 2,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -347,12 +350,6 @@ namespace StudentMN.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RefreshTokenExpiryTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
@@ -380,11 +377,11 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 7, 9, 39, 33, 510, DateTimeKind.Local).AddTicks(2146),
+                            CreatedAt = new DateTime(2025, 12, 5, 7, 42, 45, 220, DateTimeKind.Local).AddTicks(5028),
                             Email = "admin@studentmn.com",
                             FullName = "Administrator",
                             IsActive = true,
-                            Password = "$2a$11$Rl8ulwnVnj9cp2xQBU.L8efKypo4Z.FcdrnXFItvzL4GllX99/e6S",
+                            Password = "$2a$11$tmqbpQbK1ttJOVKMXkq/JOH6q7pCGgXV48xW7UNwtT9OVCba3ojVa",
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Username = "admin"

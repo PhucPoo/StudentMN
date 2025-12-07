@@ -14,5 +14,7 @@ namespace StudentMN.Repositories
         Task<bool> DeleteUserAsync(int id);
         Task<bool> UserExistsAsync(string username);
         Task<bool> EmailExistsAsync(string email);
+        Task UpdateAsync(User user);
+        Task<User> GetUserByRefreshTokenAsync(string refreshToken);
     }
 }

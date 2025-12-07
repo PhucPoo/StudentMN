@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs;
+using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models;
 using StudentMN.Services;
@@ -21,7 +23,7 @@ namespace StudentMN.Controllers
 
         
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] DTOs.Request.LoginRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -117,6 +119,29 @@ namespace StudentMN.Controllers
                 success = true,
                 message = "Đăng xuất thành công"
             });
+        }
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromBody] TokenRequestDTO request)
+        {
+            if (string.IsNullOrEmpty(request.RefreshToken))
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Refresh token không được để trống"
+                });
+            }
+            
+
+            var result = await _authService.RefreshTokenAsync(request.RefreshToken);
+
+            if (!result.Success)
+            {
+                // refresh token sai / hết hạn
+                return Unauthorized(result);
+            }
+
+            return Ok(result);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models;
 using StudentMN.Repositories;
@@ -35,7 +36,6 @@ namespace StudentMN.Services
         {
             try
             {
-                // Validate input
                 if (string.IsNullOrWhiteSpace(request.Username) ||
                     string.IsNullOrWhiteSpace(request.Password))
                 {
@@ -46,40 +46,38 @@ namespace StudentMN.Services
                     };
                 }
 
-                // Kiểm tra user tồn tại
                 var user = await _userRepository.GetUserByUsernameAsync(request.Username);
                 if (user == null)
                 {
                     return new LoginResponse
                     {
                         Success = false,
-                        Message = "Tên đăng nhập hoặc mật khẩu không đúng"
+                        Message = "Tên đăng nhập không tồn tại"
                     };
                 }
 
-                // Validate password
                 bool isValidPassword = await _userRepository.ValidateCredentialsAsync(
-                    request.Username,
-                    request.Password
-                );
+                    request.Username, request.Password);
 
                 if (!isValidPassword)
                 {
                     return new LoginResponse
                     {
                         Success = false,
-                        Message = "Tên đăng nhập hoặc mật khẩu không đúng"
+                        Message = "Mật khẩu của bạn không đúng"
                     };
                 }
 
-                // Generate JWT token
-                string token = GenerateJwtToken(user, user.Role.RoleName);
+                // Tạo token
+                var tokens = await GenerateTokens(user);
 
                 return new LoginResponse
                 {
                     Success = true,
                     Message = "Đăng nhập thành công",
-                    Token = token,
+                    AccessToken = tokens.accessToken,
+                    RefreshToken = tokens.refreshToken,
+                    ExpiredAt = tokens.expires,
                     User = new UserInfo
                     {
                         Id = user.Id,
@@ -99,6 +97,7 @@ namespace StudentMN.Services
                 };
             }
         }
+
 
         public string GenerateJwtToken(User user, string roleName)
         {
@@ -155,6 +154,80 @@ namespace StudentMN.Services
                 return false;
             }
         }
+        public string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+
+        private async Task<(string accessToken, string refreshToken, DateTime expires)> GenerateTokens(User user)
+        {
+            string roleName = user.Role?.RoleName ?? "User"; // tránh null
+            string accessToken = GenerateJwtToken(user, roleName);
+
+            string refreshToken = GenerateRefreshToken();
+            DateTime refreshExpiry = DateTime.UtcNow.AddDays(7);
+
+            // Lưu refresh token vào DB
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = refreshExpiry;
+
+            await _userRepository.UpdateAsync(user); 
+            //await _userRepository.SaveAsync(); 
+
+            return (accessToken, refreshToken, refreshExpiry);
+        }
+        public async Task<LoginResponse> RefreshTokenAsync(string refreshToken)
+        {
+            var user = await _userRepository.GetUserByRefreshTokenAsync(refreshToken);
+
+            if (user == null || user.RefreshToken != refreshToken)
+                return new LoginResponse { Success = false, Message = "Refresh token không hợp lệ" };
+
+            if (user.RefreshTokenExpiryTime < DateTime.UtcNow)
+                return new LoginResponse { Success = false, Message = "Refresh token đã hết hạn" };
+
+            var tokens = await GenerateTokens(user);
+
+            return new LoginResponse
+            {
+                Success = true,
+                Message = "Làm mới token thành công",
+                AccessToken = tokens.accessToken,
+                RefreshToken = tokens.refreshToken,
+                ExpiredAt = tokens.expires,
+                User = new UserInfo
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    Role = user.Role.RoleName
+                }
+            };
+        }
+        public async Task SaveRefreshTokenAsync(int userId, string refreshToken)
+        {
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            if (user == null) return;
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+
+            await _userRepository.UpdateAsync(user);
+        }
+        public async Task<bool> ValidateRefreshTokenAsync(int userId, string refreshToken)
+        {
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            if (user == null) return false;
+
+            return user.RefreshToken == refreshToken &&
+                   user.RefreshTokenExpiryTime > DateTime.UtcNow;
+        }
+
+
 
         public async Task<User> GetCurrentUserAsync(int userId)
         {

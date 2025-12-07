@@ -4,8 +4,10 @@
     {
         public bool Success { get; set; }
         public string Message { get; set; }
-        public string Token { get; set; }
         public UserInfo User { get; set; }
+        public DateTime ExpiredAt { get; set; }
+        public string AccessToken { get; set; } = string.Empty;
+        public string RefreshToken { get; set; } = string.Empty;
     }
 
     public class UserInfo

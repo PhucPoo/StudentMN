@@ -1,6 +1,6 @@
 ﻿using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models;
+using StudentMN.Models.Account;
 
 namespace StudentMN.Services
 {

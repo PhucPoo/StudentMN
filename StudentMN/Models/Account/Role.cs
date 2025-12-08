@@ -1,4 +1,6 @@
-﻿namespace StudentMN.Models
+﻿using StudentMN.Models.Permission;
+
+namespace StudentMN.Models.Account
 {
     public class Role:BaseEntity
     {

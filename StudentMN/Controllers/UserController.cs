@@ -21,9 +21,9 @@ namespace StudentManagement.StudentManagement.API.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<UserResponseDTO>>> GetAll()
+        public async Task<ActionResult<List<UserResponseDTO>>> GetAll(int pageNumber=1, int pageSize=8)
         {
-            return Ok(await _service.GetAllAsync());
+            return Ok(await _service.GetAllAsync(pageNumber,pageSize));
         }
 
         [Authorize(Roles = "Admin")]

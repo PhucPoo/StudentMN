@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models;
+using StudentMN.Models.Account;
 
 namespace StudentMN.Services
 {
@@ -13,7 +14,7 @@ namespace StudentMN.Services
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
 
-        public UserService(AppDbContext context, IMapper mapper , IAuthService authService)
+        public UserService(AppDbContext context, IMapper mapper, IAuthService authService)
         {
             _context = context;
             _mapper = mapper;
@@ -21,11 +22,27 @@ namespace StudentMN.Services
         }
 
         // Xem danh sách người dùng
-        public async Task<List<UserResponseDTO>> GetAllAsync()
+        public async Task<PagedResponse<UserResponseDTO>> GetAllAsync(int pageNumber = 1, int pageSize = 8)
         {
+            var query = _context.Users.Include(u => u.Role).AsQueryable();
+            var totalCount = await query.CountAsync();
             
-            var users = await _context.Users.ToListAsync();
-            return _mapper.Map<List<UserResponseDTO>>(users);
+            var users = await query
+                .OrderBy(u => u.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var usersDto = _mapper.Map<List<UserResponseDTO>>(users);
+
+            return new PagedResponse<UserResponseDTO>
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+                Data = usersDto
+            };
         }
 
         // Thêm tài khoản mới

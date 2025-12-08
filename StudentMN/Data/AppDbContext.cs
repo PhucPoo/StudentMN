@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentMN.Models;
+using StudentMN.Models.Account;
+using StudentMN.Models.Permission;
 
 namespace StudentMN.Data
 {

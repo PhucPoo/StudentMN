@@ -1,4 +1,4 @@
-﻿using StudentMN.Models;
+﻿using StudentMN.Models.Account;
 
 namespace StudentMN.Repositories
 {

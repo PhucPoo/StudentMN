@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentMN.Data;
 
@@ -11,9 +12,11 @@ using StudentMN.Data;
 namespace StudentMN.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251208020129_UpdateRefreshToken")]
+    partial class UpdateRefreshToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,139 +25,7 @@ namespace StudentMN.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("StudentMN.Models.Account.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 648, DateTimeKind.Local).AddTicks(3574),
-                            Description = "Quản trị viên",
-                            RoleName = "Admin",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 648, DateTimeKind.Local).AddTicks(3576),
-                            Description = "Sinh viên",
-                            RoleName = "Student",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 648, DateTimeKind.Local).AddTicks(3577),
-                            Description = "Giảng viên",
-                            RoleName = "Teacher",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
-                });
-
-            modelBuilder.Entity("StudentMN.Models.Account.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RefreshTokenExpiryTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("Username")
-                        .IsUnique();
-
-                    b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4113),
-                            Email = "admin@studentmn.com",
-                            FullName = "Administrator",
-                            IsActive = true,
-                            Password = "$2a$11$at6MM8aMNWyGrm8WOV7RBunhYReyt1p8vgD1JSKZwUsZ.PShhmclm",
-                            RoleId = 1,
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Username = "admin"
-                        });
-                });
-
-            modelBuilder.Entity("StudentMN.Models.Permission.Permission", b =>
+            modelBuilder.Entity("StudentMN.Models.Permission", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -188,7 +59,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4301),
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7345),
                             Description = "Xem danh sách người dùng",
                             PermissionName = "ViewUsers",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -196,7 +67,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4303),
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7346),
                             Description = "Tạo người dùng mới",
                             PermissionName = "CreateUser",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -204,7 +75,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4304),
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7348),
                             Description = "Cập nhật người dùng",
                             PermissionName = "UpdateUser",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -212,7 +83,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4305),
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7349),
                             Description = "Xóa người dùng",
                             PermissionName = "DeleteUser",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -220,7 +91,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4307),
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7350),
                             Description = "Xem danh sách sinh viên",
                             PermissionName = "ViewStudents",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -228,14 +99,71 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4308),
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7351),
                             Description = "Quản lý sinh viên",
                             PermissionName = "ManageStudents",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
-            modelBuilder.Entity("StudentMN.Models.Permission.RolePermission", b =>
+            modelBuilder.Entity("StudentMN.Models.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 618, DateTimeKind.Local).AddTicks(6869),
+                            Description = "Quản trị viên",
+                            RoleName = "Admin",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 618, DateTimeKind.Local).AddTicks(6871),
+                            Description = "Sinh viên",
+                            RoleName = "Student",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 618, DateTimeKind.Local).AddTicks(6872),
+                            Description = "Giảng viên",
+                            RoleName = "Teacher",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("StudentMN.Models.RolePermission", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -270,7 +198,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4340),
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7389),
                             PermissionId = 1,
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -278,7 +206,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4342),
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7391),
                             PermissionId = 2,
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -286,7 +214,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4343),
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7392),
                             PermissionId = 3,
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -294,7 +222,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4344),
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7394),
                             PermissionId = 4,
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -302,7 +230,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4346),
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7395),
                             PermissionId = 5,
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -310,7 +238,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4347),
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7396),
                             PermissionId = 6,
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -318,7 +246,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 12, 8, 13, 25, 6, 816, DateTimeKind.Local).AddTicks(4348),
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7397),
                             PermissionId = 5,
                             RoleId = 2,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -391,26 +319,90 @@ namespace StudentMN.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("StudentMN.Models.Account.User", b =>
+            modelBuilder.Entity("StudentMN.Models.User", b =>
                 {
-                    b.HasOne("StudentMN.Models.Account.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("Role");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 8, 9, 1, 28, 789, DateTimeKind.Local).AddTicks(7100),
+                            Email = "admin@studentmn.com",
+                            FullName = "Administrator",
+                            IsActive = true,
+                            Password = "$2a$11$HAYlqrOL8CPKAlG8Sc/hCeizk5vRx1qj/armEeduUnkqp4aw14fnO",
+                            RoleId = 1,
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Username = "admin"
+                        });
                 });
 
-            modelBuilder.Entity("StudentMN.Models.Permission.RolePermission", b =>
+            modelBuilder.Entity("StudentMN.Models.RolePermission", b =>
                 {
-                    b.HasOne("StudentMN.Models.Permission.Permission", "Permission")
+                    b.HasOne("StudentMN.Models.Permission", "Permission")
                         .WithMany("RolePermissions")
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StudentMN.Models.Account.Role", "Role")
+                    b.HasOne("StudentMN.Models.Role", "Role")
                         .WithMany("RolePermissions")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -423,7 +415,7 @@ namespace StudentMN.Migrations
 
             modelBuilder.Entity("StudentMN.Models.Student", b =>
                 {
-                    b.HasOne("StudentMN.Models.Account.User", "User")
+                    b.HasOne("StudentMN.Models.User", "User")
                         .WithOne()
                         .HasForeignKey("StudentMN.Models.Student", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -432,16 +424,27 @@ namespace StudentMN.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("StudentMN.Models.Account.Role", b =>
+            modelBuilder.Entity("StudentMN.Models.User", b =>
+                {
+                    b.HasOne("StudentMN.Models.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("StudentMN.Models.Permission", b =>
+                {
+                    b.Navigation("RolePermissions");
+                });
+
+            modelBuilder.Entity("StudentMN.Models.Role", b =>
                 {
                     b.Navigation("RolePermissions");
 
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("StudentMN.Models.Permission.Permission", b =>
-                {
-                    b.Navigation("RolePermissions");
                 });
 #pragma warning restore 612, 618
         }

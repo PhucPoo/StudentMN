@@ -1,5 +1,4 @@
-﻿
-namespace StudentMN.Models
+﻿namespace StudentMN.Models.Permission
 {
     public class Permission : BaseEntity
     {

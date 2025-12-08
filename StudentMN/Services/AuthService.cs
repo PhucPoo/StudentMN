@@ -1,7 +1,10 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models;
+using StudentMN.Models.Account;
 using StudentMN.Repositories;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,7 +17,8 @@ namespace StudentMN.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
-        
+        private readonly AppDbContext _context;
+
 
         public string HashPassword(string password)
         {
@@ -26,10 +30,11 @@ namespace StudentMN.Services
             return BCrypt.Net.BCrypt.Verify(password, hash);
         }
 
-        public AuthService(IUserRepository userRepository, IConfiguration configuration)
+        public AuthService(IUserRepository userRepository, IConfiguration configuration, AppDbContext context)
         {
             _userRepository = userRepository;
             _configuration = configuration;
+            _context = context;
         }
 
         public async Task<LoginResponse> LoginAsync(LoginRequest request)
@@ -154,6 +159,17 @@ namespace StudentMN.Services
                 return false;
             }
         }
+        public string GetRoleFromToken(string token)
+        {
+            if (string.IsNullOrEmpty(token)) return "User";
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+
+            // Lấy claim role
+            var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+            return roleClaim?.Value ;
+        }
         public string GenerateRefreshToken()
         {
             var randomNumber = new byte[64];
@@ -164,7 +180,14 @@ namespace StudentMN.Services
 
         private async Task<(string accessToken, string refreshToken, DateTime expires)> GenerateTokens(User user)
         {
-            string roleName = user.Role?.RoleName ?? "User"; // tránh null
+            if (user.Role == null && user.RoleId != 0)
+            {
+                user.Role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == user.RoleId);
+            }
+            string roleName = user.Role?.RoleName;
+            if (string.IsNullOrEmpty(roleName))
+                throw new Exception("User không có role hợp lệ");
+
             string accessToken = GenerateJwtToken(user, roleName);
 
             string refreshToken = GenerateRefreshToken();
@@ -190,6 +213,8 @@ namespace StudentMN.Services
                 return new LoginResponse { Success = false, Message = "Refresh token đã hết hạn" };
 
             var tokens = await GenerateTokens(user);
+            var role = _context.Roles.FirstOrDefault(r => r.Id == user.RoleId);
+            var roleName = role?.RoleName ?? "NoRole";
 
             return new LoginResponse
             {
@@ -204,7 +229,7 @@ namespace StudentMN.Services
                     Username = user.Username,
                     FullName = user.FullName,
                     Email = user.Email,
-                    Role = user.Role.RoleName
+                    Role = roleName,
                 }
             };
         }

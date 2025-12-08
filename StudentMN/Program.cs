@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using StudentMN.Data;
 using StudentMN.Mapping;
 using StudentMN.Repositories;
@@ -24,6 +25,13 @@ builder.Services.AddCors(options =>
 });
 //Đăng ký automapper
 builder.Services.AddAutoMapper(ctf => { }, typeof(AutoMapperConfigurationProfile));
+
+//Cấu hình Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .WriteTo.File("logs/webapp.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>

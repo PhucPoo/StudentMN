@@ -1,4 +1,5 @@
-﻿namespace StudentMN.DTOs.Request
+﻿
+namespace StudentMN.DTOs.Request
 {
     public class StudentRequestDTO
     {

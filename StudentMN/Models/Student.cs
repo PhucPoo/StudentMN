@@ -1,6 +1,8 @@
-﻿namespace StudentMN.Models
+﻿using StudentMN.Models.Account;
+
+namespace StudentMN.Models
 {
-    public class Student : BaseEntity
+    public class Student :BaseEntity
     {
         public string Avt { get; set; }
         public string StudentCode { get; set; }

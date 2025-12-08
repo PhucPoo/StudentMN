@@ -21,12 +21,36 @@ namespace StudentMN.Services
         }
 
         // Xem danh sách sinh viên
-        public async Task<List<StudentResponseDTO>> GetAllAsync()
+        public async Task<PagedResponse<StudentResponseDTO>> GetAllAsync(int pageNumber = 1,int pageSize = 8,string? search = null)
         {
+            var query = _context.Students.Include(s => s.User)
+                                         .AsQueryable();
 
-            var students = await _context.Students.ToListAsync();
-            return _mapper.Map<List<StudentResponseDTO>>(students);
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(s => s.StudentCode.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var students = await query
+                .OrderBy(s => s.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var studentsDto = _mapper.Map<List<StudentResponseDTO>>(students);
+
+            return new PagedResponse<StudentResponseDTO>
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+                Data = studentsDto
+            };
         }
+
 
         // Thêm sinh viên mới
         public async Task<StudentResponseDTO> CreateAsync(StudentRequestDTO dto)

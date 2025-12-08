@@ -12,7 +12,9 @@ namespace StudentMN.Mapping
         {
             CreateMap<User, UserResponseDTO>().ReverseMap();
             CreateMap<UserRequestDTO, User>();
-            CreateMap<Student, StudentResponseDTO>().ReverseMap();
+            CreateMap<Student, StudentResponseDTO>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email));
             CreateMap<StudentRequestDTO, Student>();
         }
     }

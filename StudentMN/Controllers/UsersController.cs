@@ -7,7 +7,7 @@ using StudentMN.Services;
 
 namespace StudentManagement.StudentManagement.API.Controllers
 {
-
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase

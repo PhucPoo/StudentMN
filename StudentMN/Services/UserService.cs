@@ -22,11 +22,17 @@ namespace StudentMN.Services
         }
 
         // Xem danh sách người dùng
-        public async Task<PagedResponse<UserResponseDTO>> GetAllAsync(int pageNumber = 1, int pageSize = 8)
+        public async Task<PagedResponse<UserResponseDTO>> GetAllAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            var query = _context.Users.Include(u => u.Role).AsQueryable();
+            var query = _context.Users.Include(u => u.Role)
+                                      .Where(u => u.IsActive)
+                                      .AsQueryable();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(u => u.FullName.Contains(search));
+            }
             var totalCount = await query.CountAsync();
-            
+
             var users = await query
                 .OrderBy(u => u.Id)
                 .Skip((pageNumber - 1) * pageSize)

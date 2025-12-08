@@ -71,7 +71,7 @@ namespace StudentMN.Services
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null) return false;
-            _context.Users.Remove(user);
+            user.IsActive = false;
             await _context.SaveChangesAsync();
             return true;
         }

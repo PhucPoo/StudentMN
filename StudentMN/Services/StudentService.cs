@@ -50,16 +50,37 @@ namespace StudentMN.Services
                 Data = studentsDto
             };
         }
+        public async Task<StudentResponseDTO> GetByUserIdAsync(int userId)
+        {
+            var student = await _context.Students
+                .Include(s => s.User) // để lấy thông tin user liên quan
+                .FirstOrDefaultAsync(s => s.UserId == userId);
+
+            if (student == null) return null;
+
+            var dto = _mapper.Map<StudentResponseDTO>(student);
+            dto.FullName = student.User.FullName;
+            dto.Email = student.User.Email;
+
+            return dto;
+        }
 
 
         // Thêm sinh viên mới
         public async Task<StudentResponseDTO> CreateAsync(StudentRequestDTO dto)
         {
             var student = _mapper.Map<Student>(dto);
-            
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == dto.UserId);
+
+            student.UserId = user.Id;
+
             _context.Students.Add(student);
             await _context.SaveChangesAsync();
-            return _mapper.Map<StudentResponseDTO>(student);
+            var response= _mapper.Map<StudentResponseDTO>(student);
+            response.FullName = user.FullName;
+            response.Email = user.Email;
+            return response;
         }
 
         // Cập nhật sinh viên

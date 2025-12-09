@@ -25,6 +25,16 @@ namespace StudentManagement.StudentManagement.API.Controllers
         {
             return Ok(await _service.GetAllAsync(pageNumber,pageSize,search));
         }
+        [HttpGet("by-user/{userId}")]
+        public async Task<IActionResult> GetByUserId(int userId)
+        {
+            var student = await _service.GetByUserIdAsync(userId);
+
+            if (student == null)
+                return NotFound(new { success = false, message = "Không tìm thấy sinh viên" });
+
+            return Ok(new { success = true, data = student });
+        }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]

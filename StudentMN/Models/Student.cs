@@ -1,12 +1,18 @@
 ﻿using StudentMN.Models.Account;
+using System.ComponentModel.DataAnnotations;
 
 namespace StudentMN.Models
 {
     public class Student :BaseEntity
     {
+        [Required(ErrorMessage = "Ảnh đại diện không được để trống không được để trống")]
         public string Avt { get; set; }
         public string StudentCode { get; set; }
         public string FullName { get; set; }
+
+        [Required(ErrorMessage = "Ngày sinh không được để trống")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateOfBirth { get; set; }
         public string Gender { get; set; }
         public string Email { get; set; }

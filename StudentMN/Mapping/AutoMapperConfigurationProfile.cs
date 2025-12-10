@@ -27,6 +27,8 @@ namespace StudentMN.Mapping
             CreateMap<Classes, ClassesResponseDTO>();
             CreateMap<SubjectRequestDTO, Subject>();
             CreateMap<Subject, SubjectResponseDTO>();
+            CreateMap<ScoreRequestDTO, Score>();
+            CreateMap<Score, ScoreResponseDTO>();
 
         }
     }

@@ -25,6 +25,16 @@ namespace TeacherMN.Controllers
         {
             return Ok(await _service.GetAllAsync(pageNumber, pageSize, search));
         }
+        [HttpGet("by-user/{userId}")]
+        public async Task<IActionResult> GetByUserId(int userId)
+        {
+            var teacher = await _service.GetByUserIdAsync(userId);
+
+            if (teacher == null)
+                return NotFound(new { success = false, message = "Không tìm thấy sinh viên" });
+
+            return Ok(new { success = true, data = teacher });
+        }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]

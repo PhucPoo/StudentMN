@@ -51,7 +51,21 @@ namespace TeacherMN.Services
                 Data = TeachersDto
             };
         }
-        
+        public async Task<TeacherResponseDTO> GetByUserIdAsync(int userId)
+        {
+            var teacher = await _context.Teachers
+                .Include(s => s.User)
+                .FirstOrDefaultAsync(s => s.UserId == userId);
+
+            if (teacher == null) return null;
+
+            var dto = _mapper.Map<TeacherResponseDTO>(teacher);
+            dto.FullName = teacher.User.FullName;
+            dto.Email = teacher.User.Email;
+
+            return dto;
+        }
+
 
         // Thêm giảng viên mới
         public async Task<TeacherResponseDTO> CreateAsync(TeacherRequestDTO dto)

@@ -24,6 +24,8 @@ namespace StudentMN.Controllers
             return Ok(await _service.GetAllAsync(pageNumber, pageSize, search));
         }
 
+        
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<SubjectResponseDTO>> Create(SubjectRequestDTO dto)

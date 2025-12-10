@@ -18,7 +18,7 @@ namespace StudentMN.Services
             _mapper = mapper;
             _authService = authService;
         }
-        // Xem danh sách khoa
+        // Xem danh sách lớp
         public async Task<PagedResponse<ClassesResponseDTO>> GetAllAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
             var query = _context.Classes.AsQueryable();
@@ -47,7 +47,7 @@ namespace StudentMN.Services
                 Data = ClasssDto
             };
         }
-        //Thêm khoa mới
+        //Thêm lớp mới
         public async Task<ClassesResponseDTO> CreateAsync(ClassesRequestDTO dto)
         {
             var Class = _mapper.Map<Classes>(dto);
@@ -57,7 +57,7 @@ namespace StudentMN.Services
             return _mapper.Map<ClassesResponseDTO>(Class);
         }
 
-        //Cập nhật khoa mới
+        //Cập nhật lớp mới
         public async Task<ClassesResponseDTO> UpdateAsync(int id, ClassesRequestDTO dto)
         {
             var Class = await _context.Classes.FindAsync(id);

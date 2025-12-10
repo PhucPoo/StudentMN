@@ -1,4 +1,5 @@
 ﻿using StudentMN.Models.Account;
+using StudentMN.Models.Base;
 
 namespace StudentMN.Models.Permission
 {

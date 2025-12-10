@@ -1,4 +1,6 @@
-﻿namespace StudentMN.Models.Permission
+﻿using StudentMN.Models.Base;
+
+namespace StudentMN.Models.Permission
 {
     public class Permission : BaseEntity
     {

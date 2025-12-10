@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StudentMN.Models;
 using StudentMN.Models.Account;
+using StudentMN.Models.Base;
+using StudentMN.Models.Class;
 using StudentMN.Models.Permission;
+using StudentMN.Models.Score;
 
 namespace StudentMN.Data
 {
@@ -16,6 +18,12 @@ namespace StudentMN.Data
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Student> Students { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Score> Scores { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Classes> Classes { get; set; }
+        public DbSet<Major> Majors { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -83,6 +91,23 @@ namespace StudentMN.Data
                 // Tạo composite unique index
                 entity.HasIndex(e => new { e.RoleId, e.PermissionId }).IsUnique();
             });
+            modelBuilder.Entity<Student>()
+                    .HasOne(s => s.Class)
+                    .WithMany(c => c.Students)
+                    .HasForeignKey(s => s.ClassId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Classes>()
+                    .HasOne(c => c.Major)
+                    .WithMany(m => m.Classes)
+                    .HasForeignKey(c => c.MajorId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Classes>()
+                    .HasOne(c => c.Teacher)
+                    .WithMany()
+                    .HasForeignKey(c => c.TeacherId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
             // Student configuration
             modelBuilder.Entity<Student>(entity =>

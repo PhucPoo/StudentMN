@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models;
+using StudentMN.Models.Account;
 
 namespace StudentMN.Services
 {
@@ -53,7 +53,7 @@ namespace StudentMN.Services
         public async Task<StudentResponseDTO> GetByUserIdAsync(int userId)
         {
             var student = await _context.Students
-                .Include(s => s.User) // để lấy thông tin user liên quan
+                .Include(s => s.User) 
                 .FirstOrDefaultAsync(s => s.UserId == userId);
 
             if (student == null) return null;

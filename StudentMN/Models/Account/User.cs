@@ -1,4 +1,6 @@
-﻿namespace StudentMN.Models.Account
+﻿using StudentMN.Models.Base;
+
+namespace StudentMN.Models.Account
 {
     public class User: BaseEntity
     {

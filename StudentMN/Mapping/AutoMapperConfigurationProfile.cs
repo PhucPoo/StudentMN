@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models;
 using StudentMN.Models.Account;
+using StudentMN.Models.Class;
 
 namespace StudentMN.Mapping
 {
@@ -16,6 +16,13 @@ namespace StudentMN.Mapping
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email));
             CreateMap<StudentRequestDTO, Student>();
+            CreateMap<Teacher, TeacherResponseDTO>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email));
+            CreateMap<TeacherRequestDTO, Teacher>();
+            CreateMap<MajorRequestDTO, Major>();
+            CreateMap<Major, MajorResponseDTO>();
+                
         }
     }
 

@@ -1,4 +1,4 @@
-﻿using StudentMN.Models;
+﻿using StudentMN.Models.Base;
 using System.ComponentModel.DataAnnotations;
 
 namespace StudentMN.DTOs.Response

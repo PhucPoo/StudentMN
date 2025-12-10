@@ -19,12 +19,13 @@ namespace StudentManagement.StudentManagement.API.Controllers
             _service = service;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<List<StudentResponseDTO>>> GetAll(int pageNumber = 1, int pageSize = 8, string search = null)
         {
             return Ok(await _service.GetAllAsync(pageNumber,pageSize,search));
         }
+
         [HttpGet("by-user/{userId}")]
         public async Task<IActionResult> GetByUserId(int userId)
         {
@@ -44,7 +45,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
             return CreatedAtAction(nameof(GetAll), new { id = student.Id }, student);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<StudentResponseDTO>> Update(int id, StudentRequestDTO dto)
         {

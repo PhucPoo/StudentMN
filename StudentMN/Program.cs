@@ -9,6 +9,7 @@ using StudentMN.Mapping;
 using StudentMN.Repositories;
 using StudentMN.Services;
 using System.Text;
+using TeacherMN.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<StudentService>();
+builder.Services.AddScoped<TeacherService>();
+builder.Services.AddScoped<MajorService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

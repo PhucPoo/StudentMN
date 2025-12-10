@@ -45,6 +45,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<StudentService>();
 builder.Services.AddScoped<TeacherService>();
 builder.Services.AddScoped<MajorService>();
+builder.Services.AddScoped<ClassService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

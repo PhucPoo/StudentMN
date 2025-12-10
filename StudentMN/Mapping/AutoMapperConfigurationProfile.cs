@@ -22,7 +22,9 @@ namespace StudentMN.Mapping
             CreateMap<TeacherRequestDTO, Teacher>();
             CreateMap<MajorRequestDTO, Major>();
             CreateMap<Major, MajorResponseDTO>();
-                
+            CreateMap<ClassesRequestDTO, Classes>();
+            CreateMap<Classes, ClassesResponseDTO>();
+
         }
     }
 

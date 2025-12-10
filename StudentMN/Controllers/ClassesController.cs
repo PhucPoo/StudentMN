@@ -11,11 +11,11 @@
     {
         [ApiController]
         [Route("api/[controller]")]
-        public class ClasssController : ControllerBase
+        public class ClassesController : ControllerBase
         {
             private readonly ClassService _service;
 
-            public ClasssController(ClassService service)
+            public ClassesController(ClassService service)
             {
                 _service = service;
             }

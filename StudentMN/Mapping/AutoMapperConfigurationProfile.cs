@@ -3,6 +3,7 @@ using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Account;
 using StudentMN.Models.Class;
+using StudentMN.Models.Score;
 
 namespace StudentMN.Mapping
 {
@@ -24,6 +25,8 @@ namespace StudentMN.Mapping
             CreateMap<Major, MajorResponseDTO>();
             CreateMap<ClassesRequestDTO, Classes>();
             CreateMap<Classes, ClassesResponseDTO>();
+            CreateMap<SubjectRequestDTO, Subject>();
+            CreateMap<Subject, SubjectResponseDTO>();
 
         }
     }

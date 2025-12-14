@@ -6,14 +6,28 @@ namespace StudentMN.Middleware
     public class ExceptionHandling
     {
         private readonly RequestDelegate _next;
-        public ExceptionHandling(RequestDelegate next)
+        private readonly ILogger<ExceptionHandling> _logger;
+        public ExceptionHandling(RequestDelegate next, ILogger<ExceptionHandling> logger)
         {
             _next = next;
+            _logger = logger;
         }
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            context.Response.ContentType = "application/json";
+            // Nếu response đã bắt đầu, không thể set header nữa
+            if (context.Response.HasStarted)
+            {
+                _logger.LogWarning("Response đã bắt đầu, không thể gửi lỗi JSON cho {Method} {Path}",
+                    context.Request.Method, context.Request.Path);
+                _logger.LogError(exception, "Exception xảy ra sau khi response đã bắt đầu");
+                return;
+            }
+
+            // Xóa bất kỳ dữ liệu nào đang được ghi
+            context.Response.Clear();
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.ContentType = "application/json";
 
             var response = new
             {
@@ -22,8 +36,10 @@ namespace StudentMN.Middleware
                 detail = exception.Message
             };
 
-            return context.Response.WriteAsync(JsonSerializer.Serialize(response));
+            // Ghi JSON vào body
+            await context.Response.WriteAsync(JsonSerializer.Serialize(response));
         }
+
         public async Task InvokeAsync(HttpContext context)
         {
             try
@@ -35,6 +51,5 @@ namespace StudentMN.Middleware
                 await HandleExceptionAsync(context, ex);
             }
         }
-        
     }
 }

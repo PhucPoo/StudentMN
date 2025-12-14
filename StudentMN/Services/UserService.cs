@@ -14,12 +14,14 @@ namespace StudentMN.Services
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(AppDbContext context, IMapper mapper, IAuthService authService)
+        public UserService(AppDbContext context, IMapper mapper, IAuthService authService, ILogger<UserService> logger)
         {
             _context = context;
             _mapper = mapper;
             _authService = authService;
+            _logger = logger;
         }
 
         // Xem danh sách người dùng
@@ -55,28 +57,39 @@ namespace StudentMN.Services
         // Thêm tài khoản mới
         public async Task<UserResponseDTO> CreateUserAsync(UserRequestDTO dto)
         {
-            var usernameExists = await _context.Users
-                .AnyAsync(u => u.Username == dto.Username && u.IsActive);
+            _logger.LogInformation("Bắt đầu tạo user | Username: {Username} | Email: {Email}", dto.Username, dto.Email);
 
-            if (usernameExists)
-                throw new Exception("Username đã tồn tại");
-
-            var emailExists = await _context.Users
-                .AnyAsync(u => u.Email == dto.Email && u.IsActive);
-
-            if (emailExists)
-                throw new Exception("Email đã tồn tại");
-
-            var user = _mapper.Map<User>(dto);
             if (string.IsNullOrWhiteSpace(dto.Password))
             {
-                throw new Exception("Password không được để trống");
+                _logger.LogWarning("Tạo user thất bại: Password rỗng | Username: {Username}", dto.Username);
+                throw new ArgumentException("Password không được để trống");
             }
+
+            var usernameExists = await _context.Users.AnyAsync(u => u.Username == dto.Username && u.IsActive);
+            if (usernameExists)
+            {
+                _logger.LogWarning("Tạo user thất bại: Username đã tồn tại | Username: {Username}", dto.Username);
+                throw new ArgumentException("Username đã tồn tại");
+            }
+
+            var emailExists = await _context.Users.AnyAsync(u => u.Email == dto.Email && u.IsActive);
+            if (emailExists)
+            {
+                _logger.LogWarning("Tạo user thất bại: Email đã tồn tại | Email: {Email}", dto.Email);
+                throw new ArgumentException("Email đã tồn tại");
+            }
+
+            var user = _mapper.Map<User>(dto);
             user.Password = _authService.HashPassword(dto.Password);
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Tạo user thành công | UserId: {UserId} | Username: {Username}", user.Id, user.Username);
+
             return _mapper.Map<UserResponseDTO>(user);
         }
+
 
         // Cập nhật tài khoản
         public async Task<UserResponseDTO?> UpdateUserAsync(int id, UserRequestDTO dto)

@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:8080") 
+            policy.WithOrigins("http://localhost:8080")
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -115,9 +115,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowFrontend");
-app.UseMiddleware<StudentMN.Middleware.JwtMiddleware>();
-app.UseMiddleware<StudentMN.Middleware.ExceptionHandling>();
-app.UseMiddleware<StudentMN.Middleware.RequestLogging>();
+//app.UseMiddleware<StudentMN.Middleware.JwtMiddleware>();
+//app.UseMiddleware<StudentMN.Middleware.ExceptionHandling>();
+//app.UseMiddleware<StudentMN.Middleware.RequestLogging>();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

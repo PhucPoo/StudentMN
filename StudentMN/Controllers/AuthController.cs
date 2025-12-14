@@ -80,7 +80,7 @@ namespace StudentMN.Controllers
                     username = user.Username,
                     fullName = user.FullName,
                     email = user.Email,
-                    role = user.Role?.RoleName,
+                    role = user.Role.RoleName,
                     createdAt = user.CreatedAt
                 }
             });

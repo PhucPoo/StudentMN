@@ -5,6 +5,7 @@ using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Account;
+using StudentMN.Services.AuthService;
 
 namespace StudentMN.Services
 {
@@ -22,14 +23,14 @@ namespace StudentMN.Services
         }
 
         // Xem danh sách người dùng
-        public async Task<PagedResponse<UserResponseDTO>> GetAllAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
+        public async Task<PagedResponse<UserResponseDTO>> GetAllUserAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
             var query = _context.Users.Include(u => u.Role)
                                       .Where(u => u.IsActive)
                                       .AsQueryable();
             if (!string.IsNullOrWhiteSpace(search))
             {
-                query = query.Where(u => u.FullName.Contains(search));
+                query = query.Where(u => u.FullName != null && u.FullName.Contains(search));
             }
             var totalCount = await query.CountAsync();
 
@@ -52,9 +53,25 @@ namespace StudentMN.Services
         }
 
         // Thêm tài khoản mới
-        public async Task<UserResponseDTO> CreateAsync(UserRequestDTO dto)
+        public async Task<UserResponseDTO> CreateUserAsync(UserRequestDTO dto)
         {
+            var usernameExists = await _context.Users
+                .AnyAsync(u => u.Username == dto.Username && u.IsActive);
+
+            if (usernameExists)
+                throw new Exception("Username đã tồn tại");
+
+            var emailExists = await _context.Users
+                .AnyAsync(u => u.Email == dto.Email && u.IsActive);
+
+            if (emailExists)
+                throw new Exception("Email đã tồn tại");
+
             var user = _mapper.Map<User>(dto);
+            if (string.IsNullOrWhiteSpace(dto.Password))
+            {
+                throw new Exception("Password không được để trống");
+            }
             user.Password = _authService.HashPassword(dto.Password);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -62,7 +79,7 @@ namespace StudentMN.Services
         }
 
         // Cập nhật tài khoản
-        public async Task<UserResponseDTO> UpdateAsync(int id, UserRequestDTO dto)
+        public async Task<UserResponseDTO?> UpdateUserAsync(int id, UserRequestDTO dto)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null) return null;
@@ -73,7 +90,7 @@ namespace StudentMN.Services
         }
 
         // Xóa tài khoản
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteUserAsync(int id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null) return false;

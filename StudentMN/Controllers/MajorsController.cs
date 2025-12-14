@@ -19,33 +19,33 @@ namespace StudentMN.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<MajorResponseDTO>>> GetAll(int pageNumber = 1, int pageSize = 8, string search = null)
+        public async Task<ActionResult<List<MajorResponseDTO>>> GetAllMajor(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            return Ok(await _service.GetAllAsync(pageNumber, pageSize, search));
+            return Ok(await _service.GetAllMajorAsync(pageNumber, pageSize, search));
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<MajorResponseDTO>> Create(MajorRequestDTO dto)
+        public async Task<ActionResult<MajorResponseDTO>> CreateMajor(MajorRequestDTO dto)
         {
-            var Major = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetAll), new { id = Major.Id }, Major);
+            var Major = await _service.CreateMajorAsync(dto);
+            return CreatedAtAction(nameof(GetAllMajor), new { id = Major.Id }, Major);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<MajorResponseDTO>> Update(int id, MajorRequestDTO dto)
+        public async Task<ActionResult<MajorResponseDTO>> UpdateMajor(int id, MajorRequestDTO dto)
         {
-            var Major = await _service.UpdateAsync(id, dto);
+            var Major = await _service.UpdateMajorAsync(id, dto);
             if (Major == null) return NotFound();
             return Ok(Major);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> DeleteMajor(int id)
         {
-            var success = await _service.DeleteAsync(id);
+            var success = await _service.DeleteMajorAsync(id);
             if (!success) return NotFound();
             return NoContent();
         }

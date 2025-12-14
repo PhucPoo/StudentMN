@@ -21,14 +21,14 @@ namespace TeacherMN.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<List<TeacherResponseDTO>>> GetAll(int pageNumber = 1, int pageSize = 8, string search = null)
+        public async Task<ActionResult<List<TeacherResponseDTO>>> GetAllTeacher(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            return Ok(await _service.GetAllAsync(pageNumber, pageSize, search));
+            return Ok(await _service.GetAllTeacherAsync(pageNumber, pageSize, search));
         }
         [HttpGet("by-user/{userId}")]
-        public async Task<IActionResult> GetByUserId(int userId)
+        public async Task<IActionResult> GetTeacherByUserId(int userId)
         {
-            var teacher = await _service.GetByUserIdAsync(userId);
+            var teacher = await _service.GetTeacherByUserIdAsync(userId);
 
             if (teacher == null)
                 return NotFound(new { success = false, message = "Không tìm thấy sinh viên" });
@@ -38,26 +38,26 @@ namespace TeacherMN.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<TeacherResponseDTO>> Create(TeacherRequestDTO dto)
+        public async Task<ActionResult<TeacherResponseDTO>> CreateTeacher(TeacherRequestDTO dto)
         {
-            var Teacher = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetAll), new { id = Teacher.Id }, Teacher);
+            var Teacher = await _service.CreateTeacherAsync(dto);
+            return CreatedAtAction(nameof(GetAllTeacher), new { id = Teacher.Id }, Teacher);
         }
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<ActionResult<TeacherResponseDTO>> Update(int id, TeacherRequestDTO dto)
+        public async Task<ActionResult<TeacherResponseDTO>> UpdateTeacher(int id, TeacherRequestDTO dto)
         {
-            var Teacher = await _service.UpdateAsync(id, dto);
+            var Teacher = await _service.UpdateTeacherAsync(id, dto);
             if (Teacher == null) return NotFound();
             return Ok(Teacher);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> DeleteTeacher(int id)
         {
-            var success = await _service.DeleteAsync(id);
+            var success = await _service.DeleteTeacherAsync(id);
             if (!success) return NotFound();
             return NoContent();
         }

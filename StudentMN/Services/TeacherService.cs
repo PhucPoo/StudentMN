@@ -4,7 +4,7 @@ using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Account;
-using StudentMN.Services;
+using StudentMN.Services.AuthService;
 
 namespace TeacherMN.Services
 {
@@ -12,24 +12,22 @@ namespace TeacherMN.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IAuthService _authService;
 
         public TeacherService(AppDbContext context, IMapper mapper, IAuthService authService)
         {
             _context = context;
             _mapper = mapper;
-            _authService = authService;
         }
 
         // Xem danh sách giảng viên
-        public async Task<PagedResponse<TeacherResponseDTO>> GetAllAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
+        public async Task<PagedResponse<TeacherResponseDTO>> GetAllTeacherAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
             var query = _context.Teachers.Include(s => s.User)
                                          .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                query = query.Where(s => s.TeacherCode.Contains(search));
+                query = query.Where(s => s.TeacherCode!=null && s.TeacherCode.Contains(search));
             }
 
             var totalCount = await query.CountAsync();
@@ -51,7 +49,7 @@ namespace TeacherMN.Services
                 Data = TeachersDto
             };
         }
-        public async Task<TeacherResponseDTO> GetByUserIdAsync(int userId)
+        public async Task<TeacherResponseDTO?> GetTeacherByUserIdAsync(int userId)
         {
             var teacher = await _context.Teachers
                 .Include(s => s.User)
@@ -60,19 +58,23 @@ namespace TeacherMN.Services
             if (teacher == null) return null;
 
             var dto = _mapper.Map<TeacherResponseDTO>(teacher);
-            dto.FullName = teacher.User.FullName;
-            dto.Email = teacher.User.Email;
+            dto.FullName = teacher.User?.FullName;
+            dto.Email = teacher.User?.Email;
 
             return dto;
         }
 
 
         // Thêm giảng viên mới
-        public async Task<TeacherResponseDTO> CreateAsync(TeacherRequestDTO dto)
+        public async Task<TeacherResponseDTO> CreateTeacherAsync(TeacherRequestDTO dto)
         {
             var Teacher = _mapper.Map<Teacher>(dto);
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == dto.UserId);
+            if (user == null)
+            {
+                throw new Exception("User không tồn tại");
+            }
 
             Teacher.UserId = user.Id;
 
@@ -85,7 +87,7 @@ namespace TeacherMN.Services
         }
 
         // Cập nhật giảng viên
-        public async Task<TeacherResponseDTO> UpdateAsync(int id, TeacherRequestDTO dto)
+        public async Task<TeacherResponseDTO?> UpdateTeacherAsync(int id, TeacherRequestDTO dto)
         {
             var Teacher = await _context.Teachers.FindAsync(id);
             if (Teacher == null) return null;
@@ -96,7 +98,7 @@ namespace TeacherMN.Services
         }
 
         // Xóa giảng viên
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteTeacherAsync(int id)
         {
             var Teacher = await _context.Teachers.FindAsync(id);
             if (Teacher == null) return false;

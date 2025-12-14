@@ -6,6 +6,7 @@ using StudentMN.DTOs.Response;
 using StudentMN.Models.Account;
 using StudentMN.Models.Class;
 using StudentMN.Models.Score;
+using StudentMN.Services.AuthService;
 
 namespace StudentMN.Services
 {
@@ -13,15 +14,13 @@ namespace StudentMN.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IAuthService _authService;
         public ScoreService(AppDbContext context, IMapper mapper, IAuthService authService)
         {
             _context = context;
             _mapper = mapper;
-            _authService = authService;
         }
         // Xem danh sách khoa
-        public async Task<PagedResponse<ScoreResponseDTO>> GetAllAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
+        public async Task<PagedResponse<ScoreResponseDTO>> GetAllScoreAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
             var query = _context.Scores.AsQueryable();
             var totalCount = await query.CountAsync();
@@ -44,7 +43,7 @@ namespace StudentMN.Services
             };
         }
         //Thêm khoa mới
-        public async Task<ScoreResponseDTO> CreateAsync(ScoreRequestDTO dto)
+        public async Task<ScoreResponseDTO> CreateScoreAsync(ScoreRequestDTO dto)
         {
             var score = _mapper.Map<Score>(dto);
 
@@ -54,7 +53,7 @@ namespace StudentMN.Services
         }
 
         //Cập nhật khoa mới
-        public async Task<ScoreResponseDTO> UpdateAsync(int id, ScoreRequestDTO dto)
+        public async Task<ScoreResponseDTO?> UpdateScoreAsync(int id, ScoreRequestDTO dto)
         {
             var score = await _context.Scores.FindAsync(id);
             if (score == null) return null;
@@ -63,7 +62,7 @@ namespace StudentMN.Services
             await _context.SaveChangesAsync();
             return _mapper.Map<ScoreResponseDTO>(score);
         }
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteScoreAsync(int id)
         {
             var score = await _context.Scores.FindAsync(id);
             if (score == null) return false;

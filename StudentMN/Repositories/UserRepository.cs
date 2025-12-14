@@ -19,7 +19,7 @@ namespace StudentMN.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<User> GetUserByUsernameAsync(string username)
+        public async Task<User?> GetUserByUsernameAsync(string username)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace StudentMN.Repositories
             }
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<User?> GetUserByIdAsync(int id)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace StudentMN.Repositories
             }
         }
 
-        public async Task<User> GetUserByEmailAsync(string email)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace StudentMN.Repositories
             }
         }
 
-        public async Task<User> UpdateUserAsync(User user)
+        public async Task<User?> UpdateUserAsync(User user)
         {
             try
             {
@@ -124,7 +124,6 @@ namespace StudentMN.Repositories
                 existingUser.RoleId = user.RoleId;
                 existingUser.UpdatedAt = DateTime.Now;
 
-                // Only update password if it's provided and different
                 if (!string.IsNullOrEmpty(user.Password) && !BCrypt.Net.BCrypt.Verify(user.Password, existingUser.Password))
                 {
                     existingUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
@@ -146,7 +145,6 @@ namespace StudentMN.Repositories
                 var user = await _context.Users.FindAsync(id);
                 if (user == null) return false;
 
-                // Soft delete
                 user.IsActive = false;
                 user.UpdatedAt = DateTime.Now;
 
@@ -182,7 +180,7 @@ namespace StudentMN.Repositories
                 throw;
             }
         }
-        public async Task<User> GetUserByRefreshTokenAsync(string refreshToken)
+        public async Task<User?> GetUserByRefreshTokenAsync(string refreshToken)
         {
             return await _context.Users
                 .FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);

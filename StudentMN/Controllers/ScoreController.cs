@@ -19,24 +19,24 @@ namespace StudentMN.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<ScoreResponseDTO>>> GetAll(int pageNumber = 1, int pageSize = 8, string search = null)
+        public async Task<ActionResult<List<ScoreResponseDTO>>> GetAllScore(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            return Ok(await _service.GetAllAsync(pageNumber, pageSize, search));
+            return Ok(await _service.GetAllScoreAsync(pageNumber, pageSize, search));
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<ScoreResponseDTO>> Create(ScoreRequestDTO dto)
+        public async Task<ActionResult<ScoreResponseDTO>> CreateScore(ScoreRequestDTO dto)
         {
-            var Score = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetAll), new { id = Score.Id }, Score);
+            var Score = await _service.CreateScoreAsync(dto);
+            return CreatedAtAction(nameof(GetAllScore), new { id = Score.Id }, Score);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<ScoreResponseDTO>> Update(int id, ScoreRequestDTO dto)
+        public async Task<ActionResult<ScoreResponseDTO>> UpdateScore(int id, ScoreRequestDTO dto)
         {
-            var Score = await _service.UpdateAsync(id, dto);
+            var Score = await _service.UpdateScoreAsync(id, dto);
             if (Score == null) return NotFound();
             return Ok(Score);
         }

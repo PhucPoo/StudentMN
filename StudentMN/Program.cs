@@ -8,6 +8,7 @@ using StudentMN.Data;
 using StudentMN.Mapping;
 using StudentMN.Repositories;
 using StudentMN.Services;
+using StudentMN.Services.AuthService;
 using System.Text;
 using TeacherMN.Services;
 
@@ -61,7 +62,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                Encoding.UTF8.GetBytes(
+                builder.Configuration.GetRequiredSection("Jwt:Key").Value!))
         };
     });
 
@@ -113,6 +115,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowFrontend");
+app.UseMiddleware<StudentMN.Middleware.JwtMiddleware>();
+app.UseMiddleware<StudentMN.Middleware.ExceptionHandling>();
+app.UseMiddleware<StudentMN.Middleware.RequestLogging>();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

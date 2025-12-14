@@ -5,6 +5,7 @@ using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Class;
 using StudentMN.Models.Score;
+using StudentMN.Services.AuthService;
 
 namespace StudentMN.Services
 {
@@ -12,15 +13,13 @@ namespace StudentMN.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IAuthService _authService;
         public SubjectService(AppDbContext context, IMapper mapper, IAuthService authService)
         {
             _context = context;
             _mapper = mapper;
-            _authService = authService;
         }
         // Xem danh sách khoa
-        public async Task<PagedResponse<SubjectResponseDTO>> GetAllAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
+        public async Task<PagedResponse<SubjectResponseDTO>> GetAllSubjectAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
             var query = _context.Subjects.AsQueryable();
 
@@ -49,7 +48,7 @@ namespace StudentMN.Services
             };
         }
         //Thêm môn học mới
-        public async Task<SubjectResponseDTO> CreateAsync(SubjectRequestDTO dto)
+        public async Task<SubjectResponseDTO> CreateSubjectAsync(SubjectRequestDTO dto)
         {
             var Subject = _mapper.Map<Subject>(dto);
 
@@ -59,7 +58,7 @@ namespace StudentMN.Services
         }
 
         //Cập nhật môn học mới
-        public async Task<SubjectResponseDTO> UpdateAsync(int id, SubjectRequestDTO dto)
+        public async Task<SubjectResponseDTO?> UpdateSubjectAsync(int id, SubjectRequestDTO dto)
         {
             var Subject = await _context.Subjects.FindAsync(id);
             if (Subject == null) return null;
@@ -68,7 +67,7 @@ namespace StudentMN.Services
             await _context.SaveChangesAsync();
             return _mapper.Map<SubjectResponseDTO>(Subject);
         }
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteSubjectAsync(int id)
         {
             var Subject = await _context.Subjects.FindAsync(id);
             if (Subject == null) return false;

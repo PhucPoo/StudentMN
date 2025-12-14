@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace StudentMN.Services
+namespace StudentMN.Services.AuthService
 {
     public class AuthService : IAuthService
     {
@@ -72,8 +72,6 @@ namespace StudentMN.Services
                         Message = "Mật khẩu của bạn không đúng"
                     };
                 }
-
-                // Tạo token
                 var tokens = await GenerateTokens(user);
 
                 return new LoginResponse
@@ -89,7 +87,7 @@ namespace StudentMN.Services
                         Username = user.Username,
                         FullName = user.FullName,
                         Email = user.Email,
-                        Role = user.Role.RoleName
+                        Role = user.Role?.RoleName
                     }
                 };
             }
@@ -106,18 +104,32 @@ namespace StudentMN.Services
 
         public string GenerateJwtToken(User user, string roleName)
         {
+            var jwtKey = _configuration["Jwt:Key"]
+                ?? throw new InvalidOperationException("Jwt:Key bị thiếu trong cấu hình");
+
             var securityKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])
+                Encoding.UTF8.GetBytes(jwtKey)
             );
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
+            if (string.IsNullOrWhiteSpace(user.Username))
+            {
+                throw new Exception("Username không hợp lệ");
+            }
+            if (string.IsNullOrWhiteSpace(user.Email))
+            {
+                throw new Exception("Email không hợp lệ");
+            }
+            if (string.IsNullOrWhiteSpace(user.FullName))
+            {
+                throw new Exception("FullName không hợp lệ");
+            }
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email ?? ""),
+                new Claim(ClaimTypes.Email, user.Email ),
                 new Claim(ClaimTypes.Role, roleName),
-                new Claim("FullName", user.FullName ?? "")
+                new Claim("FullName", user.FullName )
             };
 
             var token = new JwtSecurityToken(
@@ -130,7 +142,7 @@ namespace StudentMN.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        
+
 
 
         public async Task<bool> ValidateTokenAsync(string token)
@@ -138,7 +150,9 @@ namespace StudentMN.Services
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+                var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]
+                        ?? throw new InvalidOperationException("Jwt:Key bị thiếu trong cấu hình")
+                );
 
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
@@ -159,16 +173,16 @@ namespace StudentMN.Services
                 return false;
             }
         }
-        public string GetRoleFromToken(string token)
+        public string? GetRoleFromToken(string token)
         {
             if (string.IsNullOrEmpty(token)) return "User";
 
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(token);
 
-            // Lấy claim role
+
             var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
-            return roleClaim?.Value ;
+            return roleClaim?.Value;
         }
         public string GenerateRefreshToken()
         {
@@ -182,9 +196,11 @@ namespace StudentMN.Services
         {
             if (user.Role == null && user.RoleId != 0)
             {
-                user.Role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == user.RoleId);
+                user.Role = await _context.Roles
+                    .FirstOrDefaultAsync(r => r.Id == user.RoleId)
+                    ?? throw new InvalidOperationException($"Không tìm thấy vai trò có Id là = {user.RoleId}");
             }
-            string roleName = user.Role?.RoleName;
+            string? roleName = user.Role?.RoleName;
             if (string.IsNullOrEmpty(roleName))
                 throw new Exception("User không có role hợp lệ");
 
@@ -197,7 +213,7 @@ namespace StudentMN.Services
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = refreshExpiry;
 
-            await _userRepository.UpdateAsync(user); 
+            await _userRepository.UpdateAsync(user);
             //await _userRepository.SaveAsync(); 
 
             return (accessToken, refreshToken, refreshExpiry);
@@ -254,7 +270,7 @@ namespace StudentMN.Services
 
 
 
-        public async Task<User> GetCurrentUserAsync(int userId)
+        public async Task<User?> GetCurrentUserAsync(int userId)
         {
             return await _userRepository.GetUserByIdAsync(userId);
         }

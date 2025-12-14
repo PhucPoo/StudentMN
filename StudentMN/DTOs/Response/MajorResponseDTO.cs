@@ -4,7 +4,7 @@ namespace StudentMN.DTOs.Response
 {
     public class MajorResponseDTO:BaseEntity
     {
-        public string MajorName { get; set; }
-        public string Description { get; set; }
+        public string? MajorName { get; set; }
+        public string? Description { get; set; }
     }
 }

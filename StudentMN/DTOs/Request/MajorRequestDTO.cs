@@ -2,7 +2,7 @@
 {
     public class MajorRequestDTO
     {
-        public string MajorName { get; set; }
-        public string Description { get; set; }
+        public string? MajorName { get; set; }
+        public string? Description { get; set; }
     }
 }

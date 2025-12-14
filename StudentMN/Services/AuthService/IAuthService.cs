@@ -2,7 +2,7 @@
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Account;
 
-namespace StudentMN.Services
+namespace StudentMN.Services.AuthService
 {
     public interface IAuthService
     {
@@ -18,6 +18,6 @@ namespace StudentMN.Services
 
         Task<LoginResponse> RefreshTokenAsync(string refreshToken);
         Task<bool> ValidateTokenAsync(string token);
-        Task<User> GetCurrentUserAsync(int userId);
+        Task<User?> GetCurrentUserAsync(int userId);
     }
 }

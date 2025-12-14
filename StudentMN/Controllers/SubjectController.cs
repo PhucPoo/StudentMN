@@ -19,35 +19,35 @@ namespace StudentMN.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<SubjectResponseDTO>>> GetAll(int pageNumber = 1, int pageSize = 8, string search = null)
+        public async Task<ActionResult<List<SubjectResponseDTO>>> GetAllSubject(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            return Ok(await _service.GetAllAsync(pageNumber, pageSize, search));
+            return Ok(await _service.GetAllSubjectAsync(pageNumber, pageSize, search));
         }
 
         
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<SubjectResponseDTO>> Create(SubjectRequestDTO dto)
+        public async Task<ActionResult<SubjectResponseDTO>> CreateSubject(SubjectRequestDTO dto)
         {
-            var Subject = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetAll), new { id = Subject.Id }, Subject);
+            var Subject = await _service.CreateSubjectAsync(dto);
+            return CreatedAtAction(nameof(GetAllSubject), new { id = Subject.Id }, Subject);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<SubjectResponseDTO>> Update(int id, SubjectRequestDTO dto)
+        public async Task<ActionResult<SubjectResponseDTO>> UpdateSubject(int id, SubjectRequestDTO dto)
         {
-            var Subject = await _service.UpdateAsync(id, dto);
+            var Subject = await _service.UpdateSubjectAsync(id, dto);
             if (Subject == null) return NotFound();
             return Ok(Subject);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> DeleteSubject(int id)
         {
-            var success = await _service.DeleteAsync(id);
+            var success = await _service.DeleteSubjectAsync(id);
             if (!success) return NotFound();
             return NoContent();
         }

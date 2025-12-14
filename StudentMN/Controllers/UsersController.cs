@@ -21,33 +21,33 @@ namespace StudentManagement.StudentManagement.API.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<UserResponseDTO>>> GetAll(int pageNumber=1, int pageSize=8, string search=null)
+        public async Task<ActionResult<List<UserResponseDTO>>> GetAllUser(int pageNumber=1, int pageSize=8, string? search=null)
         {
-            return Ok(await _service.GetAllAsync(pageNumber,pageSize,search));
+            return Ok(await _service.GetAllUserAsync(pageNumber,pageSize,search));
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<UserResponseDTO>> Create(UserRequestDTO dto)
+        public async Task<ActionResult<UserResponseDTO>> CreateUser(UserRequestDTO dto)
         {
-            var user = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetAll), new { id = user.Id }, user);
+            var user = await _service.CreateUserAsync(dto);
+            return CreatedAtAction(nameof(GetAllUser), new { id = user.Id }, user);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<UserResponseDTO>> Update(int id, UserRequestDTO dto)
+        public async Task<ActionResult<UserResponseDTO>> UpdateUser(int id, UserRequestDTO dto)
         {
-            var user = await _service.UpdateAsync(id, dto);
+            var user = await _service.UpdateUserAsync(id, dto);
             if (user == null) return NotFound();
             return Ok(user);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> DeleteUser(int id)
         {
-            var success = await _service.DeleteAsync(id);
+            var success = await _service.DeleteUserAsync(id);
             if (!success) return NotFound();
             return NoContent();
         }

@@ -5,6 +5,7 @@ using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Account;
 using StudentMN.Models.Class;
+using StudentMN.Services.AuthService;
 
 namespace StudentMN.Services
 {
@@ -12,15 +13,13 @@ namespace StudentMN.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IAuthService _authService;
         public MajorService(AppDbContext context, IMapper mapper, IAuthService authService)
         {
             _context = context;
             _mapper = mapper;
-            _authService = authService;
         }
         // Xem danh sách khoa
-        public async Task<PagedResponse<MajorResponseDTO>> GetAllAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
+        public async Task<PagedResponse<MajorResponseDTO>> GetAllMajorAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
             var query = _context.Majors.AsQueryable();
 
@@ -49,7 +48,7 @@ namespace StudentMN.Services
             };
         }
         //Thêm khoa mới
-        public async Task<MajorResponseDTO> CreateAsync(MajorRequestDTO dto)
+        public async Task<MajorResponseDTO> CreateMajorAsync(MajorRequestDTO dto)
         {
             var major = _mapper.Map<Major>(dto);
 
@@ -59,7 +58,7 @@ namespace StudentMN.Services
         }
 
         //Cập nhật khoa mới
-        public async Task<MajorResponseDTO> UpdateAsync(int id, MajorRequestDTO dto)
+        public async Task<MajorResponseDTO?> UpdateMajorAsync(int id, MajorRequestDTO dto)
         {
             var major = await _context.Majors.FindAsync(id);
             if (major == null) return null;
@@ -68,7 +67,7 @@ namespace StudentMN.Services
             await _context.SaveChangesAsync();
             return _mapper.Map<MajorResponseDTO>(major);
         }
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteMajorAsync(int id)
         {
             var major = await _context.Majors.FindAsync(id);
             if (major == null) return false;

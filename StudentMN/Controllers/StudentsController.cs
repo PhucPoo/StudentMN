@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Services;
+using System.Security.Claims;
 
 namespace StudentManagement.StudentManagement.API.Controllers
 {
@@ -49,7 +50,12 @@ namespace StudentManagement.StudentManagement.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<StudentResponseDTO>> Update(int id, StudentRequestDTO dto)
         {
-            var student = await _service.UpdateAsync(id, dto);
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (string.IsNullOrEmpty(role))
+                return Forbid();
+
+            var student = await _service.UpdateAsync(id, dto,role);
             if (student == null) return NotFound();
             return Ok(student);
         }

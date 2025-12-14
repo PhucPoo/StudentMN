@@ -84,10 +84,15 @@ namespace StudentMN.Services
         }
 
         // Cập nhật sinh viên
-        public async Task<StudentResponseDTO> UpdateAsync(int id, StudentRequestDTO dto)
+        public async Task<StudentResponseDTO> UpdateAsync(int id, StudentRequestDTO dto, string role)
         {
             var student = await _context.Students.FindAsync(id);
             if (student == null) return null;
+
+            if (role != "Admin")
+            {
+                dto.StudentCode = student.StudentCode;
+            }
 
             _mapper.Map(dto, student);
             await _context.SaveChangesAsync();

@@ -1,7 +1,7 @@
 ﻿using StudentMN.Models.Account;
 using StudentMN.Models.Base;
 
-namespace StudentMN.Models.Permission
+namespace StudentMN.Models.PermissionModels
 {
     public class RolePermission: BaseEntity
     {

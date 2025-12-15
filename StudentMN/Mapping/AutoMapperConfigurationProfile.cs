@@ -3,6 +3,7 @@ using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Account;
 using StudentMN.Models.Class;
+using StudentMN.Models.PermissionModels;
 using StudentMN.Models.Score;
 
 namespace StudentMN.Mapping
@@ -29,6 +30,10 @@ namespace StudentMN.Mapping
             CreateMap<Subject, SubjectResponseDTO>();
             CreateMap<ScoreRequestDTO, Score>();
             CreateMap<Score, ScoreResponseDTO>();
+            CreateMap<PermissionRequestDTO, Permission>();
+            CreateMap<Permission,PermissionDTO>();
+            CreateMap<RolePermissionRequestDTO, RolePermission>();
+            CreateMap<RolePermission, RolePermissionDTO>();
 
         }
     }

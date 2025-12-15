@@ -2,7 +2,7 @@
 using StudentMN.Models.Account;
 using StudentMN.Models.Base;
 using StudentMN.Models.Class;
-using StudentMN.Models.Permission;
+using StudentMN.Models.PermissionModels;
 using StudentMN.Models.Score;
 
 namespace StudentMN.Data
@@ -152,28 +152,6 @@ namespace StudentMN.Data
                     IsActive = true,
                     CreatedAt = DateTime.Now
                 }
-            );
-
-            // Seed Permissions
-            modelBuilder.Entity<Permission>().HasData(
-                new Permission { Id = 1, PermissionName = "ViewUsers", Description = "Xem danh sách người dùng", CreatedAt = DateTime.Now },
-                new Permission { Id = 2, PermissionName = "CreateUser", Description = "Tạo người dùng mới", CreatedAt = DateTime.Now },
-                new Permission { Id = 3, PermissionName = "UpdateUser", Description = "Cập nhật người dùng", CreatedAt = DateTime.Now },
-                new Permission { Id = 4, PermissionName = "DeleteUser", Description = "Xóa người dùng", CreatedAt = DateTime.Now },
-                new Permission { Id = 5, PermissionName = "ViewStudents", Description = "Xem danh sách sinh viên", CreatedAt = DateTime.Now },
-                new Permission { Id = 6, PermissionName = "ManageStudents", Description = "Quản lý sinh viên", CreatedAt = DateTime.Now }
-            );
-
-            // Seed RolePermissions (Admin có tất cả quyền)
-            modelBuilder.Entity<RolePermission>().HasData(
-                new RolePermission { Id = 1, RoleId = 1, PermissionId = 1, CreatedAt = DateTime.Now },
-                new RolePermission { Id = 2, RoleId = 1, PermissionId = 2, CreatedAt = DateTime.Now },
-                new RolePermission { Id = 3, RoleId = 1, PermissionId = 3, CreatedAt = DateTime.Now },
-                new RolePermission { Id = 4, RoleId = 1, PermissionId = 4, CreatedAt = DateTime.Now },
-                new RolePermission { Id = 5, RoleId = 1, PermissionId = 5, CreatedAt = DateTime.Now },
-                new RolePermission { Id = 6, RoleId = 1, PermissionId = 6, CreatedAt = DateTime.Now },
-                // Student chỉ có quyền xem
-                new RolePermission { Id = 7, RoleId = 2, PermissionId = 5, CreatedAt = DateTime.Now }
             );
         }
 

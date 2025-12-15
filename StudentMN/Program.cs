@@ -9,6 +9,7 @@ using StudentMN.Mapping;
 using StudentMN.Repositories;
 using StudentMN.Services;
 using StudentMN.Services.AuthService;
+using StudentMN.Services.PermissionService;
 using System.Text;
 using TeacherMN.Services;
 
@@ -30,10 +31,9 @@ builder.Services.AddAutoMapper(ctf => { }, typeof(AutoMapperConfigurationProfile
 
 //Cấu hình Serilog
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Debug()
-    .WriteTo.Console()
-    .WriteTo.File("logs/webapp.txt", rollingInterval: RollingInterval.Day)
+    .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
+
 builder.Host.UseSerilog();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -49,6 +49,8 @@ builder.Services.AddScoped<MajorService>();
 builder.Services.AddScoped<ClassService>();
 builder.Services.AddScoped<SubjectService>();
 builder.Services.AddScoped<ScoreService>();
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

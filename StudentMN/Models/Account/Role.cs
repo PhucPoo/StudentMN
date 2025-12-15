@@ -1,5 +1,5 @@
 ﻿using StudentMN.Models.Base;
-using StudentMN.Models.Permission;
+using StudentMN.Models.PermissionModels;
 
 namespace StudentMN.Models.Account
 {

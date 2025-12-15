@@ -21,7 +21,7 @@ namespace StudentMN.Controllers
             _authService = authService;
         }
 
-        
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] DTOs.Request.LoginRequest request)
         {
@@ -86,7 +86,6 @@ namespace StudentMN.Controllers
             });
         }
 
-        
 
         [HttpPost("validate-token")]
         public async Task<IActionResult> ValidateToken([FromBody] string token)
@@ -120,6 +119,7 @@ namespace StudentMN.Controllers
                 message = "Đăng xuất thành công"
             });
         }
+        [AllowAnonymous]
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken([FromBody] TokenRequestDTO request)
         {

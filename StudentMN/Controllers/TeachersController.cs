@@ -40,6 +40,14 @@ namespace TeacherMN.Controllers
         [HttpPost]
         public async Task<ActionResult<TeacherResponseDTO>> CreateTeacher(TeacherRequestDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.ToDictionary(
+                    kv => kv.Key,
+                    kv => kv.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+                return BadRequest(new { success = false, errors });
+            }
             var Teacher = await _service.CreateTeacherAsync(dto);
             return CreatedAtAction(nameof(GetAllTeacher), new { id = Teacher.Id }, Teacher);
         }

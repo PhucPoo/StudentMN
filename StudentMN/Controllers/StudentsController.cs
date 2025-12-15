@@ -42,6 +42,14 @@ namespace StudentManagement.StudentManagement.API.Controllers
         [HttpPost]
         public async Task<ActionResult<StudentResponseDTO>> CreateStudent(StudentRequestDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.ToDictionary(
+                    kv => kv.Key,
+                    kv => kv.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+                return BadRequest(new { success = false, errors });
+            }
             var student = await _service.CreateStudentAsync(dto);
             return CreatedAtAction(nameof(GetAllStudent), new { id = student.Id }, student);
         }

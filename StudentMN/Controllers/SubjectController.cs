@@ -30,6 +30,14 @@ namespace StudentMN.Controllers
         [HttpPost]
         public async Task<ActionResult<SubjectResponseDTO>> CreateSubject(SubjectRequestDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.ToDictionary(
+                    kv => kv.Key,
+                    kv => kv.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+                return BadRequest(new { success = false, errors });
+            }
             var Subject = await _service.CreateSubjectAsync(dto);
             return CreatedAtAction(nameof(GetAllSubject), new { id = Subject.Id }, Subject);
         }

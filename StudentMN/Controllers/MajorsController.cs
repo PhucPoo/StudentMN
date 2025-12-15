@@ -28,6 +28,14 @@ namespace StudentMN.Controllers
         [HttpPost]
         public async Task<ActionResult<MajorResponseDTO>> CreateMajor(MajorRequestDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.ToDictionary(
+                    kv => kv.Key,
+                    kv => kv.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+                return BadRequest(new { success = false, errors });
+            }
             var Major = await _service.CreateMajorAsync(dto);
             return CreatedAtAction(nameof(GetAllMajor), new { id = Major.Id }, Major);
         }

@@ -34,7 +34,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("logs/webapp.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
-
+builder.Host.UseSerilog();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -98,6 +98,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -115,9 +116,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowFrontend");
-//app.UseMiddleware<StudentMN.Middleware.JwtMiddleware>();
-//app.UseMiddleware<StudentMN.Middleware.ExceptionHandling>();
-//app.UseMiddleware<StudentMN.Middleware.RequestLogging>();
+app.UseMiddleware<StudentMN.Middleware.ExceptionHandling>();
+app.UseMiddleware<StudentMN.Middleware.RequestLogging>();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

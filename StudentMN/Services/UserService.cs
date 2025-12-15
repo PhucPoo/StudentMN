@@ -57,26 +57,25 @@ namespace StudentMN.Services
         // Thêm tài khoản mới
         public async Task<UserResponseDTO> CreateUserAsync(UserRequestDTO dto)
         {
-            _logger.LogInformation("Bắt đầu tạo user | Username: {Username} | Email: {Email}", dto.Username, dto.Email);
 
             if (string.IsNullOrWhiteSpace(dto.Password))
             {
-                _logger.LogWarning("Tạo user thất bại: Password rỗng | Username: {Username}", dto.Username);
-                throw new ArgumentException("Password không được để trống");
+                _logger.LogWarning("Tao User that bai: Password rong | Username: {Username}", dto.Username);
+                throw new ArgumentException("Password khong duoc de trong");
             }
 
             var usernameExists = await _context.Users.AnyAsync(u => u.Username == dto.Username && u.IsActive);
             if (usernameExists)
             {
-                _logger.LogWarning("Tạo user thất bại: Username đã tồn tại | Username: {Username}", dto.Username);
-                throw new ArgumentException("Username đã tồn tại");
+                _logger.LogWarning("Tao user that bai: Username da ton tai | Username: {Username}", dto.Username);
+                throw new ArgumentException("Username da ton tai");
             }
 
             var emailExists = await _context.Users.AnyAsync(u => u.Email == dto.Email && u.IsActive);
             if (emailExists)
             {
-                _logger.LogWarning("Tạo user thất bại: Email đã tồn tại | Email: {Email}", dto.Email);
-                throw new ArgumentException("Email đã tồn tại");
+                _logger.LogWarning("tao user that bai: Email da ton tai | Email: {Email}", dto.Email);
+                throw new ArgumentException("Email da ton tai");
             }
 
             var user = _mapper.Map<User>(dto);
@@ -85,7 +84,7 @@ namespace StudentMN.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Tạo user thành công | UserId: {UserId} | Username: {Username}", user.Id, user.Username);
+            _logger.LogInformation("Tao user thanh cong | UserId: {UserId} | Username: {Username}", user.Id, user.Username);
 
             return _mapper.Map<UserResponseDTO>(user);
         }

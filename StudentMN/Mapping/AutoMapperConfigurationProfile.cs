@@ -4,7 +4,7 @@ using StudentMN.DTOs.Response;
 using StudentMN.Models.Account;
 using StudentMN.Models.Class;
 using StudentMN.Models.PermissionModels;
-using StudentMN.Models.Score;
+using StudentMN.Models.ScoreStudent;
 
 namespace StudentMN.Mapping
 {

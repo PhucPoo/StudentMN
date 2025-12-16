@@ -18,6 +18,8 @@ namespace StudentMN.Models.Account
         public User? User { get; set; }
 
         public Major? Major { get; set; }
+        public ICollection<CourseSection> CourseSections { get; set; }
+        = new List<CourseSection>();
 
 
     }

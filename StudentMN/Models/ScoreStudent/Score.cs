@@ -1,7 +1,8 @@
 ﻿using StudentMN.Models.Account;
 using StudentMN.Models.Base;
+using StudentMN.Models.Class;
 
-namespace StudentMN.Models.Score
+namespace StudentMN.Models.ScoreStudent
 {
     public class Score:BaseEntity
     {
@@ -15,6 +16,8 @@ namespace StudentMN.Models.Score
 
         public Student Student { get; set; }
         public Subject Subject { get; set; }
+        public int CourseSectionId { get; set; }
+        public CourseSection CourseSection { get; set; } = null!;
 
     }
 }

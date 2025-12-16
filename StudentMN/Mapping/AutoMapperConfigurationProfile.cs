@@ -34,6 +34,8 @@ namespace StudentMN.Mapping
             CreateMap<Permission,PermissionDTO>();
             CreateMap<RolePermissionRequestDTO, RolePermission>();
             CreateMap<RolePermission, RolePermissionDTO>();
+            CreateMap<CourseSectionRequestDTO, CourseSection>();
+            CreateMap<CourseSection, CourseSectionResponseDTO>();
 
         }
     }

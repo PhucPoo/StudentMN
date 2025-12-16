@@ -1,12 +1,10 @@
 ﻿using StudentMN.Models.Account;
-using StudentMN.Models.Base;
 using StudentMN.Models.ScoreStudent;
 
-namespace StudentMN.Models.Class
+namespace StudentMN.DTOs.Request
 {
-    public class CourseSection: BaseEntity
+    public class CourseSectionRequestDTO
     {
-
         public string SectionCode { get; set; } = null!;
 
         public int SubjectId { get; set; }
@@ -18,11 +16,5 @@ namespace StudentMN.Models.Class
         public string Semester { get; set; } = null!;
 
         public int MaxStudents { get; set; }
-
-        public ICollection<EnrollmentCourseSection> EnrollmentCourseSections { get; set; }
-            = new List<EnrollmentCourseSection>();
-
-        public ICollection<Score> Scores { get; set; }
-            = new List<Score>();
     }
 }

@@ -23,6 +23,9 @@ namespace StudentMN.Data
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Classes> Classes { get; set; }
         public DbSet<Major> Majors { get; set; }
+        public DbSet<CourseSection> CourseSections { get; set; }
+        public DbSet<EnrollmentCourseSection> EnrollmentCourseSections { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

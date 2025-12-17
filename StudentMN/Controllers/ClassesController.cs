@@ -20,14 +20,14 @@
                 _service = service;
             }
 
-            [Authorize]
+            //[Authorize]
             [HttpGet]
             public async Task<ActionResult<List<ClassesResponseDTO>>> GetAllClass(int pageNumber = 1, int pageSize = 8, string? search = null)
             {
                 return Ok(await _service.GetAllClassAsync(pageNumber, pageSize, search));
             }
 
-            [Authorize(Roles = "Admin")]
+            //[Authorize(Roles = "Admin")]
             [HttpPost]
             public async Task<ActionResult<ClassesResponseDTO>> CreateClass(ClassesRequestDTO dto)
             {
@@ -35,7 +35,7 @@
                 return CreatedAtAction(nameof(GetAllClass), new { id = Class.Id }, Class);
             }
 
-            [Authorize(Roles = "Admin")]
+            //[Authorize(Roles = "Admin")]
             [HttpPut("{id}")]
             public async Task<ActionResult<ClassesResponseDTO>> UpdateClass(int id, ClassesRequestDTO dto)
             {
@@ -44,7 +44,7 @@
                 return Ok(Class);
             }
 
-            [Authorize(Roles = "Admin")]
+            //[Authorize(Roles = "Admin")]
             [HttpDelete("{id}")]
             public async Task<ActionResult> DeleteClass(int id)
             {

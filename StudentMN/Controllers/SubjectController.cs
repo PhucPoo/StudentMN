@@ -17,7 +17,7 @@ namespace StudentMN.Controllers
             _service = service;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<List<SubjectResponseDTO>>> GetAllSubject(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
@@ -26,7 +26,7 @@ namespace StudentMN.Controllers
 
         
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<SubjectResponseDTO>> CreateSubject(SubjectRequestDTO dto)
         {
@@ -42,7 +42,7 @@ namespace StudentMN.Controllers
             return CreatedAtAction(nameof(GetAllSubject), new { id = Subject.Id }, Subject);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<ActionResult<SubjectResponseDTO>> UpdateSubject(int id, SubjectRequestDTO dto)
         {
@@ -51,7 +51,7 @@ namespace StudentMN.Controllers
             return Ok(Subject);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteSubject(int id)
         {

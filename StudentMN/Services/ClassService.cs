@@ -3,8 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models.Class;
-using StudentMN.Services.AuthService;
+using StudentMN.Models.Entities.Class;
+using StudentMN.Models.Entities.PermissionModels;
+using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Services
 {
@@ -12,10 +13,12 @@ namespace StudentMN.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        public ClassService(AppDbContext context, IMapper mapper, IAuthService authService)
+        private readonly ILogger<ClassService> _logger;
+        public ClassService(AppDbContext context, IMapper mapper, IAuthService authService,ILogger<ClassService> logger)
         {
             _context = context;
             _mapper = mapper;
+            _logger = logger;
         }
         // Xem danh sách lớp
         public async Task<PagedResponse<ClassesResponseDTO>> GetAllClassAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
@@ -49,10 +52,25 @@ namespace StudentMN.Services
         //Thêm lớp mới
         public async Task<ClassesResponseDTO> CreateClassAsync(ClassesRequestDTO dto)
         {
+            var teacherExists = await _context.Teachers
+                   .AnyAsync(t => t.Id == dto.TeacherId);
+
+            if (!teacherExists)
+            {
+                throw new Exception("The teacher does not exist");
+            }
             var Class = _mapper.Map<Classes>(dto);
 
             _context.Classes.Add(Class);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Name err: {ExceptionName}, Details: {Message}", ex.GetType().Name, ex.Message);
+
+            }
             return _mapper.Map<ClassesResponseDTO>(Class);
         }
 
@@ -70,7 +88,7 @@ namespace StudentMN.Services
         {
             var Class = await _context.Classes.FindAsync(id);
             if (Class == null) return false;
-            Class.IsDelete = true;
+            _context.Classes.Remove(Class);
             await _context.SaveChangesAsync();
             return true;
         }

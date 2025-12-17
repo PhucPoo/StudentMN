@@ -8,5 +8,6 @@ namespace StudentMN.DTOs.Response
         public string? SubjectName { get; set; }
         public int Credits { get; set; }
         public int MajorId { get; set; }
+        public MajorResponseDTO Major { get; set; } = null!;
     }
 }

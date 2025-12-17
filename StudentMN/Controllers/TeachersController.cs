@@ -19,7 +19,7 @@ namespace TeacherMN.Controllers
             _service = service;
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<List<TeacherResponseDTO>>> GetAllTeacher(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
@@ -31,12 +31,12 @@ namespace TeacherMN.Controllers
             var teacher = await _service.GetTeacherByUserIdAsync(userId);
 
             if (teacher == null)
-                return NotFound(new { success = false, message = "Không tìm thấy sinh viên" });
+                return NotFound(new { success = false, message = "Không tìm thấy giảng viên" });
 
             return Ok(new { success = true, data = teacher });
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<TeacherResponseDTO>> CreateTeacher(TeacherRequestDTO dto)
         {
@@ -52,7 +52,7 @@ namespace TeacherMN.Controllers
             return CreatedAtAction(nameof(GetAllTeacher), new { id = Teacher.Id }, Teacher);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<TeacherResponseDTO>> UpdateTeacher(int id, TeacherRequestDTO dto)
         {
@@ -61,7 +61,7 @@ namespace TeacherMN.Controllers
             return Ok(Teacher);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTeacher(int id)
         {

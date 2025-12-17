@@ -5,7 +5,7 @@ using StudentMN.DTOs;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models;
-using StudentMN.Services.AuthService;
+using StudentMN.Services.Interfaces;
 using System.Security.Claims;
 
 namespace StudentMN.Controllers
@@ -45,7 +45,7 @@ namespace StudentMN.Controllers
         }
 
        
-        [Authorize]
+        //[Authorize]
         [HttpGet("me")]
         public async Task<IActionResult> GetCurrentUser()
         {
@@ -108,7 +108,7 @@ namespace StudentMN.Controllers
             });
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("logout")]
         public IActionResult Logout()
         {

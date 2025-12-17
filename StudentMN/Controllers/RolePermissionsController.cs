@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
-using StudentMN.Services.PermissionService;
+using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Controllers
 {
@@ -25,7 +25,7 @@ namespace StudentMN.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Admin")]  
+        //[Authorize(Roles = "Admin")]  
         [HttpPost("add-role-permissions")]
         public async Task<IActionResult> UpdateRolePermissions([FromBody] RolePermissionRequestDTO request)
         {

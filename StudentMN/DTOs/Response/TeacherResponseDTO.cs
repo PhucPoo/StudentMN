@@ -1,5 +1,4 @@
 ﻿using StudentMN.Models.Base;
-using StudentMN.Models.Class;
 
 namespace StudentMN.DTOs.Response
 {
@@ -15,7 +14,9 @@ namespace StudentMN.DTOs.Response
         public string? Address { get; set; }
         public int UserId { get; set; }
         public int MajorId { get; set; }
+        public UserResponseDTO User { get; set; } = null!;
+        public MajorResponseDTO Major { get; set; } = null!;
 
-       
+
     }
 }

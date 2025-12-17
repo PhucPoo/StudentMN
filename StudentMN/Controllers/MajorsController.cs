@@ -17,14 +17,14 @@ namespace StudentMN.Controllers
             _service = service;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<List<MajorResponseDTO>>> GetAllMajor(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
             return Ok(await _service.GetAllMajorAsync(pageNumber, pageSize, search));
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<MajorResponseDTO>> CreateMajor(MajorRequestDTO dto)
         {
@@ -40,7 +40,7 @@ namespace StudentMN.Controllers
             return CreatedAtAction(nameof(GetAllMajor), new { id = Major.Id }, Major);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<ActionResult<MajorResponseDTO>> UpdateMajor(int id, MajorRequestDTO dto)
         {
@@ -49,7 +49,7 @@ namespace StudentMN.Controllers
             return Ok(Major);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMajor(int id)
         {

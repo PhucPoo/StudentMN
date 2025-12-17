@@ -58,7 +58,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 16, 11, 26, 25, 742, DateTimeKind.Local).AddTicks(4179),
+                            CreatedAt = new DateTime(2025, 12, 17, 9, 40, 56, 44, DateTimeKind.Local).AddTicks(7844),
                             Description = "Quản trị viên",
                             IsDelete = false,
                             RoleName = "Admin",
@@ -67,7 +67,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 16, 11, 26, 25, 742, DateTimeKind.Local).AddTicks(4181),
+                            CreatedAt = new DateTime(2025, 12, 17, 9, 40, 56, 44, DateTimeKind.Local).AddTicks(7846),
                             Description = "Sinh viên",
                             IsDelete = false,
                             RoleName = "Student",
@@ -76,7 +76,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 16, 11, 26, 25, 742, DateTimeKind.Local).AddTicks(4184),
+                            CreatedAt = new DateTime(2025, 12, 17, 9, 40, 56, 44, DateTimeKind.Local).AddTicks(7848),
                             Description = "Giảng viên",
                             IsDelete = false,
                             RoleName = "Teacher",
@@ -279,12 +279,12 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 16, 11, 26, 25, 914, DateTimeKind.Local).AddTicks(8927),
+                            CreatedAt = new DateTime(2025, 12, 17, 9, 40, 56, 193, DateTimeKind.Local).AddTicks(4316),
                             Email = "admin@studentmn.com",
                             FullName = "Administrator",
                             IsActive = true,
                             IsDelete = false,
-                            Password = "$2a$11$zxI6J8bDW.SmFL7Iddviye5gjVDydF90f.r2h74kIPTTNkUNgPBz.",
+                            Password = "$2a$11$xWW0EE59GTZKYk63jFRMoOl8PyRxD.5QBtZFMQj1LBjSrMEcRwIam",
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Username = "admin"
@@ -329,6 +329,69 @@ namespace StudentMN.Migrations
                     b.HasIndex("TeacherId");
 
                     b.ToTable("Classes");
+                });
+
+            modelBuilder.Entity("StudentMN.Models.Class.CourseSection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaxStudents")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SectionCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Semester")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("CourseSections");
+                });
+
+            modelBuilder.Entity("StudentMN.Models.Class.EnrollmentCourseSection", b =>
+                {
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseSectionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RegisteredAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("StudentId", "CourseSectionId");
+
+                    b.HasIndex("CourseSectionId");
+
+                    b.ToTable("EnrollmentCourseSections");
                 });
 
             modelBuilder.Entity("StudentMN.Models.Class.Major", b =>
@@ -432,7 +495,7 @@ namespace StudentMN.Migrations
                     b.ToTable("RolePermissions");
                 });
 
-            modelBuilder.Entity("StudentMN.Models.Score.Score", b =>
+            modelBuilder.Entity("StudentMN.Models.ScoreStudent.Score", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -445,6 +508,9 @@ namespace StudentMN.Migrations
 
                     b.Property<float?>("AverageScore")
                         .HasColumnType("real");
+
+                    b.Property<int>("CourseSectionId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -471,6 +537,8 @@ namespace StudentMN.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CourseSectionId");
+
                     b.HasIndex("StudentId");
 
                     b.HasIndex("SubjectId");
@@ -478,7 +546,7 @@ namespace StudentMN.Migrations
                     b.ToTable("Scores");
                 });
 
-            modelBuilder.Entity("StudentMN.Models.Score.Subject", b =>
+            modelBuilder.Entity("StudentMN.Models.ScoreStudent.Subject", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -584,6 +652,44 @@ namespace StudentMN.Migrations
                     b.Navigation("Teacher");
                 });
 
+            modelBuilder.Entity("StudentMN.Models.Class.CourseSection", b =>
+                {
+                    b.HasOne("StudentMN.Models.ScoreStudent.Subject", "Subject")
+                        .WithMany("CourseSections")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("StudentMN.Models.Account.Teacher", "Teacher")
+                        .WithMany("CourseSections")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("StudentMN.Models.Class.EnrollmentCourseSection", b =>
+                {
+                    b.HasOne("StudentMN.Models.Class.CourseSection", "CourseSection")
+                        .WithMany("EnrollmentCourseSections")
+                        .HasForeignKey("CourseSectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudentMN.Models.Account.Student", "Student")
+                        .WithMany("EnrollmentCourseSections")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CourseSection");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("StudentMN.Models.PermissionModels.RolePermission", b =>
                 {
                     b.HasOne("StudentMN.Models.PermissionModels.Permission", "Permission")
@@ -603,26 +709,34 @@ namespace StudentMN.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("StudentMN.Models.Score.Score", b =>
+            modelBuilder.Entity("StudentMN.Models.ScoreStudent.Score", b =>
                 {
+                    b.HasOne("StudentMN.Models.Class.CourseSection", "CourseSection")
+                        .WithMany("Scores")
+                        .HasForeignKey("CourseSectionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("StudentMN.Models.Account.Student", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("StudentMN.Models.Score.Subject", "Subject")
+                    b.HasOne("StudentMN.Models.ScoreStudent.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CourseSection");
 
                     b.Navigation("Student");
 
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("StudentMN.Models.Score.Subject", b =>
+            modelBuilder.Entity("StudentMN.Models.ScoreStudent.Subject", b =>
                 {
                     b.HasOne("StudentMN.Models.Class.Major", "Major")
                         .WithMany()
@@ -640,9 +754,26 @@ namespace StudentMN.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("StudentMN.Models.Account.Student", b =>
+                {
+                    b.Navigation("EnrollmentCourseSections");
+                });
+
+            modelBuilder.Entity("StudentMN.Models.Account.Teacher", b =>
+                {
+                    b.Navigation("CourseSections");
+                });
+
             modelBuilder.Entity("StudentMN.Models.Class.Classes", b =>
                 {
                     b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("StudentMN.Models.Class.CourseSection", b =>
+                {
+                    b.Navigation("EnrollmentCourseSections");
+
+                    b.Navigation("Scores");
                 });
 
             modelBuilder.Entity("StudentMN.Models.Class.Major", b =>
@@ -653,6 +784,11 @@ namespace StudentMN.Migrations
             modelBuilder.Entity("StudentMN.Models.PermissionModels.Permission", b =>
                 {
                     b.Navigation("RolePermissions");
+                });
+
+            modelBuilder.Entity("StudentMN.Models.ScoreStudent.Subject", b =>
+                {
+                    b.Navigation("CourseSections");
                 });
 #pragma warning restore 612, 618
         }

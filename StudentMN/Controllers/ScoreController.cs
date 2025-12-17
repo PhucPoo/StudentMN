@@ -17,14 +17,14 @@ namespace StudentMN.Controllers
             _service = service;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<List<ScoreResponseDTO>>> GetAllScore(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
             return Ok(await _service.GetAllScoreAsync(pageNumber, pageSize, search));
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ScoreResponseDTO>> CreateScore(ScoreRequestDTO dto)
         {
@@ -32,7 +32,7 @@ namespace StudentMN.Controllers
             return CreatedAtAction(nameof(GetAllScore), new { id = Score.Id }, Score);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<ActionResult<ScoreResponseDTO>> UpdateScore(int id, ScoreRequestDTO dto)
         {

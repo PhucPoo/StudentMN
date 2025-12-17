@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models.Account;
-using StudentMN.Services.AuthService;
+using StudentMN.Models.Entities.Account;
+using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Services
 {
@@ -106,7 +106,7 @@ namespace StudentMN.Services
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null) return false;
-            user.IsActive = false;
+            user.IsDelete = true;
             await _context.SaveChangesAsync();
             return true;
         }

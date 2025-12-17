@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models.Account;
-using StudentMN.Services.AuthService;
+using StudentMN.Models.Entities.Account;
+using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Services
 {
@@ -104,7 +104,7 @@ namespace StudentMN.Services
         {
             var student = await _context.Students.FindAsync(id);
             if (student == null) return false;
-            _context.Students.Remove(student);
+            student.IsDelete = true;
             await _context.SaveChangesAsync();
             return true;
         }

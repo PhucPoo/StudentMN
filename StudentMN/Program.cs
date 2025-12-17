@@ -7,9 +7,9 @@ using Serilog;
 using StudentMN.Data;
 using StudentMN.Mapping;
 using StudentMN.Repositories;
+using StudentMN.Repositories.Interface;
 using StudentMN.Services;
-using StudentMN.Services.AuthService;
-using StudentMN.Services.PermissionService;
+using StudentMN.Services.Interfaces;
 using System.Text;
 using TeacherMN.Services;
 
@@ -51,6 +51,8 @@ builder.Services.AddScoped<SubjectService>();
 builder.Services.AddScoped<ScoreService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
+builder.Services.AddScoped<ICourseSectionService, CourseSectionService>();
+builder.Services.AddScoped<IEnrollmentCourseSection, EnrollmentCourseSectionService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

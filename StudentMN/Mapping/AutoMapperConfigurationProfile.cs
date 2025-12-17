@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models.Account;
-using StudentMN.Models.Class;
-using StudentMN.Models.PermissionModels;
-using StudentMN.Models.Score;
+using StudentMN.Models.Entities.Account;
+using StudentMN.Models.Entities.Class;
+using StudentMN.Models.Entities.PermissionModels;
+using StudentMN.Models.Entities.ScoreStudent;
 
 namespace StudentMN.Mapping
 {
@@ -34,6 +34,10 @@ namespace StudentMN.Mapping
             CreateMap<Permission,PermissionDTO>();
             CreateMap<RolePermissionRequestDTO, RolePermission>();
             CreateMap<RolePermission, RolePermissionDTO>();
+            CreateMap<CourseSectionRequestDTO, CourseSection>();
+            CreateMap<CourseSection, CourseSectionResponseDTO>();
+            CreateMap<EnrollmentCourseSection, EnrollmentResponseDTO>();
+            CreateMap<EnrollmentRequestDTO, EnrollmentCourseSection>();
 
         }
     }

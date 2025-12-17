@@ -3,10 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using StudentMN.Data;
 using StudentMN.DTOs.Request;
-using StudentMN.Models.Account;
-using StudentMN.Models.PermissionModels;
-using StudentMN.Repositories;
-using StudentMN.Services.AuthService;
+using StudentMN.Models.Entities.Account;
+using StudentMN.Models.Entities.PermissionModels;
+using StudentMN.Repositories.Interface;
+using StudentMN.Services;
 using Xunit;
 
 namespace StudentMN.Tests.Services

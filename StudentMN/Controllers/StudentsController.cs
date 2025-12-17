@@ -20,7 +20,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
             _service = service;
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<List<StudentResponseDTO>>> GetAllStudent(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
@@ -38,7 +38,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
             return Ok(new { success = true, data = student });
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<StudentResponseDTO>> CreateStudent(StudentRequestDTO dto)
         {
@@ -54,7 +54,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
             return CreatedAtAction(nameof(GetAllStudent), new { id = student.Id }, student);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<StudentResponseDTO>> UpdateStudent(int id, StudentRequestDTO dto)
         {
@@ -68,7 +68,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
             return Ok(student);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteStudent(int id)
         {

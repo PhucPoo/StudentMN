@@ -18,6 +18,7 @@ namespace StudentMN.DTOs.Response
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public int UserId { get; set; }
-        
+        public UserResponseDTO User { get; set; } = null!;
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentMN.Data;
-using StudentMN.Models.Account;
+using StudentMN.Models.Entities.Account;
+using StudentMN.Repositories.Interface;
 
 namespace StudentMN.Repositories
 {
@@ -68,7 +69,6 @@ namespace StudentMN.Repositories
                 var user = await GetUserByUsernameAsync(username);
                 if (user == null) return false;
 
-                // Verify password using BCrypt
                 return BCrypt.Net.BCrypt.Verify(password, user.Password);
             }
             catch (Exception)

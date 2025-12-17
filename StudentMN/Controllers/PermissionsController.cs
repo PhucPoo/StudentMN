@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models.PermissionModels;
-using StudentMN.Services.PermissionService;
+using StudentMN.Models.Entities.PermissionModels;
+using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Controllers
 {

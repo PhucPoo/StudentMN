@@ -3,9 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models.Account;
-using StudentMN.Models.Class;
-using StudentMN.Services.AuthService;
+using StudentMN.Models.Entities.Class;
+using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Services
 {

@@ -21,5 +21,7 @@ namespace StudentMN.Models.Account
         // Navigation property
         public User? User { get; set; }
         public Classes? Class { get; set; }
+        public ICollection<EnrollmentCourseSection> EnrollmentCourseSections { get; set; }
+        = new List<EnrollmentCourseSection>();
     }
 }

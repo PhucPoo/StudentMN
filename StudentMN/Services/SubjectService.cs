@@ -4,7 +4,7 @@ using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Class;
-using StudentMN.Models.Score;
+using StudentMN.Models.ScoreStudent;
 using StudentMN.Services.AuthService;
 
 namespace StudentMN.Services

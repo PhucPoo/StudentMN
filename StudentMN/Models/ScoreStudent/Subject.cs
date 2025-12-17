@@ -1,7 +1,7 @@
 ﻿using StudentMN.Models.Base;
 using StudentMN.Models.Class;
 
-namespace StudentMN.Models.Score
+namespace StudentMN.Models.ScoreStudent
 {
     public class Subject: BaseEntity
     {
@@ -11,5 +11,7 @@ namespace StudentMN.Models.Score
         public int MajorId { get; set; }
 
         public Major Major { get; set; }
+        public ICollection<CourseSection> CourseSections { get; set; }
+        = new List<CourseSection>();
     }
 }

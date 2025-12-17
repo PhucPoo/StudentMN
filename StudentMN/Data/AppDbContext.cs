@@ -29,7 +29,6 @@ namespace StudentMN.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Cấu hình BaseEntity cho tất cả các entity
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
@@ -40,7 +39,6 @@ namespace StudentMN.Data
                 }
             }
 
-            // User configuration
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -57,7 +55,6 @@ namespace StudentMN.Data
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
-            // Role configuration
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -65,7 +62,6 @@ namespace StudentMN.Data
                 entity.Property(e => e.Description).HasMaxLength(200);
             });
 
-            // Permission configuration
             modelBuilder.Entity<Permission>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -73,7 +69,6 @@ namespace StudentMN.Data
                 entity.Property(e => e.Description).HasMaxLength(200);
             });
 
-            // RolePermission configuration
             modelBuilder.Entity<RolePermission>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -88,7 +83,6 @@ namespace StudentMN.Data
                     .HasForeignKey(e => e.PermissionId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                // Tạo composite unique index
                 entity.HasIndex(e => new { e.RoleId, e.PermissionId }).IsUnique();
             });
             modelBuilder.Entity<Student>()
@@ -109,7 +103,6 @@ namespace StudentMN.Data
                     .HasForeignKey(c => c.TeacherId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-            // Student configuration
             modelBuilder.Entity<Student>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -126,20 +119,17 @@ namespace StudentMN.Data
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
-            // Seed data
             SeedData(modelBuilder);
         }
 
         private void SeedData(ModelBuilder modelBuilder)
         {
-            // Seed Roles
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, RoleName = "Admin", Description = "Quản trị viên", CreatedAt = DateTime.Now },
                 new Role { Id = 2, RoleName = "Student", Description = "Sinh viên", CreatedAt = DateTime.Now },
                 new Role { Id = 3, RoleName = "Teacher", Description = "Giảng viên", CreatedAt = DateTime.Now }
             );
 
-            // Seed Admin User (password: Admin@123)
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -155,7 +145,6 @@ namespace StudentMN.Data
             );
         }
 
-        // Override SaveChanges để tự động cập nhật UpdatedAt
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var entries = ChangeTracker.Entries()

@@ -15,7 +15,6 @@ namespace StudentMN.Middleware
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            // Nếu response đã bắt đầu, không thể set header nữa
             if (context.Response.HasStarted)
             {
                 _logger.LogWarning("Response đã bắt đầu, không thể gửi lỗi JSON cho {Method} {Path}",
@@ -24,7 +23,6 @@ namespace StudentMN.Middleware
                 return;
             }
 
-            // Xóa bất kỳ dữ liệu nào đang được ghi
             context.Response.Clear();
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             context.Response.ContentType = "application/json";
@@ -36,7 +34,6 @@ namespace StudentMN.Middleware
                 detail = exception.Message
             };
 
-            // Ghi JSON vào body
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
         }
 

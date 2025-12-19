@@ -9,7 +9,6 @@ namespace StudentMN.Models.Entities.Account
         [Required(ErrorMessage = "Ảnh đại diện không được để trống không được để trống")]
         public string? Avt { get; set; }
         public string? StudentCode { get; set; }
-        public string? FullName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string? Gender { get; set; }
         public string? Email { get; set; }

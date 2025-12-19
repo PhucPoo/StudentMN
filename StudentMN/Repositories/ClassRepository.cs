@@ -14,37 +14,37 @@ namespace StudentMN.Repositories
             _context = context;
         }
 
-        public async Task<List<Classes>> GetAllAsync()
+        public async Task<List<Classes>> GetAllClassAsync()
         {
             return await _context.Classes
                                  .Include(c => c.Teacher)
+                                    .ThenInclude(t => t.User)
                                  .Include(c => c.Major)
-                                 .Include(c => c.Students)
                                  .ToListAsync();
         }
 
-        public async Task<Classes?> GetByIdAsync(int id)
+        public async Task<Classes?> GetClassByIdAsync(int id)
         {
             return await _context.Classes
                                  .Include(c => c.Teacher)
+                                    .ThenInclude(t => t.User)
                                  .Include(c => c.Major)
-                                 .Include(c => c.Students)
                                  .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task AddAsync(Classes classEntity)
+        public async Task AddClassAsync(Classes classEntity)
         {
             await _context.Classes.AddAsync(classEntity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Classes classEntity)
+        public async Task UpdateClassAsync(Classes classEntity)
         {
             _context.Classes.Update(classEntity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Classes classEntity)
+        public async Task DeleteClassAsync(Classes classEntity)
         {
             _context.Classes.Remove(classEntity);
             await _context.SaveChangesAsync();

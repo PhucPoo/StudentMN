@@ -24,13 +24,13 @@ namespace StudentManagement.StudentManagement.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<StudentResponseDTO>>> GetAllStudent(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            return Ok(await _service.GetAllStudentAsync(pageNumber,pageSize,search));
+            return Ok(await _service.GetAllStudentAsync(pageNumber, pageSize, search));
         }
 
-        [HttpGet("by-user/{userId}")]
-        public async Task<IActionResult> GetStudentByUserId(int userId)
+        [HttpGet("by-id/{Id}")]
+        public async Task<IActionResult> GetStudentById(int Id)
         {
-            var student = await _service.GetStudentByUserIdAsync(userId);
+            var student = await _service.GetStudentByIdAsync(Id);
 
             if (student == null)
                 return NotFound(new { success = false, message = "Không tìm thấy sinh viên" });
@@ -42,16 +42,27 @@ namespace StudentManagement.StudentManagement.API.Controllers
         [HttpPost]
         public async Task<ActionResult<StudentResponseDTO>> CreateStudent(StudentRequestDTO dto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                var errors = ModelState.ToDictionary(
-                    kv => kv.Key,
-                    kv => kv.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                );
-                return BadRequest(new { success = false, errors });
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.ToDictionary(
+                        kv => kv.Key,
+                        kv => kv.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                    return BadRequest(new { success = false, errors });
+                }
+                var student = await _service.CreateStudentAsync(dto);
+                if (student is null)
+                {
+                    return BadRequest("");
+                }
+                return CreatedAtAction(nameof(GetAllStudent), new { id = student.Id }, student);
             }
-            var student = await _service.CreateStudentAsync(dto);
-            return CreatedAtAction(nameof(GetAllStudent), new { id = student.Id }, student);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //[Authorize]
@@ -63,7 +74,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
             if (string.IsNullOrEmpty(role))
                 return Forbid();
 
-            var student = await _service.UpdateStudentAsync(id, dto,role);
+            var student = await _service.UpdateStudentAsync(id, dto, role);
             if (student == null) return NotFound();
             return Ok(student);
         }

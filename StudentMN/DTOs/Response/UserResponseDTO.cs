@@ -18,6 +18,6 @@ namespace StudentMN.DTOs.Response
         [Required]
         public int RoleId { get; set; }
         public bool IsActive { get; set; } = true;
-        public RolePermissionDTO Role { get; set; } = null!;
+        public RoleResponseDTO Role { get; set; } = null!;
     }
 }

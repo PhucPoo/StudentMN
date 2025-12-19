@@ -8,7 +8,7 @@ namespace StudentMN.Repositories.Interface
         Task<User?> GetUserByIdAsync(int id);
         Task<User?> GetUserByEmailAsync(string email);
         Task<bool> ValidateCredentialsAsync(string username, string password);
-        Task<IEnumerable<User>> GetAllUsersAsync();
+        Task<List<User>> GetAllUsersAsync();
         Task<User> CreateUserAsync(User user);
         Task<User?> UpdateUserAsync(User user);
         Task<bool> DeleteUserAsync(int id);

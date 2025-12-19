@@ -9,7 +9,7 @@ namespace StudentMN.DTOs.Response
         public int MajorId { get; set; }
         public int TeacherId { get; set; }
 
-        public TeacherResponseDTO Teacher { get; set; } = null!;
-        public MajorResponseDTO Major { get; set; } = null!;
+        public TeacherResponseDTO Teacher { get; set; } 
+        public MajorResponseDTO Major { get; set; } 
     }
 }

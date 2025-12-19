@@ -8,6 +8,7 @@ using StudentMN.Data;
 using StudentMN.Mapping;
 using StudentMN.Repositories;
 using StudentMN.Repositories.Interface;
+using StudentMN.Repositories.Interfaces;
 using StudentMN.Services;
 using StudentMN.Services.Interfaces;
 using System.Text;
@@ -27,7 +28,7 @@ builder.Services.AddCors(options =>
         });
 });
 //Đăng ký automapper
-builder.Services.AddAutoMapper(ctf => { }, typeof(AutoMapperConfigurationProfile));
+builder.Services.AddAutoMapper(typeof(AutoMapperConfigurationProfile));
 
 //Cấu hình Serilog
 Log.Logger = new LoggerConfiguration()
@@ -39,10 +40,14 @@ builder.Host.UseSerilog();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//Đăng kí repository để inject vào service
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IClassRepository, ClassRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
+//Đăng kí service
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<StudentService>();
 builder.Services.AddScoped<TeacherService>();
 builder.Services.AddScoped<MajorService>();

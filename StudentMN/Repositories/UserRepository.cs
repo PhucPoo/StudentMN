@@ -77,7 +77,7 @@ namespace StudentMN.Repositories
             }
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task<List<User>> GetAllUsersAsync()
         {
             try
             {

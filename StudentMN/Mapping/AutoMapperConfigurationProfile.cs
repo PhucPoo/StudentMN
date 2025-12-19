@@ -12,10 +12,11 @@ namespace StudentMN.Mapping
     {
         public AutoMapperConfigurationProfile()
         {
-            CreateMap<User, UserResponseDTO>().ReverseMap();
+            CreateMap<Role, RoleResponseDTO>();
+            CreateMap<RoleRequestDTO, Role>();
+            CreateMap<User, UserResponseDTO>();
             CreateMap<UserRequestDTO, User>();
             CreateMap<Student, StudentResponseDTO>()
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User!.FullName))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User!.Email));
             CreateMap<StudentRequestDTO, Student>();
             CreateMap<Teacher, TeacherResponseDTO>()

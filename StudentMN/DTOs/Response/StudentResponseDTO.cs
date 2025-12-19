@@ -7,7 +7,6 @@ namespace StudentMN.DTOs.Response
     {
         public string? Avt { get; set; }
         public string? StudentCode { get; set; }
-        public string? FullName { get; set; }
 
         [Required(ErrorMessage = "Ngày sinh không được để trống")]
         [DataType(DataType.Date)]

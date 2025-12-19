@@ -4,27 +4,27 @@ using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Services;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using StudentMN.Services.Interfaces;
 
 namespace StudentManagement.StudentManagement.API.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly UserService _service;
+        private readonly IUserService _userService;
 
-        public UsersController(UserService service)
+        public UsersController(IUserService userService)
         {
-            _service = service;
+            _userService = userService;
         }
 
         //[Authorize]
         [HttpGet]
         public async Task<ActionResult<List<UserResponseDTO>>> GetAllUser(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            return Ok(await _service.GetAllUserAsync(pageNumber, pageSize, search));
+            return Ok(await _userService.GetAllUser(pageNumber, pageSize, search));
         }
 
         //[Authorize(Roles = "Admin")]
@@ -39,7 +39,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
                 );
                 return BadRequest(new { success = false, errors });
             }
-            var user = await _service.CreateUserAsync(dto);
+            var user = await _userService.CreateUser(dto);
                 return CreatedAtAction(nameof(GetAllUser), new { id = user.Id }, user);
             }
 
@@ -47,7 +47,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
             [HttpPut("{id}")]
             public async Task<ActionResult<UserResponseDTO>> UpdateUser(int id, UserRequestDTO dto)
             {
-                var user = await _service.UpdateUserAsync(id, dto);
+                var user = await _userService.UpdateUser(id, dto);
                 if (user == null) return NotFound();
                 return Ok(user);
             }
@@ -56,7 +56,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
             [HttpDelete("{id}")]
             public async Task<ActionResult> DeleteUser(int id)
             {
-                var success = await _service.DeleteUserAsync(id);
+                var success = await _userService.DeleteUser(id);
                 if (!success) return NotFound();
                 return NoContent();
             }

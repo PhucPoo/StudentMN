@@ -1,48 +1,49 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using StudentMN.Data;
+using Microsoft.Extensions.Logging;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Entities.Account;
+using StudentMN.Repositories.Interface;
 using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
-        private readonly AppDbContext _context;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
         private readonly ILogger<UserService> _logger;
 
-        public UserService(AppDbContext context, IMapper mapper, IAuthService authService, ILogger<UserService> logger)
+        public UserService(IUserRepository userRepository, IMapper mapper, IAuthService authService, ILogger<UserService> logger)
         {
-            _context = context;
+            _userRepository = userRepository;
             _mapper = mapper;
             _authService = authService;
             _logger = logger;
         }
 
         // Xem danh sách người dùng
-        public async Task<PagedResponse<UserResponseDTO>> GetAllUserAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
+        public async Task<PagedResponse<UserResponseDTO>> GetAllUser(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            var query = _context.Users.Include(u => u.Role)
-                                      .Where(u => u.IsActive)
-                                      .AsQueryable();
+            var users = await _userRepository.GetAllUsersAsync();
+
             if (!string.IsNullOrWhiteSpace(search))
             {
-                query = query.Where(u => u.FullName != null && u.FullName.Contains(search));
+                users = users
+                    .Where(u => !string.IsNullOrEmpty(u.FullName) && u.FullName.Contains(search))
+                    .ToList();
             }
-            var totalCount = await query.CountAsync();
 
-            var users = await query
+            var totalCount = users.Count;
+
+            var pagedUsers = users
                 .OrderBy(u => u.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToListAsync();
+                .ToList();
 
-            var usersDto = _mapper.Map<List<UserResponseDTO>>(users);
+            var usersDto = _mapper.Map<List<UserResponseDTO>>(pagedUsers);
 
             return new PagedResponse<UserResponseDTO>
             {
@@ -55,60 +56,61 @@ namespace StudentMN.Services
         }
 
         // Thêm tài khoản mới
-        public async Task<UserResponseDTO> CreateUserAsync(UserRequestDTO dto)
+        public async Task<UserResponseDTO> CreateUser(UserRequestDTO dto)
         {
-
             if (string.IsNullOrWhiteSpace(dto.Password))
             {
-                _logger.LogWarning("Tao User that bai: Password rong | Username: {Username}", dto.Username);
-                throw new ArgumentException("Password khong duoc de trong");
+                _logger.LogWarning("Create user false: Password empty | Username: {Username}", dto.Username);
+                throw new ArgumentException("Password cannot be empty");
             }
 
-            var usernameExists = await _context.Users.AnyAsync(u => u.Username == dto.Username && u.IsActive);
-            if (usernameExists)
+            if (await _userRepository.UserExistsAsync(dto.Username))
             {
-                _logger.LogWarning("Tao user that bai: Username da ton tai | Username: {Username}", dto.Username);
-                throw new ArgumentException("Username da ton tai");
+                _logger.LogWarning("Create user false: User already exists | Username: {Username}", dto.Username);
+                throw new ArgumentException("User already exists");
             }
 
-            var emailExists = await _context.Users.AnyAsync(u => u.Email == dto.Email && u.IsActive);
-            if (emailExists)
+            if (await _userRepository.EmailExistsAsync(dto.Email))
             {
-                _logger.LogWarning("tao user that bai: Email da ton tai | Email: {Email}", dto.Email);
-                throw new ArgumentException("Email da ton tai");
+                _logger.LogWarning("Create user false: Email already exists | Email: {Email}", dto.Email);
+                throw new ArgumentException("Email already exists ");
             }
 
             var user = _mapper.Map<User>(dto);
             user.Password = _authService.HashPassword(dto.Password);
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            await _userRepository.CreateUserAsync(user);
 
-            _logger.LogInformation("Tao user thanh cong | UserId: {UserId} | Username: {Username}", user.Id, user.Username);
+            _logger.LogInformation("User created successfully | UserId: {UserId} | Username: {Username}", user.Id, user.Username);
 
-            return _mapper.Map<UserResponseDTO>(user);
+            var createdUser = await _userRepository.GetUserByIdAsync(user.Id);
+
+            return _mapper.Map<UserResponseDTO>(createdUser!);
         }
 
-
         // Cập nhật tài khoản
-        public async Task<UserResponseDTO?> UpdateUserAsync(int id, UserRequestDTO dto)
+        public async Task<UserResponseDTO?> UpdateUser(int id, UserRequestDTO dto)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null) return null;
 
             _mapper.Map(dto, user);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<UserResponseDTO>(user);
+
+            if (!string.IsNullOrWhiteSpace(dto.Password))
+            {
+                user.Password = _authService.HashPassword(dto.Password);
+            }
+
+            await _userRepository.UpdateAsync(user);
+
+            var updatedUser = await _userRepository.GetUserByIdAsync(id);
+            return _mapper.Map<UserResponseDTO>(updatedUser!);
         }
 
         // Xóa tài khoản
-        public async Task<bool> DeleteUserAsync(int id)
+        public async Task<bool> DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null) return false;
-            user.IsDelete = true;
-            await _context.SaveChangesAsync();
-            return true;
+            return await _userRepository.DeleteUserAsync(id);
         }
     }
 }

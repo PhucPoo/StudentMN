@@ -16,12 +16,9 @@ namespace StudentMN.Mapping
             CreateMap<RoleRequestDTO, Role>();
             CreateMap<User, UserResponseDTO>();
             CreateMap<UserRequestDTO, User>();
-            CreateMap<Student, StudentResponseDTO>()
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User!.Email));
+            CreateMap<Student, StudentResponseDTO>();
             CreateMap<StudentRequestDTO, Student>();
-            CreateMap<Teacher, TeacherResponseDTO>()
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User!.FullName))
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User!.Email));
+            CreateMap<Teacher, TeacherResponseDTO>();
             CreateMap<TeacherRequestDTO, Teacher>();
             CreateMap<MajorRequestDTO, Major>();
             CreateMap<Major, MajorResponseDTO>();

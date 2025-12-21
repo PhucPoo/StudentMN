@@ -1,44 +1,44 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Entities.Account;
+using StudentMN.Repositories.Interface;
 using StudentMN.Services.Interfaces;
-
-namespace TeacherMN.Services
+namespace StudentMN.Services
 {
-    public class TeacherService
+    public class TeacherService: ITeacherService
     {
-        private readonly AppDbContext _context;
+        private readonly ITeacherRepository _teacherRepository;
         private readonly IMapper _mapper;
 
-        public TeacherService(AppDbContext context, IMapper mapper, IAuthService authService)
+        public TeacherService(ITeacherRepository teacherRepository, IMapper mapper)
         {
-            _context = context;
+            _teacherRepository = teacherRepository;
             _mapper = mapper;
         }
 
         // Xem danh sách giảng viên
-        public async Task<PagedResponse<TeacherResponseDTO>> GetAllTeacherAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
+        public async Task<PagedResponse<TeacherResponseDTO>> GetAllTeacher(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            var query = _context.Teachers.Include(s => s.User)
-                                         .AsQueryable();
+            var Teacher = await _teacherRepository.GetAllTeacherAsync();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                query = query.Where(s => s.TeacherCode!=null && s.TeacherCode.Contains(search));
+                Teacher = Teacher
+                    .Where(c => c.User?.FullName != null &&
+                                c.User.FullName.Contains(search))
+                    .ToList();
             }
 
-            var totalCount = await query.CountAsync();
+            var totalCount = Teacher.Count;
 
-            var Teachers = await query
-                .OrderBy(s => s.Id)
+            var paged = Teacher
+                .OrderBy(c => c.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToListAsync();
+                .ToList();
 
-            var TeachersDto = _mapper.Map<List<TeacherResponseDTO>>(Teachers);
+            var dto = _mapper.Map<List<TeacherResponseDTO>>(paged);
 
             return new PagedResponse<TeacherResponseDTO>
             {
@@ -46,64 +46,56 @@ namespace TeacherMN.Services
                 PageSize = pageSize,
                 TotalCount = totalCount,
                 TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
-                Data = TeachersDto
+                Data = dto
             };
+
         }
-        public async Task<TeacherResponseDTO?> GetTeacherByUserIdAsync(int userId)
+        public async Task<TeacherResponseDTO?> GetTeacherById(int Id)
         {
-            var teacher = await _context.Teachers
-                .Include(s => s.User)
-                .FirstOrDefaultAsync(s => s.UserId == userId);
+            var teacher = await _teacherRepository.GetTeacherByIdAsync(Id);
 
             if (teacher == null) return null;
 
             var dto = _mapper.Map<TeacherResponseDTO>(teacher);
-            dto.FullName = teacher.User?.FullName;
-            dto.Email = teacher.User?.Email;
 
             return dto;
         }
 
 
         // Thêm giảng viên mới
-        public async Task<TeacherResponseDTO> CreateTeacherAsync(TeacherRequestDTO dto)
+        public async Task<TeacherResponseDTO> CreateTeacher(TeacherRequestDTO dto)
         {
-            var Teacher = _mapper.Map<Teacher>(dto);
-
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == dto.UserId);
-            if (user == null)
+            var teacher = _mapper.Map<Teacher>(dto);
+            var teacherAdd = await _teacherRepository.AddTeacherAsync(teacher);
+            if (teacherAdd is null)
             {
-                throw new Exception("User không tồn tại");
+                return null;
             }
-
-            Teacher.UserId = user.Id;
-
-            _context.Teachers.Add(Teacher);
-            await _context.SaveChangesAsync();
-            var response = _mapper.Map<TeacherResponseDTO>(Teacher);
-            response.FullName = user.FullName;
-            response.Email = user.Email;
-            return response;
+            return _mapper.Map<TeacherResponseDTO>(teacherAdd);
         }
 
         // Cập nhật giảng viên
-        public async Task<TeacherResponseDTO?> UpdateTeacherAsync(int id, TeacherRequestDTO dto)
+        public async Task<TeacherResponseDTO?> UpdateTeacher(int id, TeacherRequestDTO dto)
         {
-            var Teacher = await _context.Teachers.FindAsync(id);
-            if (Teacher == null) return null;
+            var teacherEntity = await _teacherRepository.GetTeacherByIdAsync(id);
+            if (teacherEntity == null) return null;
 
-            _mapper.Map(dto, Teacher);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<TeacherResponseDTO>(Teacher);
+            _mapper.Map(dto, teacherEntity);
+
+            await _teacherRepository.UpdateTeacherAsync(teacherEntity);
+
+            var updatedTeacher = await _teacherRepository.GetTeacherByIdAsync(id);
+
+            return _mapper.Map<TeacherResponseDTO>(updatedTeacher);
         }
 
-        // Xóa giảng viên
-        public async Task<bool> DeleteTeacherAsync(int id)
+        // Xóa tài khoản
+        public async Task<bool> DeleteTeacher(int id)
         {
-            var Teacher = await _context.Teachers.FindAsync(id);
-            if (Teacher == null) return false;
-            Teacher.IsDelete = true;
-            await _context.SaveChangesAsync();
+            var teacherEntity = await _teacherRepository.GetTeacherByIdAsync(id);
+            if (teacherEntity == null) return false;
+
+            await _teacherRepository.DeleteTeacherAsync(teacherEntity);
             return true;
         }
     }

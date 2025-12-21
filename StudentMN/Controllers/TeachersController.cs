@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using TeacherMN.Services;
+using StudentMN.Services;
+using StudentMN.Services.Interfaces;
 
-namespace TeacherMN.Controllers
+namespace StudentMN.Controllers
 {
 
 
@@ -12,9 +13,9 @@ namespace TeacherMN.Controllers
     [Route("api/[controller]")]
     public class TeachersController : ControllerBase
     {
-        private readonly TeacherService _service;
+        private readonly ITeacherService _service;
 
-        public TeachersController(TeacherService service)
+        public TeachersController(ITeacherService service)
         {
             _service = service;
         }
@@ -23,15 +24,15 @@ namespace TeacherMN.Controllers
         [HttpGet]
         public async Task<ActionResult<List<TeacherResponseDTO>>> GetAllTeacher(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            return Ok(await _service.GetAllTeacherAsync(pageNumber, pageSize, search));
+            return Ok(await _service.GetAllTeacher(pageNumber, pageSize, search));
         }
         [HttpGet("by-user/{userId}")]
-        public async Task<IActionResult> GetTeacherByUserId(int userId)
+        public async Task<IActionResult> GetTeacherById(int userId)
         {
-            var teacher = await _service.GetTeacherByUserIdAsync(userId);
+            var teacher = await _service.GetTeacherById(userId);
 
             if (teacher == null)
-                return NotFound(new { success = false, message = "Không tìm thấy giảng viên" });
+                return NotFound(new { success = false, message = "Teacher not found" });
 
             return Ok(new { success = true, data = teacher });
         }
@@ -48,7 +49,7 @@ namespace TeacherMN.Controllers
                 );
                 return BadRequest(new { success = false, errors });
             }
-            var Teacher = await _service.CreateTeacherAsync(dto);
+            var Teacher = await _service.CreateTeacher(dto);
             return CreatedAtAction(nameof(GetAllTeacher), new { id = Teacher.Id }, Teacher);
         }
 
@@ -56,7 +57,7 @@ namespace TeacherMN.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<TeacherResponseDTO>> UpdateTeacher(int id, TeacherRequestDTO dto)
         {
-            var Teacher = await _service.UpdateTeacherAsync(id, dto);
+            var Teacher = await _service.UpdateTeacher(id, dto);
             if (Teacher == null) return NotFound();
             return Ok(Teacher);
         }
@@ -65,7 +66,7 @@ namespace TeacherMN.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTeacher(int id)
         {
-            var success = await _service.DeleteTeacherAsync(id);
+            var success = await _service.DeleteTeacher(id);
             if (!success) return NotFound();
             return NoContent();
         }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Services;
+using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Controllers
 {
@@ -10,9 +11,9 @@ namespace StudentMN.Controllers
     [Route("api/[controller]")]
     public class MajorsController : ControllerBase
     {
-        private readonly MajorService _service;
+        private readonly IMajorService _service;
 
-        public MajorsController(MajorService service)
+        public MajorsController(IMajorService service)
         {
             _service = service;
         }
@@ -21,7 +22,7 @@ namespace StudentMN.Controllers
         [HttpGet]
         public async Task<ActionResult<List<MajorResponseDTO>>> GetAllMajor(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            return Ok(await _service.GetAllMajorAsync(pageNumber, pageSize, search));
+            return Ok(await _service.GetAllMajor(pageNumber, pageSize, search));
         }
 
         //[Authorize(Roles = "Admin")]
@@ -36,7 +37,7 @@ namespace StudentMN.Controllers
                 );
                 return BadRequest(new { success = false, errors });
             }
-            var Major = await _service.CreateMajorAsync(dto);
+            var Major = await _service.CreateMajor(dto);
             return CreatedAtAction(nameof(GetAllMajor), new { id = Major.Id }, Major);
         }
 
@@ -44,7 +45,7 @@ namespace StudentMN.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<MajorResponseDTO>> UpdateMajor(int id, MajorRequestDTO dto)
         {
-            var Major = await _service.UpdateMajorAsync(id, dto);
+            var Major = await _service.UpdateMajor(id, dto);
             if (Major == null) return NotFound();
             return Ok(Major);
         }
@@ -53,7 +54,7 @@ namespace StudentMN.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMajor(int id)
         {
-            var success = await _service.DeleteMajorAsync(id);
+            var success = await _service.DeleteMajor(id);
             if (!success) return NotFound();
             return NoContent();
         }

@@ -5,12 +5,12 @@ using StudentMN.Repositories.Interface;
 
 namespace StudentMN.Repositories
 {
-    public class StudentRepository:IStudentRepository
+    public class StudentRepository : IStudentRepository
     {
         private readonly AppDbContext _context;
         private readonly ILogger<StudentRepository> _logger;
 
-        public StudentRepository(AppDbContext context,ILogger<StudentRepository> logger)
+        public StudentRepository(AppDbContext context, ILogger<StudentRepository> logger)
         {
             _context = context;
             _logger = logger;
@@ -34,15 +34,54 @@ namespace StudentMN.Repositories
 
         public async Task<Student> AddStudentAsync(Student studentEntity)
         {
-           
-            var isExist= _context.Students.Any(s => s.UserId == studentEntity.Id);
-            if (isExist)
+            if (studentEntity == null)
             {
-                _logger.LogWarning("Cannot create student because a student with UserId {UserId} already exists.", studentEntity.UserId);
-                return null;
+                _logger.LogError("AddStudentAsync called with null studentEntity");
+                throw new ArgumentNullException(nameof(studentEntity));
             }
+
+            if (studentEntity.UserId <= 0)
+            {
+                _logger.LogWarning("Invalid UserId: {UserId}", studentEntity.UserId);
+                throw new Exception("UserId invalid");
+            }
+
+            if (!await _context.Users.AnyAsync(u => u.Id == studentEntity.UserId))
+            {
+                _logger.LogWarning("User does not exist. UserId: {UserId}", studentEntity.UserId);
+                throw new Exception("User does not exist");
+            }
+
+            if (await _context.Students.AnyAsync(s => s.UserId == studentEntity.UserId))
+            {
+                _logger.LogWarning(
+                    "UserId {UserId} is already used for another Student",
+                    studentEntity.UserId
+                );
+                throw new Exception("User used for another student");
+            }
+
             await _context.Students.AddAsync(studentEntity);
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                _logger.LogInformation(
+                    "Student created successfully. StudentId: {StudentId}, UserId: {UserId}",
+                    studentEntity.Id,
+                    studentEntity.UserId
+                );
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(
+                    ex,
+                    "Error while saving Student. UserId: {UserId}",
+                    studentEntity.UserId
+                );
+                throw;
+            }
+
             return studentEntity;
         }
 
@@ -50,12 +89,22 @@ namespace StudentMN.Repositories
         {
             _context.Students.Update(studentEntity);
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation(
+                "Student updated successfully. StudentId: {StudentId}",
+                studentEntity.Id
+            );
         }
 
         public async Task DeleteStudentAsync(Student studentEntity)
         {
             _context.Students.Remove(studentEntity);
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation(
+                "Student deleted successfully. StudentId: {StudentId}",
+                studentEntity.Id
+            );
         }
 
         public async Task<bool> ExistsAsync(int id)

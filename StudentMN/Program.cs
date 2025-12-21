@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using ClassMN.Services;
+using ClassMN.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -12,7 +13,8 @@ using StudentMN.Repositories.Interfaces;
 using StudentMN.Services;
 using StudentMN.Services.Interfaces;
 using System.Text;
-using TeacherMN.Services;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,14 +46,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IClassRepository, ClassRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
+builder.Services.AddScoped<IMajorRepository, MajorRepository>();
 
 //Đăng kí service
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<StudentService>();
-builder.Services.AddScoped<TeacherService>();
-builder.Services.AddScoped<MajorService>();
-builder.Services.AddScoped<ClassService>();
+builder.Services.AddScoped<IStudentService,StudentService>();
+builder.Services.AddScoped<ITeacherService,TeacherService>();
+builder.Services.AddScoped<IMajorService,MajorService>();
+builder.Services.AddScoped<ICLassService,ClassService>();
 builder.Services.AddScoped<SubjectService>();
 builder.Services.AddScoped<ScoreService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();

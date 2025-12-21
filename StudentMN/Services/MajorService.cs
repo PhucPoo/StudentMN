@@ -4,36 +4,40 @@ using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Entities.Class;
+using StudentMN.Repositories.Interface;
 using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Services
 {
-    public class MajorService
+    public class MajorService: IMajorService
     {
-        private readonly AppDbContext _context;
+        private readonly IMajorRepository _majorRepository;
         private readonly IMapper _mapper;
-        public MajorService(AppDbContext context, IMapper mapper, IAuthService authService)
+        public MajorService(IMajorRepository majorRepository, IMapper mapper)
         {
-            _context = context;
+            _majorRepository = majorRepository;
             _mapper = mapper;
         }
         // Xem danh sách khoa
-        public async Task<PagedResponse<MajorResponseDTO>> GetAllMajorAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
+        public async Task<PagedResponse<MajorResponseDTO>> GetAllMajor(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            var query = _context.Majors.AsQueryable();
+            var major = await _majorRepository.GetAllMajorAsync();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                query = query.Where(s => s.MajorName.Contains(search));
+                major = major
+                    .Where(c => c.MajorName != null &&
+                                c.MajorName.Contains(search))
+                    .ToList();
             }
 
-            var totalCount = await query.CountAsync();
+            var totalCount = major.Count;
 
-            var majors = await query
-                .OrderBy(s => s.Id)
+            var majors = major
+                .OrderBy(c => c.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToListAsync();
+                .ToList();
 
             var majorsDto = _mapper.Map<List<MajorResponseDTO>>(majors);
 
@@ -46,32 +50,53 @@ namespace StudentMN.Services
                 Data = majorsDto
             };
         }
+        //Lấy khoa theo Id
+        public async Task<MajorResponseDTO?> GetMajorById(int Id)
+        {
+            var Major = await _majorRepository.GetMajorByIdAsync(Id);
+
+            if (Major == null) return null;
+
+            var dto = _mapper.Map<MajorResponseDTO>(Major);
+
+            return dto;
+        }
+
+
         //Thêm khoa mới
-        public async Task<MajorResponseDTO> CreateMajorAsync(MajorRequestDTO dto)
+        public async Task<MajorResponseDTO> CreateMajor(MajorRequestDTO dto)
         {
-            var major = _mapper.Map<Major>(dto);
-
-            _context.Majors.Add(major);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<MajorResponseDTO>(major);
+            var Major = _mapper.Map<Major>(dto);
+            var MajorAdd = await _majorRepository.AddMajorAsync(Major);
+            if (MajorAdd is null)
+            {
+                return null;
+            }
+            return _mapper.Map<MajorResponseDTO>(MajorAdd);
         }
 
-        //Cập nhật khoa mới
-        public async Task<MajorResponseDTO?> UpdateMajorAsync(int id, MajorRequestDTO dto)
+        // Cập nhật giảng viên
+        public async Task<MajorResponseDTO?> UpdateMajor(int id, MajorRequestDTO dto)
         {
-            var major = await _context.Majors.FindAsync(id);
-            if (major == null) return null;
+            var MajorEntity = await _majorRepository.GetMajorByIdAsync(id);
+            if (MajorEntity == null) return null;
 
-            _mapper.Map(dto, major);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<MajorResponseDTO>(major);
+            _mapper.Map(dto, MajorEntity);
+
+            await _majorRepository.UpdateMajorAsync(MajorEntity);
+
+            var updatedMajor = await _majorRepository.GetMajorByIdAsync(id);
+
+            return _mapper.Map<MajorResponseDTO>(updatedMajor);
         }
-        public async Task<bool> DeleteMajorAsync(int id)
+
+        // Xóa tài khoản
+        public async Task<bool> DeleteMajor(int id)
         {
-            var major = await _context.Majors.FindAsync(id);
-            if (major == null) return false;
-            major.IsDelete = true;
-            await _context.SaveChangesAsync();
+            var MajorEntity = await _majorRepository.GetMajorByIdAsync(id);
+            if (MajorEntity == null) return false;
+
+            await _majorRepository.DeleteMajorAsync(MajorEntity);
             return true;
         }
     }

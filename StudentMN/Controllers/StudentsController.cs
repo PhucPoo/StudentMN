@@ -1,9 +1,8 @@
 ﻿
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Services;
+using StudentMN.Services.Interfaces;
 using System.Security.Claims;
 
 namespace StudentManagement.StudentManagement.API.Controllers
@@ -13,9 +12,9 @@ namespace StudentManagement.StudentManagement.API.Controllers
     [Route("api/[controller]")]
     public class StudentsController : ControllerBase
     {
-        private readonly StudentService _service;
+        private readonly IStudentService _service;
 
-        public StudentsController(StudentService service)
+        public StudentsController(IStudentService service)
         {
             _service = service;
         }
@@ -24,13 +23,13 @@ namespace StudentManagement.StudentManagement.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<StudentResponseDTO>>> GetAllStudent(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            return Ok(await _service.GetAllStudentAsync(pageNumber, pageSize, search));
+            return Ok(await _service.GetAllStudent(pageNumber, pageSize, search));
         }
 
         [HttpGet("by-id/{Id}")]
         public async Task<IActionResult> GetStudentById(int Id)
         {
-            var student = await _service.GetStudentByIdAsync(Id);
+            var student = await _service.GetStudentById(Id);
 
             if (student == null)
                 return NotFound(new { success = false, message = "Không tìm thấy sinh viên" });
@@ -52,7 +51,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
                     );
                     return BadRequest(new { success = false, errors });
                 }
-                var student = await _service.CreateStudentAsync(dto);
+                var student = await _service.CreateStudent(dto);
                 if (student is null)
                 {
                     return BadRequest("");
@@ -74,7 +73,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
             if (string.IsNullOrEmpty(role))
                 return Forbid();
 
-            var student = await _service.UpdateStudentAsync(id, dto, role);
+            var student = await _service.UpdateStudent(id, dto);
             if (student == null) return NotFound();
             return Ok(student);
         }
@@ -83,7 +82,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteStudent(int id)
         {
-            var success = await _service.DeleteStudentAsync(id);
+            var success = await _service.DeleteStudent(id);
             if (!success) return NotFound();
             return NoContent();
         }

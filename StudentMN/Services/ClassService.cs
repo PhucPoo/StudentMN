@@ -1,28 +1,26 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using StudentMN.Data;
+using ClassMN.Services.Interfaces;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Entities.Class;
-using StudentMN.Models.Entities.PermissionModels;
 using StudentMN.Repositories.Interfaces;
-using StudentMN.Services.Interfaces;
 
-namespace StudentMN.Services
+
+namespace ClassMN.Services
 {
-    public class ClassService
+    public class ClassService : ICLassService
     {
         private readonly IClassRepository _classRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<ClassService> _logger;
-        public ClassService( IMapper mapper, IClassRepository classRepository, IAuthService authService,ILogger<ClassService> logger)
+        public ClassService( IMapper mapper, IClassRepository classRepository,ILogger<ClassService> logger)
         {
             _classRepository = classRepository;
             _mapper = mapper;
             _logger = logger;
         }
         // Xem danh sách lớp
-        public async Task<PagedResponse<ClassesResponseDTO>> GetAllClassAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
+        public async Task<PagedResponse<ClassesResponseDTO>> GetAllClass(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
             var classes = await _classRepository.GetAllClassAsync();
 
@@ -54,8 +52,19 @@ namespace StudentMN.Services
             };
 
         }
+        //Xem class theo Id
+        public async Task<ClassesResponseDTO?> GetClassById(int Id)
+        {
+            var Class = await _classRepository.GetClassByIdAsync(Id);
+
+            if (Class == null) return null;
+
+            var dto = _mapper.Map<ClassesResponseDTO>(Class);
+
+            return dto;
+        }
         //Thêm lớp mới
-        public async Task<ClassesResponseDTO> CreateClassAsync(ClassesRequestDTO dto)
+        public async Task<ClassesResponseDTO> CreateClass(ClassesRequestDTO dto)
         {
             //var teacherExists = await _classRepository.GetTeacherByIdAsync(dto.TeacherId);
             //if (teacherExists == null)
@@ -71,7 +80,7 @@ namespace StudentMN.Services
         }
 
         //Cập nhật lớp mới
-        public async Task<ClassesResponseDTO?> UpdateClassAsync(int id, ClassesRequestDTO dto)
+        public async Task<ClassesResponseDTO?> UpdateClass(int id, ClassesRequestDTO dto)
         {
             var classEntity = await _classRepository.GetClassByIdAsync(id);
             if (classEntity == null) return null;
@@ -85,7 +94,7 @@ namespace StudentMN.Services
             return _mapper.Map<ClassesResponseDTO>(updatedClass);
         }
         //Xóa lớp
-        public async Task<bool> DeleteClassAsync(int id)
+        public async Task<bool> DeleteClass(int id)
         {
             var classEntity = await _classRepository.GetClassByIdAsync(id);
             if (classEntity == null) return false;

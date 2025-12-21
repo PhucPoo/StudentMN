@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentMN.Data;
 
@@ -11,9 +12,11 @@ using StudentMN.Data;
 namespace StudentMN.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251221013538_UpdateStudent2")]
+    partial class UpdateStudent2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,6 +111,9 @@ namespace StudentMN.Migrations
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
@@ -206,12 +212,12 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 21, 9, 38, 32, 492, DateTimeKind.Local).AddTicks(1925),
+                            CreatedAt = new DateTime(2025, 12, 21, 8, 35, 37, 719, DateTimeKind.Local).AddTicks(9402),
                             Email = "admin@studentmn.com",
                             FullName = "Administrator",
                             IsActive = true,
                             IsDelete = false,
-                            Password = "$2a$11$vXDg.bMMFZ96D2SXexwem.1ixPwgMJDdyceDwJXGulfhI9d7huiKC",
+                            Password = "$2a$11$mw8rNWZQ8iK/PyaocZPBAOxyamEt6mxOy8hy/R0nkXccFSITbtkta",
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Username = "admin"
@@ -434,7 +440,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 21, 9, 38, 32, 378, DateTimeKind.Local).AddTicks(8388),
+                            CreatedAt = new DateTime(2025, 12, 21, 8, 35, 37, 526, DateTimeKind.Local).AddTicks(8393),
                             Description = "Quản trị viên",
                             IsDelete = false,
                             RoleName = "Admin",
@@ -443,7 +449,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 21, 9, 38, 32, 378, DateTimeKind.Local).AddTicks(8390),
+                            CreatedAt = new DateTime(2025, 12, 21, 8, 35, 37, 526, DateTimeKind.Local).AddTicks(8396),
                             Description = "Sinh viên",
                             IsDelete = false,
                             RoleName = "Student",
@@ -452,7 +458,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 21, 9, 38, 32, 378, DateTimeKind.Local).AddTicks(8392),
+                            CreatedAt = new DateTime(2025, 12, 21, 8, 35, 37, 526, DateTimeKind.Local).AddTicks(8399),
                             Description = "Giảng viên",
                             IsDelete = false,
                             RoleName = "Teacher",

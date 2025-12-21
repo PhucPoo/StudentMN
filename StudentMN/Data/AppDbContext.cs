@@ -111,7 +111,7 @@ namespace StudentMN.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.StudentCode).IsRequired().HasMaxLength(20);
                 entity.Property(e => e.Gender).HasMaxLength(10);
-                entity.Property(e => e.Email).HasMaxLength(100);
+                entity.Property(e => e.Course).HasMaxLength(100);
                 entity.Property(e => e.PhoneNumber).HasMaxLength(15);
                 entity.HasIndex(e => e.StudentCode).IsUnique();
 

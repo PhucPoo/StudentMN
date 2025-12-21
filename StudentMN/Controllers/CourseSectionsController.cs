@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models.Entities.Class;
-using StudentMN.Services;
+using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Controllers
 {
@@ -11,9 +10,9 @@ namespace StudentMN.Controllers
     [Route("api/[controller]")]
     public class CourseSectionsController : ControllerBase
     {
-        private readonly CourseSectionService _service;
+        private readonly ICourseSectionService _service;
 
-        public CourseSectionsController(CourseSectionService service)
+        public CourseSectionsController(ICourseSectionService service)
         {
             _service = service;
         }

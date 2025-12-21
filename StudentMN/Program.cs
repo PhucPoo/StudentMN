@@ -48,6 +48,7 @@ builder.Services.AddScoped<IClassRepository, ClassRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<IMajorRepository, MajorRepository>();
+builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 
 //Đăng kí service
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -56,7 +57,7 @@ builder.Services.AddScoped<IStudentService,StudentService>();
 builder.Services.AddScoped<ITeacherService,TeacherService>();
 builder.Services.AddScoped<IMajorService,MajorService>();
 builder.Services.AddScoped<ICLassService,ClassService>();
-builder.Services.AddScoped<SubjectService>();
+builder.Services.AddScoped<ISubjectService,SubjectService>();
 builder.Services.AddScoped<ScoreService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();

@@ -1,6 +1,5 @@
 ﻿using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models.Entities.Class;
 
 namespace StudentMN.Services.Interfaces
 {

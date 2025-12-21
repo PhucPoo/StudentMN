@@ -50,6 +50,7 @@ namespace StudentMN.Services
             };
 
         }
+        //Lấy giáo viên theo Id
         public async Task<TeacherResponseDTO?> GetTeacherById(int Id)
         {
             var teacher = await _teacherRepository.GetTeacherByIdAsync(Id);

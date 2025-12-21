@@ -47,35 +47,62 @@ namespace StudentMN.Services
                 Data = courseSectionsDto
             };
         }
-       
-        //Thêm lớp học phần mới
-        public async Task<CourseSectionResponseDTO> CreateCourseSectionAsync(CourseSectionRequestDTO dto)
-        {
-            var courseSection = _mapper.Map<CourseSection>(dto);
 
-            _context.CourseSections.Add(courseSection);
+        //Thêm lớp học phần mới
+        public async Task<CourseSectionResponseDTO> CreateCourseSectionAsync(
+            CourseSectionRequestDTO dto)
+        {
+            if (await _context.CourseSections.AnyAsync(cs =>
+                    cs.SectionCode == dto.SectionCode && !cs.IsDelete))
+            {
+                throw new InvalidOperationException("SectionCode already exists");
+            }
+
+            var courseSection = _mapper.Map<CourseSection>(dto);
+            courseSection.IsDelete = false;
+
+            await _context.CourseSections.AddAsync(courseSection);
             await _context.SaveChangesAsync();
+
             return _mapper.Map<CourseSectionResponseDTO>(courseSection);
         }
 
         //Cập nhật lớp học phần mới
-        public async Task<CourseSectionResponseDTO> UpdateCourseSectionAsync(int id, CourseSectionRequestDTO courseSection)
+        public async Task<CourseSectionResponseDTO> UpdateCourseSectionAsync(
+           int id,
+           CourseSectionRequestDTO dto)
         {
-            var coursesection = await _context.CourseSections.FindAsync(id);
-            if (coursesection == null || coursesection.IsDelete) return null;
+            var courseSection = await _context.CourseSections
+                .FirstOrDefaultAsync(cs => cs.Id == id && !cs.IsDelete);
 
-            _mapper.Map(courseSection, coursesection);
+            if (courseSection == null)
+                throw new KeyNotFoundException("CourseSection not found");
+
+            if (await _context.CourseSections.AnyAsync(cs =>
+                    cs.SectionCode == dto.SectionCode &&
+                    cs.Id != id &&
+                    !cs.IsDelete))
+            {
+                throw new InvalidOperationException("SectionCode already exists");
+            }
+
+            _mapper.Map(dto, courseSection);
             await _context.SaveChangesAsync();
-            return _mapper.Map<CourseSectionResponseDTO>(coursesection);
 
+            return _mapper.Map<CourseSectionResponseDTO>(courseSection);
         }
         //Xóa lớp học phần mới
         public async Task<bool> DeleteCourseSectionAsync(int id)
         {
-            var courseSection = await _context.CourseSections.FindAsync(id);
-            if (courseSection == null) return false;
+            var courseSection = await _context.CourseSections
+                .FirstOrDefaultAsync(cs => cs.Id == id && !cs.IsDelete);
+
+            if (courseSection == null)
+                return false;
+
             courseSection.IsDelete = true;
             await _context.SaveChangesAsync();
+
             return true;
         }
     }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Services;
+using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Controllers
 {
@@ -10,9 +11,9 @@ namespace StudentMN.Controllers
     [Route("api/[controller]")]
     public class SubjectController : ControllerBase
     {
-        private readonly SubjectService _service;
+        private readonly ISubjectService _service;
 
-        public SubjectController(SubjectService service)
+        public SubjectController(ISubjectService service)
         {
             _service = service;
         }
@@ -21,7 +22,7 @@ namespace StudentMN.Controllers
         [HttpGet]
         public async Task<ActionResult<List<SubjectResponseDTO>>> GetAllSubject(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            return Ok(await _service.GetAllSubjectAsync(pageNumber, pageSize, search));
+            return Ok(await _service.GetAllSubject(pageNumber, pageSize, search));
         }
 
         
@@ -38,7 +39,7 @@ namespace StudentMN.Controllers
                 );
                 return BadRequest(new { success = false, errors });
             }
-            var Subject = await _service.CreateSubjectAsync(dto);
+            var Subject = await _service.CreateSubject(dto);
             return CreatedAtAction(nameof(GetAllSubject), new { id = Subject.Id }, Subject);
         }
 
@@ -46,7 +47,7 @@ namespace StudentMN.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<SubjectResponseDTO>> UpdateSubject(int id, SubjectRequestDTO dto)
         {
-            var Subject = await _service.UpdateSubjectAsync(id, dto);
+            var Subject = await _service.UpdateSubject(id, dto);
             if (Subject == null) return NotFound();
             return Ok(Subject);
         }
@@ -55,7 +56,7 @@ namespace StudentMN.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteSubject(int id)
         {
-            var success = await _service.DeleteSubjectAsync(id);
+            var success = await _service.DeleteSubject(id);
             if (!success) return NotFound();
             return NoContent();
         }

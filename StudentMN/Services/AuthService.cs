@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Serilog;
 using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
@@ -48,7 +47,7 @@ namespace StudentMN.Services
                     return new LoginResponse
                     {
                         Success = false,
-                        Message = "Tên đăng nhập và mật khẩu không được để trống"
+                        Message = "Username and password cannot be empty"
                     };
                 }
 
@@ -58,7 +57,7 @@ namespace StudentMN.Services
                     return new LoginResponse
                     {
                         Success = false,
-                        Message = "Tên đăng nhập không tồn tại"
+                        Message = "Username does not exist"
                     };
                 }
 
@@ -70,7 +69,7 @@ namespace StudentMN.Services
                     return new LoginResponse
                     {
                         Success = false,
-                        Message = "Mật khẩu của bạn không đúng"
+                        Message = "Passwword does not exist"
                     };
                 }
                 var tokens = await GenerateTokens(user);
@@ -78,7 +77,7 @@ namespace StudentMN.Services
                 return new LoginResponse
                 {
                     Success = true,
-                    Message = "Đăng nhập thành công",
+                    Message = "login successfull",
                     AccessToken = tokens.accessToken,
                     RefreshToken = tokens.refreshToken,
                     ExpiredAt = tokens.expires,
@@ -97,7 +96,7 @@ namespace StudentMN.Services
                 return new LoginResponse
                 {
                     Success = false,
-                    Message = $"Lỗi hệ thống: {ex.Message}"
+                    Message = $"System error: {ex.Message}"
                 };
             }
         }
@@ -106,7 +105,7 @@ namespace StudentMN.Services
         public string GenerateJwtToken(User user, string roleName)
         {
             var jwtKey = _configuration["Jwt:Key"]
-                ?? throw new InvalidOperationException("Jwt:Key bị thiếu trong cấu hình");
+                ?? throw new InvalidOperationException("Jwt:Key is missing in the configuration");
 
             var securityKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(jwtKey)
@@ -114,15 +113,15 @@ namespace StudentMN.Services
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             if (string.IsNullOrWhiteSpace(user.Username))
             {
-                throw new Exception("Username không hợp lệ");
+                throw new Exception("Invalid username");
             }
             if (string.IsNullOrWhiteSpace(user.Email))
             {
-                throw new Exception("Email không hợp lệ");
+                throw new Exception("Invalid emaill");
             }
             if (string.IsNullOrWhiteSpace(user.FullName))
             {
-                throw new Exception("FullName không hợp lệ");
+                throw new Exception("Invalid FullName");
             }
             var claims = new[]
             {
@@ -152,7 +151,7 @@ namespace StudentMN.Services
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]
-                        ?? throw new InvalidOperationException("Jwt:Key bị thiếu trong cấu hình")
+                        ?? throw new InvalidOperationException("Jwt:Key is missing in the configuration")
                 );
 
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
@@ -199,11 +198,11 @@ namespace StudentMN.Services
             {
                 user.Role = await _context.Roles
                     .FirstOrDefaultAsync(r => r.Id == user.RoleId)
-                    ?? throw new InvalidOperationException($"Không tìm thấy vai trò có Id là = {user.RoleId}");
+                    ?? throw new InvalidOperationException($"Role with Id not found = {user.RoleId}");
             }
             string? roleName = user.Role?.RoleName;
             if (string.IsNullOrEmpty(roleName))
-                throw new Exception("User không có role hợp lệ");
+                throw new Exception("User does not have a valid role");
 
             string accessToken = GenerateJwtToken(user, roleName);
 
@@ -224,10 +223,10 @@ namespace StudentMN.Services
             var user = await _userRepository.GetUserByRefreshTokenAsync(refreshToken);
 
             if (user == null || user.RefreshToken != refreshToken)
-                return new LoginResponse { Success = false, Message = "Refresh token không hợp lệ" };
+                return new LoginResponse { Success = false, Message = "Invalid refresh token" };
 
             if (user.RefreshTokenExpiryTime < DateTime.UtcNow)
-                return new LoginResponse { Success = false, Message = "Refresh token đã hết hạn" };
+                return new LoginResponse { Success = false, Message = "The refresh token has expired" };
 
             var tokens = await GenerateTokens(user);
             var role = _context.Roles.FirstOrDefault(r => r.Id == user.RoleId);
@@ -236,7 +235,7 @@ namespace StudentMN.Services
             return new LoginResponse
             {
                 Success = true,
-                Message = "Làm mới token thành công",
+                Message = "Token refreshed successfully",
                 AccessToken = tokens.accessToken,
                 RefreshToken = tokens.refreshToken,
                 ExpiredAt = tokens.expires,

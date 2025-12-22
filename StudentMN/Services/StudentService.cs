@@ -73,12 +73,12 @@ namespace StudentMN.Services
             var worksheet = package.Workbook.Worksheets.Add("Students");
 
             // ===== HEADER =====
-            worksheet.Cells[1, 1].Value = "Mã sinh viên";
-            worksheet.Cells[1, 2].Value = "Họ và tên";
+            worksheet.Cells[1, 1].Value = "StudentCode";
+            worksheet.Cells[1, 2].Value = "FullName";
             worksheet.Cells[1, 3].Value = "Email";
-            worksheet.Cells[1, 4].Value = "Giới tính";
-            worksheet.Cells[1, 5].Value = "Ngày sinh";
-            worksheet.Cells[1, 6].Value = "Lớp";
+            worksheet.Cells[1, 4].Value = "Gender";
+            worksheet.Cells[1, 5].Value = "DateOfBirth";
+            worksheet.Cells[1, 6].Value = "ClassName";
 
             using (var range = worksheet.Cells[1, 1, 1, 6])
             {
@@ -88,7 +88,6 @@ namespace StudentMN.Services
                 range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             }
 
-            // ===== DATA =====
             int row = 2;
             foreach (var s in students)
             {

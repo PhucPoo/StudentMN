@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models.Entities.Account;
 using StudentMN.Models.Entities.ScoreStudent;
-using StudentMN.Repositories;
 using StudentMN.Repositories.Interface;
 using StudentMN.Services.Interfaces;
 

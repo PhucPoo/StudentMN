@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OfficeOpenXml;
 using Serilog;
 using StudentMN.Data;
 using StudentMN.Mapping;
@@ -13,6 +14,7 @@ using StudentMN.Repositories.Interfaces;
 using StudentMN.Services;
 using StudentMN.Services.Interfaces;
 using System.Text;
+using OfficeOpenXml;
 
 
 
@@ -32,6 +34,8 @@ builder.Services.AddCors(options =>
 //Đăng ký automapper
 builder.Services.AddAutoMapper(typeof(AutoMapperConfigurationProfile));
 
+//Cấu hình EPPLUS
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 //Cấu hình Serilog
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
@@ -49,6 +53,9 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<IMajorRepository, MajorRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
+builder.Services.AddScoped<ICourseSectionRepository, CourseSectionRepository>();
+builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+builder.Services.AddScoped<IScoreRepository, ScoreRepository>();
 
 //Đăng kí service
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -58,7 +65,7 @@ builder.Services.AddScoped<ITeacherService,TeacherService>();
 builder.Services.AddScoped<IMajorService,MajorService>();
 builder.Services.AddScoped<ICLassService,ClassService>();
 builder.Services.AddScoped<ISubjectService,SubjectService>();
-builder.Services.AddScoped<ScoreService>();
+builder.Services.AddScoped<IScoreService,ScoreService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 builder.Services.AddScoped<ICourseSectionService, CourseSectionService>();

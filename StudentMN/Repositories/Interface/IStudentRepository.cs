@@ -5,7 +5,8 @@ namespace StudentMN.Repositories.Interface
     public interface IStudentRepository
     {
         Task<List<Student>> GetAllStudentAsync();
-        Task<Student?> GetStudentByIdAsync(int id);
+        Task<List<Student?>> GetStudentsByClassAsync(int classId);
+        Task<Student?> GetStudentsByIdAsync(int classId);
         Task<Student> AddStudentAsync(Student studentEntity);
         Task UpdateStudentAsync(Student studentEntity);
         Task DeleteStudentAsync(Student studentEntity);

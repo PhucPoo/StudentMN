@@ -4,6 +4,7 @@ using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Entities.Class;
 using StudentMN.Services;
+using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Controllers
 {
@@ -11,9 +12,9 @@ namespace StudentMN.Controllers
     [Route("api/[controller]")]
     public class EnrollmentsController : ControllerBase
     {
-        private readonly EnrollmentCourseSectionService _service;
+        private readonly IEnrollmentCourseSection _service;
 
-        public EnrollmentsController(EnrollmentCourseSectionService service)
+        public EnrollmentsController(IEnrollmentCourseSection service)
         {
             _service = service;
         }
@@ -22,7 +23,7 @@ namespace StudentMN.Controllers
         [HttpGet]
         public async Task<ActionResult<List<EnrollmentResponseDTO>>> GetAllEnrollment(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            return Ok(await _service.GetAllEnrollmentsAsync(pageNumber, pageSize, search));
+            return Ok(await _service.GetAllEnrollments(pageNumber, pageSize, search));
         }
 
         //[Authorize]
@@ -37,7 +38,7 @@ namespace StudentMN.Controllers
                 );
                 return BadRequest(new { success = false, errors });
             }
-            var enrollment = await _service.CreateEnrollmentAsync(dto);
+            var enrollment = await _service.CreateEnrollment(dto);
             return CreatedAtAction(nameof(GetAllEnrollment), new { id = enrollment.Id }, enrollment);
         }
 
@@ -46,7 +47,7 @@ namespace StudentMN.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteEnrollment(int id)
         {
-            var success = await _service.DeleteEnrollmentAsync(id);
+            var success = await _service.DeleteEnrollment(id);
             if (!success) return NotFound();
             return NoContent();
         }

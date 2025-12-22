@@ -24,7 +24,7 @@ namespace StudentMN.Data
         public DbSet<Classes> Classes { get; set; }
         public DbSet<Major> Majors { get; set; }
         public DbSet<CourseSection> CourseSections { get; set; }
-        public DbSet<EnrollmentCourseSection> EnrollmentCourseSections { get; set; }
+        public DbSet<EnrollmentCourseSection> Enrollments { get; set; }
 
 
 
@@ -125,12 +125,12 @@ namespace StudentMN.Data
 
             modelBuilder.Entity<EnrollmentCourseSection>()
                 .HasOne(x => x.Student)
-                .WithMany(s => s.EnrollmentCourseSections)
+                .WithMany()
                 .HasForeignKey(x => x.StudentId);
 
             modelBuilder.Entity<EnrollmentCourseSection>()
                 .HasOne(x => x.CourseSection)
-                .WithMany(c => c.EnrollmentCourseSections)
+                .WithMany()
                 .HasForeignKey(x => x.CourseSectionId);
             modelBuilder.Entity<CourseSection>()
                 .HasOne(cs => cs.Teacher)
@@ -146,7 +146,7 @@ namespace StudentMN.Data
 
             modelBuilder.Entity<Score>()
                 .HasOne(s => s.CourseSection)
-                .WithMany(cs => cs.Scores)
+                .WithMany()
                 .HasForeignKey(s => s.CourseSectionId)
                 .OnDelete(DeleteBehavior.NoAction);
 

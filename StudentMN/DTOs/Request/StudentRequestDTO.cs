@@ -17,5 +17,6 @@ namespace StudentMN.DTOs.Request
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public int UserId { get; set; }
+        public int? ClassId { get; set; }
     }
 }

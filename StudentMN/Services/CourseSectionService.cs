@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Entities.Class;
+using StudentMN.Repositories;
+using StudentMN.Repositories.Interface;
 using StudentMN.Services.Interfaces;
 
 
@@ -11,32 +11,35 @@ namespace StudentMN.Services
 {
     public class CourseSectionService :ICourseSectionService
     {
-        private readonly AppDbContext _context;
+        private readonly ICourseSectionRepository _courseSectionRepository;
         private readonly IMapper _mapper;
-        public CourseSectionService(AppDbContext context, IMapper mapper)
+        public CourseSectionService(ICourseSectionRepository courseSectionRepository, IMapper mapper)
         {
-            _context = context;
+            _courseSectionRepository = courseSectionRepository;
             _mapper = mapper;
         }
         // Xem danh sách lớp học phần
-        public async Task<PagedResponse<CourseSectionResponseDTO>> GetAllCourseSectionAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
+        public async Task<PagedResponse<CourseSectionResponseDTO>> GetAllCourseSection(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            var query = _context.CourseSections.AsQueryable();
+            var courseSection = await _courseSectionRepository.GetAllCourseSectionAsync();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                query = query.Where(s => s.SectionCode.Contains(search));
+                courseSection = courseSection
+                    .Where(c => c.SectionCode != null &&
+                                c.SectionCode.Contains(search))
+                    .ToList();
             }
 
-            var totalCount = await query.CountAsync();
+            var totalCount = courseSection.Count;
 
-            var courseSections = await query
+            var Sections = courseSection
                 .OrderBy(s => s.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToListAsync();
+                .ToList();
 
-            var courseSectionsDto = _mapper.Map<List<CourseSectionResponseDTO>>(courseSections);
+            var courseSectionsDto = _mapper.Map<List<CourseSectionResponseDTO>>(Sections);
 
             return new PagedResponse<CourseSectionResponseDTO>
             {
@@ -49,60 +52,49 @@ namespace StudentMN.Services
         }
 
         //Thêm lớp học phần mới
-        public async Task<CourseSectionResponseDTO> CreateCourseSectionAsync(
-            CourseSectionRequestDTO dto)
+        public async Task<CourseSectionResponseDTO> CreateCourseSection(CourseSectionRequestDTO dto)
         {
-            if (await _context.CourseSections.AnyAsync(cs =>
-                    cs.SectionCode == dto.SectionCode && !cs.IsDelete))
-            {
-                throw new InvalidOperationException("SectionCode already exists");
-            }
-
             var courseSection = _mapper.Map<CourseSection>(dto);
-            courseSection.IsDelete = false;
-
-            await _context.CourseSections.AddAsync(courseSection);
-            await _context.SaveChangesAsync();
-
-            return _mapper.Map<CourseSectionResponseDTO>(courseSection);
-        }
-
-        //Cập nhật lớp học phần mới
-        public async Task<CourseSectionResponseDTO> UpdateCourseSectionAsync(
-           int id,
-           CourseSectionRequestDTO dto)
-        {
-            var courseSection = await _context.CourseSections
-                .FirstOrDefaultAsync(cs => cs.Id == id && !cs.IsDelete);
-
-            if (courseSection == null)
-                throw new KeyNotFoundException("CourseSection not found");
-
-            if (await _context.CourseSections.AnyAsync(cs =>
-                    cs.SectionCode == dto.SectionCode &&
-                    cs.Id != id &&
-                    !cs.IsDelete))
+            var courseSectionAdd = await _courseSectionRepository.AddCourseSectionAsync(courseSection);
+            if (courseSectionAdd is null)
             {
-                throw new InvalidOperationException("SectionCode already exists");
+                return null;
             }
-
-            _mapper.Map(dto, courseSection);
-            await _context.SaveChangesAsync();
-
-            return _mapper.Map<CourseSectionResponseDTO>(courseSection);
+            return _mapper.Map<CourseSectionResponseDTO>(courseSectionAdd);
         }
-        //Xóa lớp học phần mới
-        public async Task<bool> DeleteCourseSectionAsync(int id)
+        //Lấy lớp học phần theo Id
+        public async Task<CourseSectionResponseDTO?> GetCourseSectionById(int Id)
         {
-            var courseSection = await _context.CourseSections
-                .FirstOrDefaultAsync(cs => cs.Id == id && !cs.IsDelete);
+            var CourseSection = await _courseSectionRepository.GetCourseSectionByIdAsync(Id);
 
-            if (courseSection == null)
-                return false;
+            if (CourseSection == null) return null;
 
-            courseSection.IsDelete = true;
-            await _context.SaveChangesAsync();
+            var dto = _mapper.Map<CourseSectionResponseDTO>(CourseSection);
 
+            return dto;
+        }
+
+        //Cập nhật lớp học phần 
+        public async Task<CourseSectionResponseDTO?> UpdateCourseSection(int id, CourseSectionRequestDTO dto)
+        {
+            var CourseSectionEntity = await _courseSectionRepository.GetCourseSectionByIdAsync(id);
+            if (CourseSectionEntity == null) return null;
+
+            _mapper.Map(dto, CourseSectionEntity);
+
+            await _courseSectionRepository.UpdateCourseSectionAsync(CourseSectionEntity);
+
+            var updatedCourseSection = await _courseSectionRepository.GetCourseSectionByIdAsync(id);
+
+            return _mapper.Map<CourseSectionResponseDTO>(updatedCourseSection);
+        }
+        //Xóa lớp học phần
+        public async Task<bool> DeleteCourseSection(int id)
+        {
+            var courseSectionEntity = await _courseSectionRepository.GetCourseSectionByIdAsync(id);
+            if (courseSectionEntity == null) return false;
+
+            await _courseSectionRepository.DeleteCourseSectionAsync(courseSectionEntity);
             return true;
         }
     }

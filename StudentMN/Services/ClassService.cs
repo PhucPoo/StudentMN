@@ -12,12 +12,10 @@ namespace ClassMN.Services
     {
         private readonly IClassRepository _classRepository;
         private readonly IMapper _mapper;
-        private readonly ILogger<ClassService> _logger;
         public ClassService( IMapper mapper, IClassRepository classRepository,ILogger<ClassService> logger)
         {
             _classRepository = classRepository;
             _mapper = mapper;
-            _logger = logger;
         }
         // Xem danh sách lớp
         public async Task<PagedResponse<ClassesResponseDTO>> GetAllClass(int pageNumber = 1, int pageSize = 8, string? search = null)
@@ -66,9 +64,6 @@ namespace ClassMN.Services
         //Thêm lớp mới
         public async Task<ClassesResponseDTO> CreateClass(ClassesRequestDTO dto)
         {
-            //var teacherExists = await _classRepository.GetTeacherByIdAsync(dto.TeacherId);
-            //if (teacherExists == null)
-            //    throw new Exception("Teacher does not exist");
             var Class = _mapper.Map<Classes>(dto);
             await _classRepository.AddClassAsync(Class);
             var createdClass = await _classRepository.GetClassByIdAsync(Class.Id);

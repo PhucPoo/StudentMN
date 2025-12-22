@@ -21,7 +21,7 @@ namespace StudentMN.Controllers
         [HttpGet]
         public async Task<ActionResult<List<CourseSectionResponseDTO>>> GetAllCourseSection(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            return Ok(await _service.GetAllCourseSectionAsync(pageNumber, pageSize, search));
+            return Ok(await _service.GetAllCourseSection(pageNumber, pageSize, search));
         }
 
         //[Authorize]
@@ -36,7 +36,7 @@ namespace StudentMN.Controllers
                 );
                 return BadRequest(new { success = false, errors });
             }
-            var courseSection = await _service.CreateCourseSectionAsync(dto);
+            var courseSection = await _service.CreateCourseSection(dto);
             return CreatedAtAction(nameof(GetAllCourseSection), new { id = courseSection.Id }, courseSection);
         }
 
@@ -44,7 +44,7 @@ namespace StudentMN.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<CourseSectionResponseDTO>> UpdateCourseSection(int id, CourseSectionRequestDTO dto)
         {
-            var courseSection = await _service.UpdateCourseSectionAsync(id, dto);
+            var courseSection = await _service.UpdateCourseSection(id, dto);
             if (courseSection == null) return NotFound();
             return Ok(courseSection);
         }
@@ -53,7 +53,7 @@ namespace StudentMN.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCourseSection(int id)
         {
-            var success = await _service.DeleteCourseSectionAsync(id);
+            var success = await _service.DeleteCourseSection(id);
             if (!success) return NotFound();
             return NoContent();
         }

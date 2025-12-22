@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
+using StudentMN.Services;
 using StudentMN.Services.Interfaces;
 using System.Security.Claims;
 
@@ -25,14 +26,25 @@ namespace StudentManagement.StudentManagement.API.Controllers
         {
             return Ok(await _service.GetAllStudent(pageNumber, pageSize, search));
         }
+        [HttpGet("export/class/{classId}")]
+        public async Task<IActionResult> ExportStudentsByClass(int classId)
+        {
+            var fileBytes = await _service.ExportStudentsByClassToExcel(classId);
+
+            return File(
+                fileBytes,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                $"students_class_{classId}.xlsx"
+            );
+        }
 
         [HttpGet("by-id/{Id}")]
         public async Task<IActionResult> GetStudentById(int Id)
         {
-            var student = await _service.GetStudentById(Id);
+            var student = await _service.GetStudentByClass(Id);
 
             if (student == null)
-                return NotFound(new { success = false, message = "Không tìm thấy sinh viên" });
+                return NotFound(new { success = false, message = "Student not found" });
 
             return Ok(new { success = true, data = student });
         }

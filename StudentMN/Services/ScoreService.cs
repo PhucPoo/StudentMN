@@ -1,35 +1,34 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using StudentMN.Data;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models.Entities.ScoreStudent;
+using StudentMN.Repositories.Interface;
 using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Services
 {
-    public class ScoreService
+    public class ScoreService : IScoreService
     {
-        private readonly AppDbContext _context;
+        private readonly IScoreRepository _scoreRepository;
         private readonly IMapper _mapper;
-        public ScoreService(AppDbContext context, IMapper mapper, IAuthService authService)
+        public ScoreService(IScoreRepository scoreRepository, IMapper mapper, IAuthService authService)
         {
-            _context = context;
+            _scoreRepository = scoreRepository;
             _mapper = mapper;
         }
         // Xem danh sách khoa
-        public async Task<PagedResponse<ScoreResponseDTO>> GetAllScoreAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
+        public async Task<PagedResponse<ScoreResponseDTO>> GetAllScore(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            var query = _context.Scores.AsQueryable();
-            var totalCount = await query.CountAsync();
+            var score = await _scoreRepository.GetAllScoreAsync();
 
-            var scores = await query
-                .OrderBy(s => s.Id)
+            var totalCount = score.Count;
+
+            var Scores = score
+                .OrderBy(c => c.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToListAsync();
+                .ToList();
 
-            var scoresDto = _mapper.Map<List<ScoreResponseDTO>>(scores);
+            var scoresDto = _mapper.Map<List<ScoreResponseDTO>>(Scores);
 
             return new PagedResponse<ScoreResponseDTO>
             {
@@ -40,33 +39,34 @@ namespace StudentMN.Services
                 Data = scoresDto
             };
         }
-        //Thêm khoa mới
-        public async Task<ScoreResponseDTO> CreateScoreAsync(ScoreRequestDTO dto)
+        //Lấy khoa theo Id
+        public async Task<ScoreResponseDTO?> GetScoreById(int id)
         {
-            var score = _mapper.Map<Score>(dto);
-
-            _context.Scores.Add(score);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<ScoreResponseDTO>(score);
-        }
-
-        //Cập nhật khoa mới
-        public async Task<ScoreResponseDTO?> UpdateScoreAsync(int id, ScoreRequestDTO dto)
-        {
-            var score = await _context.Scores.FindAsync(id);
+            var score = await _scoreRepository.GetScoreByStudentIdAsync(id);
             if (score == null) return null;
 
-            _mapper.Map(dto, score);
-            await _context.SaveChangesAsync();
             return _mapper.Map<ScoreResponseDTO>(score);
         }
-        public async Task<bool> DeleteScoreAsync(int id)
+
+
+
+        // Cập nhật giảng viên
+        public async Task<ScoreResponseDTO?> UpdateScore(int id, ScoreRequestDTO dto)
         {
-            var score = await _context.Scores.FindAsync(id);
-            if (score == null) return false;
-            score.IsDelete = true;
-            await _context.SaveChangesAsync();
-            return true;
+            var scoreEntity = await _scoreRepository.GetScoreByStudentIdAsync(id);
+            if (scoreEntity == null) return null;
+
+            _mapper.Map(dto, scoreEntity);
+
+            await _scoreRepository.UpdateScoreAsync(scoreEntity);
+
+            var updatedScore = await _scoreRepository.GetScoreByStudentIdAsync(id);
+            if (updatedScore == null) return null;
+
+            return _mapper.Map<ScoreResponseDTO>(updatedScore);
         }
+
+
+
     }
 }

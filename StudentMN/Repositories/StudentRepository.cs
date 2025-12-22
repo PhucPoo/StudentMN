@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentMN.Data;
 using StudentMN.Models.Entities.Account;
+using StudentMN.Models.Entities.Class;
 using StudentMN.Repositories.Interface;
 
 namespace StudentMN.Repositories
@@ -24,12 +25,21 @@ namespace StudentMN.Repositories
                                  .ToListAsync();
         }
 
-        public async Task<Student?> GetStudentByIdAsync(int id)
+        public async Task<List<Student>> GetStudentsByClassAsync(int classId)
         {
             return await _context.Students
                                  .Include(c => c.Class)
                                  .Include(c => c.User)
-                                 .FirstOrDefaultAsync(c => c.Id == id);
+                                 .Where(s => s.ClassId == classId)
+                                 .ToListAsync();
+        }
+        public async Task<Student> GetStudentsByIdAsync(int id)
+        {
+            return await _context.Students
+                                 .Include(c => c.Class)
+                                 .Include(c => c.User)
+                                 .FirstOrDefaultAsync(s => s.Id == id);
+
         }
 
         public async Task<Student> AddStudentAsync(Student studentEntity)

@@ -19,10 +19,5 @@ namespace StudentMN.Models.Entities.Class
 
         public int MaxStudents { get; set; }
 
-        public ICollection<EnrollmentCourseSection> EnrollmentCourseSections { get; set; }
-            = new List<EnrollmentCourseSection>();
-
-        public ICollection<Score> Scores { get; set; }
-            = new List<Score>();
     }
 }

@@ -1,42 +1,38 @@
 ﻿using AutoMapper;
-using StudentMN.Data;
+using Microsoft.EntityFrameworkCore;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using Microsoft.EntityFrameworkCore;
 using StudentMN.Models.Entities.Class;
+using StudentMN.Repositories.Interface;
 using StudentMN.Services.Interfaces;
 
 
 namespace StudentMN.Services
 {
-    public class EnrollmentCourseSectionService:IEnrollmentCourseSection
+    public class EnrollmentCourseSectionService: IEnrollmentCourseSection
     {
-        private readonly AppDbContext _context;
+        private readonly IEnrollmentRepository _enrollmentRepository;
         private readonly IMapper _mapper;
-        public EnrollmentCourseSectionService(AppDbContext context, IMapper mapper)
+        public EnrollmentCourseSectionService(IEnrollmentRepository enrollmentRepository, IMapper mapper)
         {
-            _context = context;
+            _enrollmentRepository = enrollmentRepository;
             _mapper = mapper;
         }
-        // Xem danh đăng kí học phần
-        public async Task<PagedResponse<EnrollmentResponseDTO>> GetAllEnrollmentsAsync(int pageNumber = 1, int pageSize = 8, string? search = null)
+        // Xem đăng kí lớp học phần
+        public async Task<PagedResponse<EnrollmentResponseDTO>> GetAllEnrollments(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            var query = _context.EnrollmentCourseSections.AsQueryable();
+            var enrollment = await _enrollmentRepository.GetAllEnrollmentAsync();
 
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                query = query.Where(s => s.CourseSection.SectionCode.Contains(search));
-            }
 
-            var totalCount = await query.CountAsync();
+            var totalCount = enrollment.Count;
 
-            var enrollments = await query
+            var Enrollments = enrollment
                 .OrderBy(s => s.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToListAsync();
+                .ToList();
 
-            var enrollmentsDto = _mapper.Map<List<EnrollmentResponseDTO>>(enrollments);
+            var enrollmentsDto = _mapper.Map<List<EnrollmentResponseDTO>>(Enrollments);
 
             return new PagedResponse<EnrollmentResponseDTO>
             {
@@ -47,23 +43,51 @@ namespace StudentMN.Services
                 Data = enrollmentsDto
             };
         }
+
         //Thêm đăng kí lớp học phần mới
-        public async Task<EnrollmentResponseDTO> CreateEnrollmentAsync(EnrollmentRequestDTO dto)
+        public async Task<EnrollmentResponseDTO> CreateEnrollment(EnrollmentRequestDTO dto)
         {
             var enrollment = _mapper.Map<EnrollmentCourseSection>(dto);
+            var enrollmentAdd = await _enrollmentRepository.AddEnrollmentAsync(enrollment);
+            if (enrollmentAdd is null)
+            {
+                return null;
+            }
+            return _mapper.Map<EnrollmentResponseDTO>(enrollmentAdd);
+        }
+        //Lấy đăng kí lớp học phần theo Id
+        public async Task<EnrollmentResponseDTO?> GetEnrollmentById(int Id)
+        {
+            var enrollment = await _enrollmentRepository.GetEnrollmentByIdAsync(Id);
 
-            _context.EnrollmentCourseSections.Add(enrollment);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<EnrollmentResponseDTO>(enrollment);
+            if (enrollment == null) return null;
+
+            var dto = _mapper.Map<EnrollmentResponseDTO>(enrollment);
+
+            return dto;
         }
 
-        //Xóa đăng kí học phần 
-        public async Task<bool> DeleteEnrollmentAsync(int id)
+        //Cập nhật lớp học phần 
+        public async Task<EnrollmentResponseDTO?> UpdateEnrollment(int id, EnrollmentRequestDTO dto)
         {
-            var enrollment = await _context.EnrollmentCourseSections.FindAsync(id);
-            if (enrollment == null) return false;
-            enrollment.IsDelete = true;
-            await _context.SaveChangesAsync();
+            var enrollmentEntity = await _enrollmentRepository.GetEnrollmentByIdAsync(id);
+            if (enrollmentEntity == null) return null;
+
+            _mapper.Map(dto, enrollmentEntity);
+
+            await _enrollmentRepository.UpdateEnrollmentAsync(enrollmentEntity);
+
+            var updatedEnrollment = await _enrollmentRepository.GetEnrollmentByIdAsync(id);
+
+            return _mapper.Map<EnrollmentResponseDTO>(updatedEnrollment);
+        }
+        //Xóa đăng kí lớp học phần
+        public async Task<bool> DeleteEnrollment(int id)
+        {
+            var enrollmentEntity = await _enrollmentRepository.GetEnrollmentByIdAsync(id);
+            if (enrollmentEntity == null) return false;
+
+            await _enrollmentRepository.DeleteEnrollmentAsync(enrollmentEntity);
             return true;
         }
     }

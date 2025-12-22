@@ -5,9 +5,10 @@ namespace StudentMN.Services.Interfaces
 {
     public interface IEnrollmentCourseSection
     {
-        Task<PagedResponse<EnrollmentResponseDTO>> GetAllEnrollmentsAsync(int pageNumber, int pageSize, string? search);
-        Task<EnrollmentResponseDTO> CreateEnrollmentAsync(EnrollmentRequestDTO enrollment);
-        Task<bool> DeleteEnrollmentAsync(int id);
+        Task<PagedResponse<EnrollmentResponseDTO>> GetAllEnrollments(int pageNumber, int pageSize, string? search);
+        Task<EnrollmentResponseDTO> CreateEnrollment(EnrollmentRequestDTO enrollment);
+        Task<EnrollmentResponseDTO> UpdateEnrollment(int id, EnrollmentRequestDTO enrollment);
+        Task<bool> DeleteEnrollment(int id);
 
     }
 }

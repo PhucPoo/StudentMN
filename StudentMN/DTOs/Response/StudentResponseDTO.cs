@@ -18,6 +18,8 @@ namespace StudentMN.DTOs.Response
         public string? Address { get; set; }
         public int UserId { get; set; }
         public UserResponseDTO User { get; set; } = null!;
+        public int? ClassId { get; set; }
+        public ClassesResponseDTO? Class { get; set; }
 
     }
 }

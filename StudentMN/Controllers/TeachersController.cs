@@ -26,10 +26,10 @@ namespace StudentMN.Controllers
         {
             return Ok(await _service.GetAllTeacher(pageNumber, pageSize, search));
         }
-        [HttpGet("by-user/{userId}")]
-        public async Task<IActionResult> GetTeacherById(int userId)
+        [HttpGet("by-id/{Id}")]
+        public async Task<IActionResult> GetTeacherById(int Id)
         {
-            var teacher = await _service.GetTeacherById(userId);
+            var teacher = await _service.GetTeacherById(Id);
 
             if (teacher == null)
                 return NotFound(new { success = false, message = "Teacher not found" });

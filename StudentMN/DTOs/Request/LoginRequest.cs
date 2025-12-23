@@ -3,10 +3,11 @@
 namespace StudentMN.DTOs.Request
 {
     public class LoginRequest
+
     {
-        [Required]
+        [Required(ErrorMessage = "Username cannot be empty.")]
         public string? Username { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Password cannot be empty.")]
         public string? Password { get; set; }
         
     }

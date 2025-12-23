@@ -30,7 +30,7 @@ namespace StudentMN.Repositories
             return await _context.Students
                                  .Include(c => c.Class)
                                  .Include(c => c.User)
-                                 .Where(s => s.ClassId == classId)
+                                 .Where(s => s.ClassId == classId && s.IsDelete == false)
                                  .ToListAsync();
         }
         public async Task<Student> GetStudentsByIdAsync(int id)
@@ -108,7 +108,12 @@ namespace StudentMN.Repositories
 
         public async Task DeleteStudentAsync(Student studentEntity)
         {
-            _context.Students.Remove(studentEntity);
+            if (studentEntity == null)
+            {
+                _logger.LogWarning("Student not found. StudentId: {StudentId}", studentEntity.Id);
+                return; 
+            }
+            studentEntity.IsDelete = true;
             await _context.SaveChangesAsync();
 
             _logger.LogInformation(

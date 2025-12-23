@@ -29,7 +29,7 @@ namespace StudentMN.Repositories
             return await _context.Teachers
                                  .Include(c => c.Major)
                                  .Include(c => c.User)
-                                 .FirstOrDefaultAsync(c => c.Id == id);
+                                 .FirstOrDefaultAsync(c => c.User.Id == id);
         }
 
         public async Task<Teacher> AddTeacherAsync(Teacher teacherEntity)
@@ -98,7 +98,12 @@ namespace StudentMN.Repositories
 
         public async Task DeleteTeacherAsync(Teacher teacherEntity)
         {
-            _context.Teachers.Remove(teacherEntity);
+            if (teacherEntity == null)
+            {
+                _logger.LogWarning("Student not found. StudentId: {StudentId}", teacherEntity.Id);
+                return;
+            }
+            teacherEntity.IsDelete = true;
             await _context.SaveChangesAsync();
 
             _logger.LogInformation(

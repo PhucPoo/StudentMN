@@ -4,15 +4,14 @@ namespace StudentMN.DTOs.Request
 {
     public class UserRequestDTO
     {
-        [Required(ErrorMessage = "Tên không được để trống")]
+        [Required(ErrorMessage = "Username cannot be empty")]
         public string Username { get; set; }
-        [Required]
-
+        [Required(ErrorMessage = "Password cannot be empty")]
         public string Password { get; set; }
-        [Required(ErrorMessage = "FullName không được để trống")]
+        [Required(ErrorMessage = "FullName cannot be empty")]
         public string FullName { get; set; }
-        [Required(ErrorMessage = "Email không được để trống")]
-        [EmailAddress(ErrorMessage = "Email không hợp lệ")]
+        [Required(ErrorMessage = "Email cannot be empty")]
+        [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string Email { get; set; }
         [Required]
         public int RoleId { get; set; }

@@ -72,7 +72,6 @@ namespace StudentMN.Services
             using var package = new ExcelPackage();
             var worksheet = package.Workbook.Worksheets.Add("Students");
 
-            // ===== HEADER =====
             worksheet.Cells[1, 1].Value = "StudentCode";
             worksheet.Cells[1, 2].Value = "FullName";
             worksheet.Cells[1, 3].Value = "Email";

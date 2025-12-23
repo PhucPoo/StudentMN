@@ -55,8 +55,7 @@ namespace StudentMN.Repositories
             if (updatedScore.FinalScore.HasValue)
                 score.FinalScore = updatedScore.FinalScore.Value;
 
-
-            // Tự động tính điểm trung bình nếu cả 3 điểm đều có
+            //Tính điểm trung bình khi đã nhập 3 điểm xong
             if (score.AttendanceScore.HasValue &&
                 score.MidtermScore.HasValue &&
                 score.FinalScore.HasValue)

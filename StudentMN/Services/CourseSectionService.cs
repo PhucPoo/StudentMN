@@ -2,7 +2,6 @@
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
 using StudentMN.Models.Entities.Class;
-using StudentMN.Repositories;
 using StudentMN.Repositories.Interface;
 using StudentMN.Services.Interfaces;
 

@@ -30,7 +30,7 @@ namespace StudentMN.Controllers
                 return BadRequest(new LoginResponse
                 {
                     Success = false,
-                    Message = "Dữ liệu không hợp lệ"
+                    Message = "Invalid data"
                 });
             }
 
@@ -56,7 +56,7 @@ namespace StudentMN.Controllers
                 return Unauthorized(new
                 {
                     success = false,
-                    message = "Token không hợp lệ"
+                    message = "Invalid token"
                 });
             }
 
@@ -67,7 +67,7 @@ namespace StudentMN.Controllers
                 return NotFound(new
                 {
                     success = false,
-                    message = "Không tìm thấy người dùng"
+                    message = "User not found"
                 });
             }
 
@@ -95,7 +95,7 @@ namespace StudentMN.Controllers
                 return BadRequest(new
                 {
                     success = false,
-                    message = "Token không được để trống"
+                    message = "Token cannot be empty"
                 });
             }
 
@@ -116,7 +116,7 @@ namespace StudentMN.Controllers
             return Ok(new
             {
                 success = true,
-                message = "Đăng xuất thành công"
+                message = "Logged out successfully"
             });
         }
         [AllowAnonymous]
@@ -128,7 +128,7 @@ namespace StudentMN.Controllers
                 return BadRequest(new
                 {
                     success = false,
-                    message = "Refresh token không được để trống"
+                    message = "Refresh token cannot be empty"
                 });
             }
             
@@ -137,7 +137,6 @@ namespace StudentMN.Controllers
 
             if (!result.Success)
             {
-                // refresh token sai / hết hạn
                 return Unauthorized(result);
             }
 

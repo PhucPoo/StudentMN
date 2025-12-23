@@ -5,7 +5,7 @@ namespace StudentMN.DTOs.Request
     public class SubjectRequestDTO
     {
         [Required(ErrorMessage = "SubjectCode cannot be empty.")]
-        public int SubjectCode { get; set; }
+        public string SubjectCode { get; set; }
         [Required(ErrorMessage = "SubjectName cannot be empty.")]
         public string? SubjectName { get; set; }
         [Required(ErrorMessage = "Credits cannot be empty.")]

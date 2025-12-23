@@ -96,7 +96,6 @@ namespace StudentMN.Repositories
         {
             try
             {
-                // Hash password before saving
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 user.CreatedAt = DateTime.Now;
                 user.IsActive = true;

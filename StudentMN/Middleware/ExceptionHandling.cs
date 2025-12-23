@@ -17,9 +17,9 @@ namespace StudentMN.Middleware
         {
             if (context.Response.HasStarted)
             {
-                _logger.LogWarning("Response đã bắt đầu, không thể gửi lỗi JSON cho {Method} {Path}",
+                _logger.LogWarning("Response has already started, cannot send JSON error for {Method} {Path}",
                     context.Request.Method, context.Request.Path);
-                _logger.LogError(exception, "Exception xảy ra sau khi response đã bắt đầu");
+                _logger.LogError(exception, "An exception occurred after the response had already started");
                 return;
             }
 
@@ -30,7 +30,7 @@ namespace StudentMN.Middleware
             var response = new
             {
                 success = false,
-                message = "Lỗi hệ thống",
+                message = "System error",
                 detail = exception.Message
             };
 

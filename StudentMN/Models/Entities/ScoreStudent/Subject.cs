@@ -5,7 +5,7 @@ namespace StudentMN.Models.Entities.ScoreStudent
 {
     public class Subject: BaseEntity
     {
-        public int SubjectCode { get; set; }
+        public string SubjectCode { get; set; }
         public string SubjectName { get; set; }
         public int Credits { get; set; }
         public int MajorId { get; set; }

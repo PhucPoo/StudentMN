@@ -10,13 +10,11 @@ namespace StudentMN.Services
     {
         private readonly ITeacherRepository _teacherRepository;
         private readonly IMapper _mapper;
-        private readonly ILogger<TeacherService> _logger;
 
-        public TeacherService(ILogger<TeacherService> logger,ITeacherRepository teacherRepository, IMapper mapper)
+        public TeacherService(ITeacherRepository teacherRepository, IMapper mapper)
         {
             _teacherRepository = teacherRepository;
             _mapper = mapper;
-            _logger = logger;
         }
 
         // Xem danh sách giảng viên
@@ -56,7 +54,6 @@ namespace StudentMN.Services
         public async Task<TeacherResponseDTO?> GetTeacherById(int Id)
         {
             var teacher = await _teacherRepository.GetTeacherByIdAsync(Id);
-            _logger.LogWarning(">>>>>", teacher);
 
             if (teacher == null) return null;
 

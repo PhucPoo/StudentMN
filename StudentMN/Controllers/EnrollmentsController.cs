@@ -48,7 +48,7 @@ namespace StudentMN.Controllers
         public async Task<ActionResult> DeleteEnrollment(int id)
         {
             var success = await _service.DeleteEnrollment(id);
-            if (!success) return NotFound();
+            if (!success) return NotFound("unable to get enrollment");
             return NoContent();
         }
     }

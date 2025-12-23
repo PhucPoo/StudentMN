@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.Services.Interfaces;
@@ -31,18 +30,18 @@ namespace StudentMN.Controllers
         {
             if (request == null || request.PermissionIds == null)
             {
-                _logger.LogError("Yeu cau khong hop le");
+                _logger.LogError("Invalid request");
                 return BadRequest();
             }
             var success = await _rolePermissionService.UpdateRolePermissionsAsync(request);
 
             if (!success)
             {
-                _logger.LogError("Them quyen cho role khong thanh cong");
+                _logger.LogError("Failed to add permission to role");
                 return BadRequest();
             }
 
-            _logger.LogInformation("quyen duoc them thanh cong");
+            _logger.LogInformation("permission added successfully");
             return Ok();
         }
         [HttpDelete("delete-role-permissions")]
@@ -53,11 +52,11 @@ namespace StudentMN.Controllers
 
             if (!result)
             {
-                _logger.LogWarning("quyen hoac role khong ton tai");
+                _logger.LogWarning("permission or role does not exist");
                 return NotFound();
             }
 
-            _logger.LogInformation("Quyen duoc them thanh cong vao role: {roleId}",roleId);
+            _logger.LogInformation("Permission successfully added to role: {roleId}", roleId);
             return Ok();
         }
     }

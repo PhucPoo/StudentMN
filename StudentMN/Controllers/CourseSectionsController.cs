@@ -45,7 +45,7 @@ namespace StudentMN.Controllers
         public async Task<ActionResult<CourseSectionResponseDTO>> UpdateCourseSection(int id, CourseSectionRequestDTO dto)
         {
             var courseSection = await _service.UpdateCourseSection(id, dto);
-            if (courseSection == null) return NotFound();
+            if (courseSection == null) return NotFound("unable to get courseSection");
             return Ok(courseSection);
         }
 
@@ -54,7 +54,7 @@ namespace StudentMN.Controllers
         public async Task<ActionResult> DeleteCourseSection(int id)
         {
             var success = await _service.DeleteCourseSection(id);
-            if (!success) return NotFound();
+            if (!success) return NotFound("unable to get courseSection");
             return NoContent();
         }
     }

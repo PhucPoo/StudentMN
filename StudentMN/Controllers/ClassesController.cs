@@ -38,7 +38,7 @@ namespace StudentMN.Controllers
         public async Task<ActionResult<ClassesResponseDTO>> UpdateClass(int id, ClassesRequestDTO dto)
         {
             var Class = await _service.UpdateClass(id, dto);
-            if (Class == null) return NotFound();
+            if (Class == null) return NotFound("unable to get class");
             return Ok(Class);
         }
 
@@ -47,7 +47,7 @@ namespace StudentMN.Controllers
         public async Task<ActionResult> DeleteClass(int id)
         {
             var success = await _service.DeleteClass(id);
-            if (!success) return NotFound();
+            if (!success) return NotFound("unable to get class");
             return NoContent();
         }
     }

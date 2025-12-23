@@ -48,7 +48,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
             public async Task<ActionResult<UserResponseDTO>> UpdateUser(int id, UserRequestDTO dto)
             {
                 var user = await _userService.UpdateUser(id, dto);
-                if (user == null) return NotFound();
+                if (user == null) return NotFound("user not found");
                 return Ok(user);
             }
 
@@ -57,7 +57,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
             public async Task<ActionResult> DeleteUser(int id)
             {
                 var success = await _userService.DeleteUser(id);
-                if (!success) return NotFound();
+                if (!success) return NotFound("user not found");
                 return NoContent();
             }
         }

@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Services;
 using StudentMN.Services.Interfaces;
+using System.Security.Claims;
 
 namespace StudentMN.Controllers
 {
@@ -57,9 +57,14 @@ namespace StudentMN.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<TeacherResponseDTO>> UpdateTeacher(int id, TeacherRequestDTO dto)
         {
-            var Teacher = await _service.UpdateTeacher(id, dto);
-            if (Teacher == null) return NotFound();
-            return Ok(Teacher);
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (string.IsNullOrEmpty(role))
+                return Forbid();
+
+            var teacher = await _service.UpdateTeacher(id, dto);
+            if (teacher == null) return BadRequest("unable to get teacher");
+            return Ok(teacher);
         }
 
         //[Authorize(Roles = "Admin")]
@@ -67,7 +72,7 @@ namespace StudentMN.Controllers
         public async Task<ActionResult> DeleteTeacher(int id)
         {
             var success = await _service.DeleteTeacher(id);
-            if (!success) return NotFound();
+            if (!success) return NotFound("unable to get teacher");
             return NoContent();
         }
     }

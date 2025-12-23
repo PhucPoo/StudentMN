@@ -29,7 +29,7 @@ namespace StudentMN.Repositories
             return await _context.Teachers
                                  .Include(c => c.Major)
                                  .Include(c => c.User)
-                                 .FirstOrDefaultAsync(c => c.User.Id == id);
+                                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Teacher> AddTeacherAsync(Teacher teacherEntity)

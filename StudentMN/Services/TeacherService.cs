@@ -4,17 +4,20 @@ using StudentMN.DTOs.Response;
 using StudentMN.Models.Entities.Account;
 using StudentMN.Repositories.Interface;
 using StudentMN.Services.Interfaces;
-namespace StudentMN.Services
+
+namespace TeacherMN.Services
 {
     public class TeacherService: ITeacherService
     {
         private readonly ITeacherRepository _teacherRepository;
+        private readonly ILogger<TeacherService> _logger;
         private readonly IMapper _mapper;
 
-        public TeacherService(ITeacherRepository teacherRepository, IMapper mapper)
+        public TeacherService(ILogger<TeacherService> logger,ITeacherRepository teacherRepository, IMapper mapper)
         {
             _teacherRepository = teacherRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         // Xem danh sách giảng viên
@@ -78,16 +81,29 @@ namespace StudentMN.Services
         // Cập nhật giảng viên
         public async Task<TeacherResponseDTO?> UpdateTeacher(int id, TeacherRequestDTO dto)
         {
-            var teacherEntity = await _teacherRepository.GetTeacherByIdAsync(id);
-            if (teacherEntity == null) return null;
+            try
+            {
+                var teacherEntity = await _teacherRepository.GetTeacherByIdAsync(id);
+                if (teacherEntity == null)
+                {
+                    _logger.LogWarning("UpdateTeacher: Teacher with Id {TeacherId} not found.", id);
+                    return null;
+                }
 
-            _mapper.Map(dto, teacherEntity);
+                _mapper.Map(dto, teacherEntity);
 
-            await _teacherRepository.UpdateTeacherAsync(teacherEntity);
+                await _teacherRepository.UpdateTeacherAsync(teacherEntity);
 
-            var updatedTeacher = await _teacherRepository.GetTeacherByIdAsync(id);
+                var updatedTeacher = await _teacherRepository.GetTeacherByIdAsync(id);
 
-            return _mapper.Map<TeacherResponseDTO>(updatedTeacher);
+                return _mapper.Map<TeacherResponseDTO>(updatedTeacher);
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "UpdateTeacher failed for Id {TeacherId}", id);
+                throw;
+            }
         }
 
         // Xóa tài khoản

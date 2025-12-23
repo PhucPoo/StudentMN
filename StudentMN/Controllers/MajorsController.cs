@@ -46,7 +46,7 @@ namespace StudentMN.Controllers
         public async Task<ActionResult<MajorResponseDTO>> UpdateMajor(int id, MajorRequestDTO dto)
         {
             var Major = await _service.UpdateMajor(id, dto);
-            if (Major == null) return NotFound();
+            if (Major == null) return NotFound("unable to get major");
             return Ok(Major);
         }
 
@@ -55,7 +55,7 @@ namespace StudentMN.Controllers
         public async Task<ActionResult> DeleteMajor(int id)
         {
             var success = await _service.DeleteMajor(id);
-            if (!success) return NotFound();
+            if (!success) return NotFound("unable to get major");
             return NoContent();
         }
     }

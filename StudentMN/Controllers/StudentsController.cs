@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Services;
 using StudentMN.Services.Interfaces;
 using System.Security.Claims;
 
@@ -86,7 +85,7 @@ namespace StudentManagement.StudentManagement.API.Controllers
                 return Forbid();
 
             var student = await _service.UpdateStudent(id, dto);
-            if (student == null) return NotFound();
+            if (student == null) return BadRequest("unable to get student");
             return Ok(student);
         }
 
@@ -95,7 +94,10 @@ namespace StudentManagement.StudentManagement.API.Controllers
         public async Task<ActionResult> DeleteStudent(int id)
         {
             var success = await _service.DeleteStudent(id);
-            if (!success) return NotFound();
+            if (!success)
+            {
+                return NotFound(new { message = "Student not found", studentId = id });
+            }
             return NoContent();
         }
     }

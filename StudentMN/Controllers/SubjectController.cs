@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Services;
 using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Controllers
@@ -48,7 +47,7 @@ namespace StudentMN.Controllers
         public async Task<ActionResult<SubjectResponseDTO>> UpdateSubject(int id, SubjectRequestDTO dto)
         {
             var Subject = await _service.UpdateSubject(id, dto);
-            if (Subject == null) return NotFound();
+            if (Subject == null) return NotFound("subject not found");
             return Ok(Subject);
         }
 
@@ -57,7 +56,7 @@ namespace StudentMN.Controllers
         public async Task<ActionResult> DeleteSubject(int id)
         {
             var success = await _service.DeleteSubject(id);
-            if (!success) return NotFound();
+            if (!success) return NotFound("subject not found");
             return NoContent();
         }
     }

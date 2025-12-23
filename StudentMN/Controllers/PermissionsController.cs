@@ -35,7 +35,7 @@ namespace StudentMN.Controllers
         {
             var updated = await _permissionService.UpdatePermissionAsync(id, permission);
             if (updated == null)
-                return NotFound();
+                return NotFound("unable to get student");
             return Ok(updated);
         }
         [HttpDelete("{id}")]
@@ -43,7 +43,7 @@ namespace StudentMN.Controllers
         {
             var success = await _permissionService.DeletePermissionAsync(id);
             if (!success)
-                return NotFound();
+                return NotFound("unable to get student");
             return NoContent();
         }
     }

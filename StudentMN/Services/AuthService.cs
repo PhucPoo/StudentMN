@@ -62,14 +62,14 @@ namespace StudentMN.Services
                 }
 
                 bool isValidPassword = await _userRepository.ValidateCredentialsAsync(
-                    request.Username, request.Password);
+                    request.Username, user.Password);
 
                 if (!isValidPassword)
                 {
                     return new LoginResponse
                     {
                         Success = false,
-                        Message = "Passwword does not exist"
+                        Message = "Passwword incorrect"
                     };
                 }
                 var tokens = await GenerateTokens(user);

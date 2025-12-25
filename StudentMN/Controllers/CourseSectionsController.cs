@@ -28,16 +28,28 @@ namespace StudentMN.Controllers
         [HttpPost]
         public async Task<ActionResult<CourseSectionResponseDTO>> CreateCourseSection(CourseSectionRequestDTO dto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                var errors = ModelState.ToDictionary(
-                    kv => kv.Key,
-                    kv => kv.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                );
-                return BadRequest(new { success = false, errors });
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.ToDictionary(
+                        kv => kv.Key,
+                        kv => kv.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                    return BadRequest(new { success = false, errors });
+                }
+                var courseSection = await _service.CreateCourseSection(dto);
+                return CreatedAtAction(nameof(GetAllCourseSection), new { id = courseSection.Id }, courseSection);
             }
-            var courseSection = await _service.CreateCourseSection(dto);
-            return CreatedAtAction(nameof(GetAllCourseSection), new { id = courseSection.Id }, courseSection);
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "System error",
+                    detail = ex.InnerException?.Message ?? ex.Message
+                });
+            }
         }
 
         //[Authorize(Roles = "Admin")]

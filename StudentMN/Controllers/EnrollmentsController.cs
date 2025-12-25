@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
-using StudentMN.Models.Entities.Class;
-using StudentMN.Services;
 using StudentMN.Services.Interfaces;
 
 namespace StudentMN.Controllers
@@ -26,20 +24,57 @@ namespace StudentMN.Controllers
             return Ok(await _service.GetAllEnrollments(pageNumber, pageSize, search));
         }
 
+
         //[Authorize]
         [HttpPost]
         public async Task<ActionResult<EnrollmentResponseDTO>> CreateEnrollment(EnrollmentRequestDTO dto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                var errors = ModelState.ToDictionary(
-                    kv => kv.Key,
-                    kv => kv.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                );
-                return BadRequest(new { success = false, errors });
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.ToDictionary(
+                        kv => kv.Key,
+                        kv => kv.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                    return BadRequest(new { success = false, errors });
+                }
+                var enrollment = await _service.CreateEnrollment(dto);
+                return CreatedAtAction(nameof(GetAllEnrollment), new { id = enrollment.Id }, enrollment);
             }
-            var enrollment = await _service.CreateEnrollment(dto);
-            return CreatedAtAction(nameof(GetAllEnrollment), new { id = enrollment.Id }, enrollment);
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "System error",
+                    detail = ex.InnerException?.Message ?? ex.Message
+                });
+            }
+        }
+
+        [HttpGet("student/{studentId:int}")]
+        public async Task<IActionResult> GetEnrollmentsByStudentId(int studentId)
+        {
+            var enrollments = await _service.GetEnrollmentsByStudentId(studentId);
+
+            if (enrollments == null || !enrollments.Any())
+            {
+                return NotFound(new { message = "Sinh viên chưa đăng kí lớp học phần nào" });
+            }
+
+            return Ok(enrollments);
+        }
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetEnrollmentById(int id)
+        {
+            var enrollment = await _service.GetEnrollmentsById(id);
+            if (enrollment == null)
+            {
+                return NotFound(new { message = "Enrollment không tồn tại" });
+            }
+
+            return Ok(enrollment);
         }
 
 

@@ -6,86 +6,70 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StudentMN.Migrations
 {
     /// <inheritdoc />
-    public partial class TableSubject : Migration
+    public partial class UpdateUsser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "SubjectCode",
-                table: "Subjects",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "int");
-
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedAt",
-                value: new DateTime(2025, 12, 23, 14, 24, 49, 701, DateTimeKind.Local).AddTicks(5508));
+                value: new DateTime(2025, 12, 25, 15, 11, 26, 19, DateTimeKind.Local).AddTicks(1676));
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "CreatedAt",
-                value: new DateTime(2025, 12, 23, 14, 24, 49, 701, DateTimeKind.Local).AddTicks(5510));
+                value: new DateTime(2025, 12, 25, 15, 11, 26, 19, DateTimeKind.Local).AddTicks(1678));
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "CreatedAt",
-                value: new DateTime(2025, 12, 23, 14, 24, 49, 701, DateTimeKind.Local).AddTicks(5511));
+                value: new DateTime(2025, 12, 25, 15, 11, 26, 19, DateTimeKind.Local).AddTicks(1679));
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "CreatedAt", "Password" },
-                values: new object[] { new DateTime(2025, 12, 23, 14, 24, 49, 868, DateTimeKind.Local).AddTicks(949), "$2a$11$PZ8.GvEGyrpfDuHa5Uq4A.GMASoMszUemCUvtx9iSoxZCuay0WHXe" });
+                values: new object[] { new DateTime(2025, 12, 25, 15, 11, 26, 134, DateTimeKind.Local).AddTicks(840), "$2a$11$KgcZgB.Rr4ALxPn88Y3dY.Paj.Ezn.Ki9fmPNGiG7hfFb2226hn6S" });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
-                name: "SubjectCode",
-                table: "Subjects",
-                type: "int",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "CreatedAt",
-                value: new DateTime(2025, 12, 22, 10, 7, 22, 159, DateTimeKind.Local).AddTicks(2855));
+                value: new DateTime(2025, 12, 25, 14, 57, 19, 525, DateTimeKind.Local).AddTicks(8445));
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "CreatedAt",
-                value: new DateTime(2025, 12, 22, 10, 7, 22, 159, DateTimeKind.Local).AddTicks(2857));
+                value: new DateTime(2025, 12, 25, 14, 57, 19, 525, DateTimeKind.Local).AddTicks(8447));
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "CreatedAt",
-                value: new DateTime(2025, 12, 22, 10, 7, 22, 159, DateTimeKind.Local).AddTicks(2859));
+                value: new DateTime(2025, 12, 25, 14, 57, 19, 525, DateTimeKind.Local).AddTicks(8449));
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "CreatedAt", "Password" },
-                values: new object[] { new DateTime(2025, 12, 22, 10, 7, 22, 323, DateTimeKind.Local).AddTicks(3202), "$2a$11$OV4y9VgFGaH1PHB/RiayCeP86JghgzhnN6hVY.WqEyAnN1bfP.P2e" });
+                values: new object[] { new DateTime(2025, 12, 25, 14, 57, 19, 696, DateTimeKind.Local).AddTicks(1374), "$2a$11$JduJnEGBmWPBhxdDYZ284OVNzwIYSDdS/UApg8bFkFtRL32U3AxQW" });
         }
     }
 }

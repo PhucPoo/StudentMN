@@ -26,776 +26,776 @@ namespace StudentMN.Migrations
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("StudentMN.Models.Entities.Account.Student", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Address")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Avt")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Avt")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ClassId")
-                        .HasColumnType("int");
+                b.Property<int?>("ClassId")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Course")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                b.Property<string>("Course")
+                    .HasMaxLength(100)
+                    .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                b.Property<DateTime>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("DateOfBirth")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("Gender")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                b.Property<string>("Gender")
+                    .HasMaxLength(10)
+                    .HasColumnType("nvarchar(10)");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsDelete")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                b.Property<string>("PhoneNumber")
+                    .HasMaxLength(15)
+                    .HasColumnType("nvarchar(15)");
 
-                    b.Property<string>("StudentCode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                b.Property<string>("StudentCode")
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("ClassId");
+                b.HasIndex("ClassId");
 
-                    b.HasIndex("StudentCode")
-                        .IsUnique();
+                b.HasIndex("StudentCode")
+                    .IsUnique();
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                b.HasIndex("UserId")
+                    .IsUnique();
 
-                    b.ToTable("Students");
-                });
+                b.ToTable("Students");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Account.Teacher", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Address")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Avt")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Avt")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                b.Property<DateTime>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("DateOfBirth")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Email")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Gender")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsDelete")
+                    .HasColumnType("bit");
 
-                    b.Property<int>("MajorId")
-                        .HasColumnType("int");
+                b.Property<int>("MajorId")
+                    .HasColumnType("int");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("PhoneNumber")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TeacherCode")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("TeacherCode")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("MajorId");
+                b.HasIndex("MajorId");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("Teachers");
-                });
+                b.ToTable("Teachers");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Account.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                b.Property<DateTime>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                b.Property<string>("Email")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                b.Property<string>("FullName")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("nvarchar(100)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsActive")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsDelete")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                b.Property<string>("Password")
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("RefreshToken")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("RefreshTokenExpiryTime")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime?>("RefreshTokenExpiryTime")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                b.Property<int>("RoleId")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("Username")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
+                b.HasIndex("Email")
+                    .IsUnique();
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.HasIndex("Username")
-                        .IsUnique();
+                b.HasIndex("Username")
+                    .IsUnique();
 
-                    b.ToTable("Users");
+                b.ToTable("Users");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 21, 8, 35, 37, 719, DateTimeKind.Local).AddTicks(9402),
-                            Email = "admin@studentmn.com",
-                            FullName = "Administrator",
-                            IsActive = true,
-                            IsDelete = false,
-                            Password = "$2a$11$mw8rNWZQ8iK/PyaocZPBAOxyamEt6mxOy8hy/R0nkXccFSITbtkta",
-                            RoleId = 1,
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Username = "admin"
-                        });
-                });
+                b.HasData(
+                    new
+                    {
+                        Id = 1,
+                        CreatedAt = new DateTime(2025, 12, 21, 8, 35, 37, 719, DateTimeKind.Local).AddTicks(9402),
+                        Email = "admin@studentmn.com",
+                        FullName = "Administrator",
+                        IsActive = true,
+                        IsDelete = false,
+                        Password = "$2a$11$mw8rNWZQ8iK/PyaocZPBAOxyamEt6mxOy8hy/R0nkXccFSITbtkta",
+                        RoleId = 1,
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        Username = "admin"
+                    });
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Class.Classes", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ClassName")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClassName")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CourseYear")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("CourseYear")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                b.Property<DateTime>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsDelete")
+                    .HasColumnType("bit");
 
-                    b.Property<int>("MajorId")
-                        .HasColumnType("int");
+                b.Property<int>("MajorId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
+                b.Property<int>("TeacherId")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("MajorId");
+                b.HasIndex("MajorId");
 
-                    b.HasIndex("TeacherId");
+                b.HasIndex("TeacherId");
 
-                    b.ToTable("Classes");
-                });
+                b.ToTable("Classes");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Class.CourseSection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                b.Property<DateTime>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsDelete")
+                    .HasColumnType("bit");
 
-                    b.Property<int>("MaxStudents")
-                        .HasColumnType("int");
+                b.Property<int>("MaxStudents")
+                    .HasColumnType("int");
 
-                    b.Property<string>("SectionCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("SectionCode")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Semester")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Semester")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
+                b.Property<int>("SubjectId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
+                b.Property<int>("TeacherId")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("SubjectId");
+                b.HasIndex("SubjectId");
 
-                    b.HasIndex("TeacherId");
+                b.HasIndex("TeacherId");
 
-                    b.ToTable("CourseSections");
-                });
+                b.ToTable("CourseSections");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Class.EnrollmentCourseSection", b =>
-                {
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+            {
+                b.Property<int>("StudentId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("CourseSectionId")
-                        .HasColumnType("int");
+                b.Property<int>("CourseSectionId")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                b.Property<DateTime>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                b.Property<int>("Id")
+                    .HasColumnType("int");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsDelete")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("StudentId", "CourseSectionId");
+                b.HasKey("StudentId", "CourseSectionId");
 
-                    b.HasIndex("CourseSectionId");
+                b.HasIndex("CourseSectionId");
 
-                    b.ToTable("EnrollmentCourseSections");
-                });
+                b.ToTable("EnrollmentCourseSections");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Class.Major", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                b.Property<DateTime>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsDelete")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("MajorName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("MajorName")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Majors");
-                });
+                b.ToTable("Majors");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.PermissionModels.Permission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                b.Property<DateTime>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnType("nvarchar(200)");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsDelete")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("PermissionName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("PermissionName")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Permissions");
-                });
+                b.ToTable("Permissions");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.PermissionModels.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                b.Property<DateTime>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                b.Property<string>("Description")
+                    .HasMaxLength(200)
+                    .HasColumnType("nvarchar(200)");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsDelete")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("RoleName")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                b.ToTable("Roles");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 21, 8, 35, 37, 526, DateTimeKind.Local).AddTicks(8393),
-                            Description = "Quản trị viên",
-                            IsDelete = false,
-                            RoleName = "Admin",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 21, 8, 35, 37, 526, DateTimeKind.Local).AddTicks(8396),
-                            Description = "Sinh viên",
-                            IsDelete = false,
-                            RoleName = "Student",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 21, 8, 35, 37, 526, DateTimeKind.Local).AddTicks(8399),
-                            Description = "Giảng viên",
-                            IsDelete = false,
-                            RoleName = "Teacher",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
-                });
+                b.HasData(
+                    new
+                    {
+                        Id = 1,
+                        CreatedAt = new DateTime(2025, 12, 21, 8, 35, 37, 526, DateTimeKind.Local).AddTicks(8393),
+                        Description = "Quản trị viên",
+                        IsDelete = false,
+                        RoleName = "Admin",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 2,
+                        CreatedAt = new DateTime(2025, 12, 21, 8, 35, 37, 526, DateTimeKind.Local).AddTicks(8396),
+                        Description = "Sinh viên",
+                        IsDelete = false,
+                        RoleName = "Student",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 3,
+                        CreatedAt = new DateTime(2025, 12, 21, 8, 35, 37, 526, DateTimeKind.Local).AddTicks(8399),
+                        Description = "Giảng viên",
+                        IsDelete = false,
+                        RoleName = "Teacher",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    });
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.PermissionModels.RolePermission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                b.Property<DateTime>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsDelete")
+                    .HasColumnType("bit");
 
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("int");
+                b.Property<int>("PermissionId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                b.Property<int>("RoleId")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("PermissionId");
+                b.HasIndex("PermissionId");
 
-                    b.HasIndex("RoleId", "PermissionId")
-                        .IsUnique();
+                b.HasIndex("RoleId", "PermissionId")
+                    .IsUnique();
 
-                    b.ToTable("RolePermissions");
-                });
+                b.ToTable("RolePermissions");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.ScoreStudent.Score", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float?>("AttendanceScore")
-                        .HasColumnType("real");
+                b.Property<float?>("AttendanceScore")
+                    .HasColumnType("real");
 
-                    b.Property<float?>("AverageScore")
-                        .HasColumnType("real");
+                b.Property<float?>("AverageScore")
+                    .HasColumnType("real");
 
-                    b.Property<int>("CourseSectionId")
-                        .HasColumnType("int");
+                b.Property<int>("CourseSectionId")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                b.Property<DateTime>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<float?>("FinalScore")
-                        .HasColumnType("real");
+                b.Property<float?>("FinalScore")
+                    .HasColumnType("real");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsDelete")
+                    .HasColumnType("bit");
 
-                    b.Property<float?>("MidtermScore")
-                        .HasColumnType("real");
+                b.Property<float?>("MidtermScore")
+                    .HasColumnType("real");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                b.Property<int>("StudentId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
+                b.Property<int>("SubjectId")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("CourseSectionId");
+                b.HasIndex("CourseSectionId");
 
-                    b.HasIndex("StudentId");
+                b.HasIndex("StudentId");
 
-                    b.HasIndex("SubjectId");
+                b.HasIndex("SubjectId");
 
-                    b.ToTable("Scores");
-                });
+                b.ToTable("Scores");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.ScoreStudent.Subject", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                b.Property<DateTime>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<int>("Credits")
-                        .HasColumnType("int");
+                b.Property<int>("Credits")
+                    .HasColumnType("int");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsDelete")
+                    .HasColumnType("bit");
 
-                    b.Property<int>("MajorId")
-                        .HasColumnType("int");
+                b.Property<int>("MajorId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("SubjectCode")
-                        .HasColumnType("int");
+                b.Property<int>("SubjectCode")
+                    .HasColumnType("int");
 
-                    b.Property<string>("SubjectName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("SubjectName")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("MajorId");
+                b.HasIndex("MajorId");
 
-                    b.ToTable("Subjects");
-                });
+                b.ToTable("Subjects");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Account.Student", b =>
-                {
-                    b.HasOne("StudentMN.Models.Entities.Class.Classes", "Class")
-                        .WithMany("Students")
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade);
+            {
+                b.HasOne("StudentMN.Models.Entities.Class.Classes", "Class")
+                    .WithMany("Students")
+                    .HasForeignKey("ClassId")
+                    .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("StudentMN.Models.Entities.Account.User", "User")
-                        .WithOne()
-                        .HasForeignKey("StudentMN.Models.Entities.Account.Student", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("StudentMN.Models.Entities.Account.User", "User")
+                    .WithOne()
+                    .HasForeignKey("StudentMN.Models.Entities.Account.Student", "UserId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.Navigation("Class");
+                b.Navigation("Class");
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Account.Teacher", b =>
-                {
-                    b.HasOne("StudentMN.Models.Entities.Class.Major", "Major")
-                        .WithMany()
-                        .HasForeignKey("MajorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("StudentMN.Models.Entities.Class.Major", "Major")
+                    .WithMany()
+                    .HasForeignKey("MajorId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("StudentMN.Models.Entities.Account.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("StudentMN.Models.Entities.Account.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Major");
+                b.Navigation("Major");
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Account.User", b =>
-                {
-                    b.HasOne("StudentMN.Models.Entities.PermissionModels.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+            {
+                b.HasOne("StudentMN.Models.Entities.PermissionModels.Role", "Role")
+                    .WithMany("Users")
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.Navigation("Role");
-                });
+                b.Navigation("Role");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Class.Classes", b =>
-                {
-                    b.HasOne("StudentMN.Models.Entities.Class.Major", "Major")
-                        .WithMany("Classes")
-                        .HasForeignKey("MajorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+            {
+                b.HasOne("StudentMN.Models.Entities.Class.Major", "Major")
+                    .WithMany("Classes")
+                    .HasForeignKey("MajorId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("StudentMN.Models.Entities.Account.Teacher", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("StudentMN.Models.Entities.Account.Teacher", "Teacher")
+                    .WithMany()
+                    .HasForeignKey("TeacherId")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.Navigation("Major");
+                b.Navigation("Major");
 
-                    b.Navigation("Teacher");
-                });
+                b.Navigation("Teacher");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Class.CourseSection", b =>
-                {
-                    b.HasOne("StudentMN.Models.Entities.ScoreStudent.Subject", "Subject")
-                        .WithMany("CourseSections")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+            {
+                b.HasOne("StudentMN.Models.Entities.ScoreStudent.Subject", "Subject")
+                    .WithMany("CourseSections")
+                    .HasForeignKey("SubjectId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                    b.HasOne("StudentMN.Models.Entities.Account.Teacher", "Teacher")
-                        .WithMany("CourseSections")
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                b.HasOne("StudentMN.Models.Entities.Account.Teacher", "Teacher")
+                    .WithMany("CourseSections")
+                    .HasForeignKey("TeacherId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                    b.Navigation("Subject");
+                b.Navigation("Subject");
 
-                    b.Navigation("Teacher");
-                });
+                b.Navigation("Teacher");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Class.EnrollmentCourseSection", b =>
-                {
-                    b.HasOne("StudentMN.Models.Entities.Class.CourseSection", "CourseSection")
-                        .WithMany("EnrollmentCourseSections")
-                        .HasForeignKey("CourseSectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("StudentMN.Models.Entities.Class.CourseSection", "CourseSection")
+                    .WithMany("EnrollmentCourseSections")
+                    .HasForeignKey("CourseSectionId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("StudentMN.Models.Entities.Account.Student", "Student")
-                        .WithMany("EnrollmentCourseSections")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("StudentMN.Models.Entities.Account.Student", "Student")
+                    .WithMany("EnrollmentCourseSections")
+                    .HasForeignKey("StudentId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("CourseSection");
+                b.Navigation("CourseSection");
 
-                    b.Navigation("Student");
-                });
+                b.Navigation("Student");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.PermissionModels.RolePermission", b =>
-                {
-                    b.HasOne("StudentMN.Models.Entities.PermissionModels.Permission", "Permission")
-                        .WithMany("RolePermissions")
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("StudentMN.Models.Entities.PermissionModels.Permission", "Permission")
+                    .WithMany("RolePermissions")
+                    .HasForeignKey("PermissionId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("StudentMN.Models.Entities.PermissionModels.Role", "Role")
-                        .WithMany("RolePermissions")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("StudentMN.Models.Entities.PermissionModels.Role", "Role")
+                    .WithMany("RolePermissions")
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Permission");
+                b.Navigation("Permission");
 
-                    b.Navigation("Role");
-                });
+                b.Navigation("Role");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.ScoreStudent.Score", b =>
-                {
-                    b.HasOne("StudentMN.Models.Entities.Class.CourseSection", "CourseSection")
-                        .WithMany("Scores")
-                        .HasForeignKey("CourseSectionId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+            {
+                b.HasOne("StudentMN.Models.Entities.Class.CourseSection", "CourseSection")
+                    .WithMany("Scores")
+                    .HasForeignKey("CourseSectionId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                    b.HasOne("StudentMN.Models.Entities.Account.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                b.HasOne("StudentMN.Models.Entities.Account.Student", "Student")
+                    .WithMany()
+                    .HasForeignKey("StudentId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                    b.HasOne("StudentMN.Models.Entities.ScoreStudent.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("StudentMN.Models.Entities.ScoreStudent.Subject", "Subject")
+                    .WithMany()
+                    .HasForeignKey("SubjectId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("CourseSection");
+                b.Navigation("CourseSection");
 
-                    b.Navigation("Student");
+                b.Navigation("Student");
 
-                    b.Navigation("Subject");
-                });
+                b.Navigation("Subject");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.ScoreStudent.Subject", b =>
-                {
-                    b.HasOne("StudentMN.Models.Entities.Class.Major", "Major")
-                        .WithMany()
-                        .HasForeignKey("MajorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("StudentMN.Models.Entities.Class.Major", "Major")
+                    .WithMany()
+                    .HasForeignKey("MajorId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Major");
-                });
+                b.Navigation("Major");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Account.Student", b =>
-                {
-                    b.Navigation("EnrollmentCourseSections");
-                });
+            {
+                b.Navigation("EnrollmentCourseSections");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Account.Teacher", b =>
-                {
-                    b.Navigation("CourseSections");
-                });
+            {
+                b.Navigation("CourseSections");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Class.Classes", b =>
-                {
-                    b.Navigation("Students");
-                });
+            {
+                b.Navigation("Students");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Class.CourseSection", b =>
-                {
-                    b.Navigation("EnrollmentCourseSections");
+            {
+                b.Navigation("EnrollmentCourseSections");
 
-                    b.Navigation("Scores");
-                });
+                b.Navigation("Scores");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.Class.Major", b =>
-                {
-                    b.Navigation("Classes");
-                });
+            {
+                b.Navigation("Classes");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.PermissionModels.Permission", b =>
-                {
-                    b.Navigation("RolePermissions");
-                });
+            {
+                b.Navigation("RolePermissions");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.PermissionModels.Role", b =>
-                {
-                    b.Navigation("RolePermissions");
+            {
+                b.Navigation("RolePermissions");
 
-                    b.Navigation("Users");
-                });
+                b.Navigation("Users");
+            });
 
             modelBuilder.Entity("StudentMN.Models.Entities.ScoreStudent.Subject", b =>
-                {
-                    b.Navigation("CourseSections");
-                });
+            {
+                b.Navigation("CourseSections");
+            });
 #pragma warning restore 612, 618
         }
     }

@@ -54,10 +54,21 @@ namespace StudentMN.Services
             }
             return _mapper.Map<EnrollmentResponseDTO>(enrollmentAdd);
         }
-        //Lấy đăng kí lớp học phần theo Id
-        public async Task<EnrollmentResponseDTO?> GetEnrollmentById(int Id)
+        //Lấy đăng kí lớp học phần theo student Id
+        public async Task<List<EnrollmentResponseDTO?>> GetEnrollmentsByStudentId(int studentId)
         {
-            var enrollment = await _enrollmentRepository.GetEnrollmentByIdAsync(Id);
+            var enrollment = await _enrollmentRepository.GetEnrollmentsByStudentIdAsync(studentId);
+
+            if (enrollment == null) return null;
+
+            var dto = _mapper.Map<List<EnrollmentResponseDTO>>(enrollment);
+
+            return dto;
+        }
+        //Lấy lớp học phần theo Id
+        public async Task<EnrollmentResponseDTO?> GetEnrollmentsById(int Id)
+        {
+            var enrollment = await _enrollmentRepository.GetEnrollmentsByIdAsync(Id);
 
             if (enrollment == null) return null;
 
@@ -66,24 +77,11 @@ namespace StudentMN.Services
             return dto;
         }
 
-        //Cập nhật lớp học phần 
-        public async Task<EnrollmentResponseDTO?> UpdateEnrollment(int id, EnrollmentRequestDTO dto)
-        {
-            var enrollmentEntity = await _enrollmentRepository.GetEnrollmentByIdAsync(id);
-            if (enrollmentEntity == null) return null;
 
-            _mapper.Map(dto, enrollmentEntity);
-
-            await _enrollmentRepository.UpdateEnrollmentAsync(enrollmentEntity);
-
-            var updatedEnrollment = await _enrollmentRepository.GetEnrollmentByIdAsync(id);
-
-            return _mapper.Map<EnrollmentResponseDTO>(updatedEnrollment);
-        }
         //Xóa đăng kí lớp học phần
-        public async Task<bool> DeleteEnrollment(int id)
+        public async Task<bool> DeleteEnrollment(int enrollmentId)
         {
-            var enrollmentEntity = await _enrollmentRepository.GetEnrollmentByIdAsync(id);
+            var enrollmentEntity = await _enrollmentRepository.GetEnrollmentsByIdAsync(enrollmentId);
             if (enrollmentEntity == null) return false;
 
             await _enrollmentRepository.DeleteEnrollmentAsync(enrollmentEntity);

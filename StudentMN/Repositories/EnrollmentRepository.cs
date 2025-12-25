@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentMN.Data;
-using StudentMN.DTOs.Response;
 using StudentMN.Models.Entities.Account;
 using StudentMN.Models.Entities.Class;
 using StudentMN.Models.Entities.ScoreStudent;
@@ -8,7 +7,7 @@ using StudentMN.Repositories.Interface;
 
 namespace StudentMN.Repositories
 {
-    public class EnrollmentRepository:IEnrollmentRepository
+    public class EnrollmentRepository : IEnrollmentRepository
     {
         private readonly AppDbContext _context;
         private readonly ILogger<EnrollmentRepository> _logger;
@@ -22,44 +21,25 @@ namespace StudentMN.Repositories
         public async Task<List<EnrollmentCourseSection>> GetAllEnrollmentAsync()
         {
             return await _context.Enrollments
-                .Select(x => new EnrollmentCourseSection
-                {
-                    StudentId = x.StudentId,
-                    Student = new Student
-                    {
-                        Id = x.Student.Id,
-                        StudentCode = x.Student.StudentCode,
-                        User = new User
-                        {
-                            FullName = x.Student.User.FullName
-                        },
-                        Class = new Classes
-                        {
-                            ClassName = x.Student.Class.ClassName
-                        }
-                       
-                    },
-                    CourseSection = new CourseSection
-                    {
-                        Id = x.CourseSection.Id,
-                        SectionCode = x.CourseSection.SectionCode,
-                        Subject = new Subject
-                        {
-                            SubjectCode = x.CourseSection.Subject.SubjectCode,
-                            SubjectName =x.CourseSection.Subject.SubjectName
-                        },
-
-                    }
-                })
-                .ToListAsync();
+                    .Include(e => e.Student)
+                    .Include(e => e.CourseSection)
+                    .ToListAsync();
         }
-
-        public async Task<EnrollmentCourseSection?> GetEnrollmentByIdAsync(int id)
+        public async Task<EnrollmentCourseSection?> GetEnrollmentsByIdAsync(int Id)
         {
             return await _context.Enrollments
-                                 .Include(c => c.Student)
-                                 .Include(c => c.CourseSection)
-                                 .FirstOrDefaultAsync(c => c.Id == id);
+                   .Include(e => e.CourseSection)
+                   .Include(e => e.Student)
+                   .FirstOrDefaultAsync(e => e.Id == Id);
+        }
+
+        public async Task<List<EnrollmentCourseSection>> GetEnrollmentsByStudentIdAsync(int studentId)
+        {
+            return await _context.Enrollments
+                .Include(e => e.CourseSection)
+                    .ThenInclude(cs => cs.Subject)
+                .Where(e => e.StudentId == studentId)
+                .ToListAsync();
         }
 
         public async Task<EnrollmentCourseSection> AddEnrollmentAsync(EnrollmentCourseSection EnrollmentEntity)

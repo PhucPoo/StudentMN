@@ -24,6 +24,7 @@ namespace StudentMN.Data
         public DbSet<Classes> Classes { get; set; }
         public DbSet<Major> Majors { get; set; }
         public DbSet<CourseSection> CourseSections { get; set; }
+
         public DbSet<EnrollmentCourseSection> Enrollments { get; set; }
 
 
@@ -119,44 +120,49 @@ namespace StudentMN.Data
                     .WithOne()
                     .HasForeignKey<Student>(e => e.UserId)
                     .OnDelete(DeleteBehavior.Restrict);
-            });
-            modelBuilder.Entity<EnrollmentCourseSection>()
-                .HasKey(x => new { x.StudentId, x.CourseSectionId });
-
-            modelBuilder.Entity<EnrollmentCourseSection>()
-                .HasOne(x => x.Student)
-                .WithMany()
-                .HasForeignKey(x => x.StudentId);
-
-            modelBuilder.Entity<EnrollmentCourseSection>()
-                .HasOne(x => x.CourseSection)
-                .WithMany()
-                .HasForeignKey(x => x.CourseSectionId);
-            modelBuilder.Entity<CourseSection>()
+             
+                modelBuilder.Entity<CourseSection>()
                 .HasOne(cs => cs.Teacher)
                 .WithMany(t => t.CourseSections)
                 .HasForeignKey(cs => cs.TeacherId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<CourseSection>()
-                .HasOne(cs => cs.Subject)
-                .WithMany(s => s.CourseSections)
-                .HasForeignKey(cs => cs.SubjectId)
-                .OnDelete(DeleteBehavior.NoAction);
+                modelBuilder.Entity<CourseSection>()
+                    .HasOne(cs => cs.Subject)
+                    .WithMany(s => s.CourseSections)
+                    .HasForeignKey(cs => cs.SubjectId)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Score>()
-                .HasOne(s => s.CourseSection)
-                .WithMany()
-                .HasForeignKey(s => s.CourseSectionId)
-                .OnDelete(DeleteBehavior.NoAction);
+                modelBuilder.Entity<Score>()
+                    .HasOne(s => s.CourseSection)
+                    .WithMany()
+                    .HasForeignKey(s => s.CourseSectionId)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Score>()
-                .HasOne(s => s.Student)
-                .WithMany()
-                .HasForeignKey(s => s.StudentId)
-                .OnDelete(DeleteBehavior.NoAction);
+                modelBuilder.Entity<Score>()
+                    .HasOne(s => s.Student)
+                    .WithMany()
+                    .HasForeignKey(s => s.StudentId)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-            SeedData(modelBuilder);
+                SeedData(modelBuilder);
+            });
+            modelBuilder.Entity<EnrollmentCourseSection>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.HasOne(e => e.Student)
+                      .WithMany(s => s.EnrollmentCourses)  
+                      .HasForeignKey(e => e.StudentId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+              
+                entity.HasOne(e => e.CourseSection)
+                      .WithMany(c => c.EnrollmentCourses)  
+                      .HasForeignKey(e => e.CourseSectionId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
         }
 
         private void SeedData(ModelBuilder modelBuilder)

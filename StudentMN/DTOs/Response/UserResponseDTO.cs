@@ -17,7 +17,6 @@ namespace StudentMN.DTOs.Response
         public string Email { get; set; }
         [Required]
         public int RoleId { get; set; }
-        public bool IsActive { get; set; } = true;
         public RoleResponseDTO Role { get; set; } = null!;
     }
 }

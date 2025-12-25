@@ -68,8 +68,8 @@ namespace StudentMN.Repositories
             {
                 var user = await GetUserByUsernameAsync(username);
                 if (user == null) return false;
-
                 return BCrypt.Net.BCrypt.Verify(password, user.Password);
+                
             }
             catch (Exception)
             {
@@ -83,7 +83,7 @@ namespace StudentMN.Repositories
             {
                 return await _context.Users
                     .Include(u => u.Role)
-                    .Where(u => u.IsActive)
+                    .Where(u => u.IsDelete)
                     .ToListAsync();
             }
             catch (Exception)

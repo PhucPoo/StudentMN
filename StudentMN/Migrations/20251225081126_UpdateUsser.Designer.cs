@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentMN.Data;
 
@@ -11,9 +12,11 @@ using StudentMN.Data;
 namespace StudentMN.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251225081126_UpdateUsser")]
+    partial class UpdateUsser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,12 +209,12 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 25, 16, 28, 39, 438, DateTimeKind.Local).AddTicks(396),
+                            CreatedAt = new DateTime(2025, 12, 25, 15, 11, 26, 134, DateTimeKind.Local).AddTicks(840),
                             Email = "admin@studentmn.com",
                             FullName = "Administrator",
                             IsActive = true,
                             IsDelete = false,
-                            Password = "$2a$11$/KraPf/1rWvncxqcGPHfReN0WXLkkidoPcvf9sGo5rsaYghHJk0bm",
+                            Password = "$2a$11$KgcZgB.Rr4ALxPn88Y3dY.Paj.Ezn.Ki9fmPNGiG7hfFb2226hn6S",
                             RoleId = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Username = "admin"
@@ -271,7 +274,7 @@ namespace StudentMN.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<int>("GroupNumber")
+                    b.Property<int>("Group")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDelete")
@@ -280,7 +283,7 @@ namespace StudentMN.Migrations
                     b.Property<int>("MaxStudents")
                         .HasColumnType("int");
 
-                    b.Property<int>("Remainning")
+                    b.Property<int>("Remaining")
                         .HasColumnType("int");
 
                     b.Property<string>("SectionCode")
@@ -445,7 +448,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 25, 16, 28, 39, 265, DateTimeKind.Local).AddTicks(8274),
+                            CreatedAt = new DateTime(2025, 12, 25, 15, 11, 26, 19, DateTimeKind.Local).AddTicks(1676),
                             Description = "Quản trị viên",
                             IsDelete = false,
                             RoleName = "Admin",
@@ -454,7 +457,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 25, 16, 28, 39, 265, DateTimeKind.Local).AddTicks(8276),
+                            CreatedAt = new DateTime(2025, 12, 25, 15, 11, 26, 19, DateTimeKind.Local).AddTicks(1678),
                             Description = "Sinh viên",
                             IsDelete = false,
                             RoleName = "Student",
@@ -463,7 +466,7 @@ namespace StudentMN.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 25, 16, 28, 39, 265, DateTimeKind.Local).AddTicks(8277),
+                            CreatedAt = new DateTime(2025, 12, 25, 15, 11, 26, 19, DateTimeKind.Local).AddTicks(1679),
                             Description = "Giảng viên",
                             IsDelete = false,
                             RoleName = "Teacher",

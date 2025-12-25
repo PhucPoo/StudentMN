@@ -1,6 +1,4 @@
-﻿using StudentMN.Models.Entities.Account;
-using StudentMN.Models.Entities.ScoreStudent;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StudentMN.DTOs.Request
 {
@@ -8,6 +6,8 @@ namespace StudentMN.DTOs.Request
     {
         [Required(ErrorMessage = "SectionCode cannot be empty.")]
         public string SectionCode { get; set; } = null!;
+        [Required]
+        public int GroupNumber { get; set; }
 
         public int SubjectId { get; set; }
 
@@ -19,5 +19,6 @@ namespace StudentMN.DTOs.Request
         [Range(0, 200, ErrorMessage = "MaxStudents must be between 0 and 200.")]
 
         public int MaxStudents { get; set; }
+        public int Remainning { get; set; }
     }
 }

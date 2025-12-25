@@ -57,14 +57,26 @@ namespace StudentMN.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<TeacherResponseDTO>> UpdateTeacher(int id, TeacherRequestDTO dto)
         {
-            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            try
+            {
+                var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
-            if (string.IsNullOrEmpty(role))
-                return Forbid();
+                if (string.IsNullOrEmpty(role))
+                    return Forbid();
 
-            var teacher = await _service.UpdateTeacher(id, dto);
-            if (teacher == null) return BadRequest("unable to get teacher");
-            return Ok(teacher);
+                var teacher = await _service.UpdateTeacher(id, dto);
+                if (teacher == null) return BadRequest("unable to get teacher");
+                return Ok(teacher);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "System error",
+                    detail = ex.InnerException?.Message ?? ex.Message
+                });
+            }
         }
 
         //[Authorize(Roles = "Admin")]

@@ -8,6 +8,7 @@ namespace StudentMN.Models.Entities.Class
     {
 
         public string SectionCode { get; set; } = null!;
+        public int GroupNumber { get; set; }
 
         public int SubjectId { get; set; }
         public Subject Subject { get; set; } = null!;
@@ -18,6 +19,8 @@ namespace StudentMN.Models.Entities.Class
         public string Semester { get; set; } = null!;
 
         public int MaxStudents { get; set; }
+        public int Remainning { get; set; }
+        public ICollection<EnrollmentCourseSection> EnrollmentCourses { get; set; } = new List<EnrollmentCourseSection>();
 
     }
 }

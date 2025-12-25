@@ -1,5 +1,6 @@
 ﻿using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
+using StudentMN.Models.Entities.Class;
 
 namespace StudentMN.Services.Interfaces
 {
@@ -7,8 +8,9 @@ namespace StudentMN.Services.Interfaces
     {
         Task<PagedResponse<EnrollmentResponseDTO>> GetAllEnrollments(int pageNumber, int pageSize, string? search);
         Task<EnrollmentResponseDTO> CreateEnrollment(EnrollmentRequestDTO enrollment);
-        Task<EnrollmentResponseDTO> UpdateEnrollment(int id, EnrollmentRequestDTO enrollment);
-        Task<bool> DeleteEnrollment(int id);
+        Task<List<EnrollmentResponseDTO>> GetEnrollmentsByStudentId(int studentId);
+        Task<EnrollmentResponseDTO> GetEnrollmentsById(int Id);
+        Task<bool> DeleteEnrollment(int studentId);
 
     }
 }

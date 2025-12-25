@@ -21,7 +21,9 @@ namespace StudentMN.Repositories
         {
             return await _context.CourseSections
                                  .Include(c => c.Teacher)
+                                    .ThenInclude(c => c.User)
                                  .Include(c => c.Subject)
+                                    .ThenInclude(c => c.Major)
                                  .ToListAsync();
         }
 

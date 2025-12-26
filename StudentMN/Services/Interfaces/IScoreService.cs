@@ -6,9 +6,9 @@ namespace StudentMN.Services.Interfaces
     public interface IScoreService
     {
         Task<PagedResponse<ScoreResponseDTO>> GetAllScore(int pageNumber = 1, int pageSize = 8, string? search = null);
-        Task<ScoreResponseDTO?> GetScoreById(int id);
-
-        Task<ScoreResponseDTO?> UpdateScore(int id, ScoreRequestDTO dto);
+        Task<ScoreResponseDTO> AddScore(ScoreRequestDTO dto);
+        Task<ScoreResponseDTO?> GetScoresByStudent(int studentId);
+        Task<ScoreResponseDTO?> UpdateScore(int studentId, int courseSectionId, ScoreRequestDTO dto);
 
     }
 }

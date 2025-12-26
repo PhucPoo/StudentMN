@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using StudentMN.DTOs.Request;
 using StudentMN.DTOs.Response;
+using StudentMN.Models.Entities.ScoreStudent;
+using StudentMN.Repositories;
 using StudentMN.Repositories.Interface;
 using StudentMN.Services.Interfaces;
 
@@ -10,25 +12,36 @@ namespace StudentMN.Services
     {
         private readonly IScoreRepository _scoreRepository;
         private readonly IMapper _mapper;
-        public ScoreService(IScoreRepository scoreRepository, IMapper mapper, IAuthService authService)
+        private readonly ILogger<ScoreService> _logger;
+
+        public ScoreService(ILogger<ScoreService> logger,IScoreRepository scoreRepository, IMapper mapper)
         {
             _scoreRepository = scoreRepository;
             _mapper = mapper;
+            _logger = logger;
         }
-        // Xem danh sách khoa
+
+        // Xem danh sách điểm với paging
         public async Task<PagedResponse<ScoreResponseDTO>> GetAllScore(int pageNumber = 1, int pageSize = 8, string? search = null)
         {
-            var score = await _scoreRepository.GetAllScoreAsync();
+            var scores = await _scoreRepository.GetAllScoreAsync();
 
-            var totalCount = score.Count;
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                scores = scores
+                    .Where(s => s.Student != null && s.Student.User != null && s.Student.User.FullName.Contains(search))
+                    .ToList();
+            }
 
-            var Scores = score
-                .OrderBy(c => c.Id)
+            var totalCount = scores.Count;
+
+            var pagedScores = scores
+                .OrderBy(s => s.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
 
-            var scoresDto = _mapper.Map<List<ScoreResponseDTO>>(Scores);
+            var scoresDto = _mapper.Map<List<ScoreResponseDTO>>(pagedScores);
 
             return new PagedResponse<ScoreResponseDTO>
             {
@@ -39,34 +52,54 @@ namespace StudentMN.Services
                 Data = scoresDto
             };
         }
-        //Lấy khoa theo Id
-        public async Task<ScoreResponseDTO?> GetScoreById(int id)
+
+        // Lấy điểm 1 student theo studentId và subjectId
+        public async Task<ScoreResponseDTO?> GetScoresByStudent(int studentId)
         {
-            var score = await _scoreRepository.GetScoreByStudentIdAsync(id);
+            var score = await _scoreRepository.GetScoresByStudentAsync(studentId);
             if (score == null) return null;
 
             return _mapper.Map<ScoreResponseDTO>(score);
         }
-
-
-
-        // Cập nhật giảng viên
-        public async Task<ScoreResponseDTO?> UpdateScore(int id, ScoreRequestDTO dto)
+        public async Task<ScoreResponseDTO> AddScore(ScoreRequestDTO dto)
         {
-            var scoreEntity = await _scoreRepository.GetScoreByStudentIdAsync(id);
-            if (scoreEntity == null) return null;
-
-            _mapper.Map(dto, scoreEntity);
-
-            await _scoreRepository.UpdateScoreAsync(scoreEntity);
-
-            var updatedScore = await _scoreRepository.GetScoreByStudentIdAsync(id);
-            if (updatedScore == null) return null;
-
-            return _mapper.Map<ScoreResponseDTO>(updatedScore);
+            var score = _mapper.Map<Score>(dto);
+            var scoreAdd = await _scoreRepository.AddScoresAsync(score);
+            if (scoreAdd is null)
+            {
+                return null;
+            }
+            return _mapper.Map<ScoreResponseDTO>(scoreAdd);
         }
 
+        // Cập nhật điểm theo studentId và subjectId
+        public async Task<ScoreResponseDTO?> UpdateScore(int studentId, int courseSectionId, ScoreRequestDTO dto)
+        {
+            // Lấy điểm theo studentId và subjectId
+            var scoreEntity = await _scoreRepository.GetScoresByStudentAsync(studentId);
 
+            // Log xem có tìm được hay không
+            if (scoreEntity == null)
+            {
+                _logger.LogWarning("UpdateScore: No score found for StudentId={StudentId}, SubjectId={SubjectId}", studentId, courseSectionId);
+                return null;
+            }
+            else
+            {
+                _logger.LogInformation("UpdateScore: Found score with Id={ScoreId} for StudentId={StudentId}, SubjectId={SubjectId}",
+                                       scoreEntity.Id, studentId, courseSectionId);
+            }
+
+            // Áp dụng mapping từ DTO
+            _mapper.Map(dto, scoreEntity);
+
+            // Cập nhật điểm
+            await _scoreRepository.UpdateScoreAsync(scoreEntity);
+
+            _logger.LogInformation("UpdateScore: Score updated successfully for ScoreId={ScoreId}", scoreEntity.Id);
+
+            return _mapper.Map<ScoreResponseDTO>(scoreEntity);
+        }
 
     }
 }

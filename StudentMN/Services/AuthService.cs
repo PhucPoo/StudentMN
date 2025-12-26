@@ -18,7 +18,6 @@ namespace StudentMN.Services
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
         private readonly AppDbContext _context;
-        private readonly ILogger<AuthService> _logger;
 
         public string HashPassword(string password)
         {
@@ -30,12 +29,11 @@ namespace StudentMN.Services
             return BCrypt.Net.BCrypt.Verify(password, hash);
         }
 
-        public AuthService(ILogger<AuthService> logger, IUserRepository userRepository, IConfiguration configuration, AppDbContext context)
+        public AuthService( IUserRepository userRepository, IConfiguration configuration, AppDbContext context)
         {
             _userRepository = userRepository;
             _configuration = configuration;
             _context = context;
-            _logger = logger;
         }
 
         public async Task<LoginResponse> LoginAsync(LoginRequest request)

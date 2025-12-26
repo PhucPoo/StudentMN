@@ -18,7 +18,7 @@ namespace StudentMN.Services
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
         private readonly AppDbContext _context;
-
+        private readonly ILogger<AuthService> _logger;
 
         public string HashPassword(string password)
         {
@@ -30,11 +30,12 @@ namespace StudentMN.Services
             return BCrypt.Net.BCrypt.Verify(password, hash);
         }
 
-        public AuthService(IUserRepository userRepository, IConfiguration configuration, AppDbContext context)
+        public AuthService(ILogger<AuthService> logger, IUserRepository userRepository, IConfiguration configuration, AppDbContext context)
         {
             _userRepository = userRepository;
             _configuration = configuration;
             _context = context;
+            _logger = logger;
         }
 
         public async Task<LoginResponse> LoginAsync(LoginRequest request)
@@ -62,7 +63,7 @@ namespace StudentMN.Services
                 }
 
                 bool isValidPassword = await _userRepository.ValidateCredentialsAsync(
-                    request.Username, user.Password);
+                    request.Username, request.Password);
 
                 if (!isValidPassword)
                 {
@@ -72,6 +73,8 @@ namespace StudentMN.Services
                         Message = "Passwword incorrect"
                     };
                 }
+
+
                 var tokens = await GenerateTokens(user);
 
                 return new LoginResponse

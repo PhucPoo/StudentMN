@@ -8,10 +8,12 @@ namespace StudentMN.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly AppDbContext _context;
+        private readonly ILogger<UserRepository> _logger;
 
-        public UserRepository(AppDbContext context)
+        public UserRepository(ILogger<UserRepository> logger,AppDbContext context)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task UpdateAsync(User user)
@@ -26,7 +28,7 @@ namespace StudentMN.Repositories
             {
                 return await _context.Users
                     .Include(u => u.Role)
-                    .FirstOrDefaultAsync(u => u.Username == username && u.IsActive);
+                    .FirstOrDefaultAsync(u => u.Username == username );
             }
             catch (Exception)
             {
@@ -81,10 +83,16 @@ namespace StudentMN.Repositories
         {
             try
             {
-                return await _context.Users
+                var users= await _context.Users
                     .Include(u => u.Role)
-                    .Where(u => u.IsDelete)
+                    .Where(u => !u.IsDelete)
                     .ToListAsync();
+                _logger.LogInformation("All users count: {Count}", users.Count);
+                foreach (var u in users)
+                {
+                    _logger.LogInformation("User: {Username}, Password Hash: {Hash}", u.Username, u.Password);
+                }
+                return users;
             }
             catch (Exception)
             {

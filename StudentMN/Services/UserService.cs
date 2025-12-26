@@ -76,7 +76,6 @@ namespace StudentMN.Services
             }
 
             var user = _mapper.Map<User>(dto);
-            user.Password = _authService.HashPassword(dto.Password);
 
             await _userRepository.CreateUserAsync(user);
 
